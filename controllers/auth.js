@@ -60,3 +60,15 @@ exports.getMe = async (req, res, next) => {
     data: user,
   });
 };
+
+//@desc     Get all users
+//@route    Get /api/v1/users
+//@access   Public
+exports.getUsers = async (req, res, next) => {
+  try {
+    const users = await User.find();
+    res.status(200).json({ success: true, count: users.length, data: users });
+  } catch (err) {
+    next(err);
+  }
+};
