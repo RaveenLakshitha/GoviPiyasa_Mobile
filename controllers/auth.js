@@ -53,7 +53,7 @@ exports.loginUser = async (req, res, next) => {
 //@access       private
 
 exports.getMe = async (req, res, next) => {
-  const user = await User.findById(req.user.id);
+  const user = await user.findById(req.user.id);
 
   res.status(200).json({
     success: true,
@@ -66,7 +66,7 @@ exports.getMe = async (req, res, next) => {
 //@access   Public
 exports.getUsers = async (req, res, next) => {
   try {
-    const users = await User.find();
+    const users = await user.find();
     res.status(200).json({ success: true, count: users.length, data: users });
   } catch (err) {
     next(err);
