@@ -7,15 +7,15 @@ const information = mongoose.Schema({
   },
   Category: {
     type: String,
-    required: true,
+    //required: true,
   },
   Image: {
     type: String,
-    required: true,
+    //required: true,
   },
   DateAndTime: {
     type: String,
-    required: true,
+    //required: true,
   },
 });
 

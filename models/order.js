@@ -6,12 +6,12 @@ const orderSchema = mongoose.Schema({
   },
   qty: {
     type: Number,
-    required: true,
+    //required: true,
     default: 1,
   },
   price: {
     type: Number,
-    required: true,
+    //required: true,
   },
   user: {
     type: mongoose.Schema.Types.ObjectId,
@@ -19,7 +19,7 @@ const orderSchema = mongoose.Schema({
   },
   contactNumber: {
     type: String,
-    required: true,
+    //required: true,
     min: 10,
     trim: true,
   },
@@ -28,25 +28,25 @@ const orderSchema = mongoose.Schema({
   },
   address: {
     type: String,
-    required: [true, "Please add a Address"],
+    //required: [true, "Please add a Address"],
     min: 6,
     max: 10,
     select: false,
   },
   addressType: {
     type: String,
-    required: true,
+    //required: true,
     enum: ["Home", "Office"],
     default: "Home",
   },
   city: {
     type: String,
-    required: true,
+    //required: true,
     trim: true,
   },
   orderDate: {
     type: Date,
-    required: true,
+    ////required: true,
   },
   deliveryDate: {
     type: Date,

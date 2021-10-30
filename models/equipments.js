@@ -3,26 +3,26 @@ const mongoose = require("mongoose");
 const equipmentSchema = mongoose.Schema({
   EquipmentId: {
     type: String,
-    required: true,
+    ////required: true,
   },
   AvailableTime: {
     type: String,
-    required: true,
+    ////required: true,
   },
   Images: {
     type: String,
   },
   NoOfDays: {
     type: String,
-    required: true,
+    ////required: true,
   },
   RentFee: {
     type: String,
-    required: true,
+    ////required: true,
   },
   Task: {
     type: String,
-    required: true,
+    ////required: true,
   },
 
   ShopId: {

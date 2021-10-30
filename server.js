@@ -7,6 +7,7 @@ const users = require("./routes/user");
 const auths = require("./routes/auth");
 const connectDB = require("./config/db");
 const errorHandler = require("./middleware/error");
+const cookieParser = require("cookie-parser");
 //Read & Load env vars to process.env
 dotenv.config({ path: "./config/config.env" });
 
@@ -19,6 +20,9 @@ const app = express();
 
 //body parser
 app.use(express.json());
+
+//cookie parser
+app.use(cookieParser());
 
 //Dev logging middleware
 if (process.env.NODE_ENV === "development") {

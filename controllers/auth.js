@@ -53,12 +53,16 @@ exports.loginUser = async (req, res, next) => {
 //@access       private
 
 exports.getMe = async (req, res, next) => {
-  const user = await user.findById(req.user.id);
+  try {
+    const user = await user.findById(req.user.id);
 
-  res.status(200).json({
-    success: true,
-    data: user,
-  });
+    res.status(200).json({
+      success: true,
+      data: user,
+    });
+  } catch (err) {
+    next(err);
+  }
 };
 
 //@desc     Get all users

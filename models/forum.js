@@ -5,29 +5,29 @@ const forum = mongoose.Schema({
     {
       QuestionId: {
         type: String,
-        required: true,
+        //required: true,
       },
       DateAndTime: {
         type: Date,
-        required: true,
+        //required: true,
       },
       Title: {
         type: String,
-        required: true,
+        //required: true,
       },
       Category: {
         type: String,
-        required: true,
+        ////required: true,
       },
       Vote: {
         type: String,
-        required: true,
+        ////required: true,
       },
       Answer: [
         {
           AnswerId: {
             type: String,
-            required: true,
+            ////required: true,
           },
           UserId: {
             type: mongoose.Schema.Types.ObjectId,
@@ -35,15 +35,15 @@ const forum = mongoose.Schema({
           },
           DateAndTime: {
             type: Date,
-            required: true,
+            //required: true,
           },
           QuestionId: {
             type: String,
-            required: true,
+            //required: true,
           },
           Tags: {
             type: String,
-            required: true,
+            //required: true,
           },
         },
       ],

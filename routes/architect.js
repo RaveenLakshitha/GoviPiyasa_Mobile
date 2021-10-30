@@ -1,19 +1,19 @@
 const express = require("express");
 const {
-  getArchitects,
-  getArchitect,
-  createArchitect,
-  updateArchitect,
-  deleteArchitect,
+  getArchitectProfiles,
+  getArchitectProfile,
+  createArchitectProfile,
+  updateArchitectProfile,
+  deleteArchitectProfile,
 } = require("../controllers/user");
 
 const router = express.Router();
 
-router.route("/").get(getArchitects).post(createArchitect);
+router.route("/").get(getArchitectProfiles).post(createArchitectProfile);
 router
   .route("/:id")
-  .get(getArchitect)
-  .put(updateArchitect)
-  .delete(deleteArchitect);
+  .get(getArchitectProfile)
+  .put(updateArchitectProfile)
+  .delete(deleteArchitectProfile);
 
 module.exports = router;
