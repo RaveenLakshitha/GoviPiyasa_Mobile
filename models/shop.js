@@ -5,7 +5,7 @@ const shopSchema = new mongoose.Schema({
     type: String,
     min: 3,
     max: 20,
-    required: true,
+    ////////////required: true,
     trim: true,
   },
   slug: String,
@@ -13,7 +13,7 @@ const shopSchema = new mongoose.Schema({
     type: String,
     min: 3,
     max: 20,
-    required: true,
+    ////////////required: true,
     trim: true,
   },
   category: {
@@ -22,14 +22,14 @@ const shopSchema = new mongoose.Schema({
   },
   contactNumber: {
     type: String,
-    required: true,
+    //////////////required: true,
     minlength: 10,
     trim: true,
   },
   email: {
     type: String,
     unique: true,
-    required: true,
+    //////////required: true,
     trim: true,
     lowercase: true,
     match: [
@@ -39,7 +39,7 @@ const shopSchema = new mongoose.Schema({
   },
   address: {
     type: String,
-    required: [true, "Please add a Address"],
+    //////////required: [true, "Please add a Address"],
     min: 6,
     max: 10,
     select: false,
@@ -49,7 +49,7 @@ const shopSchema = new mongoose.Schema({
   },
   city: {
     type: String,
-    required: true,
+    //////////required: true,
     trim: true,
   },
   logo: { type: String },
