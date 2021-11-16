@@ -73,7 +73,7 @@ exports.getMe = async (req, res, next) => {
 
 exports.getSingleUser = async (req, res, next) => {
   try {
-    const User = await user.findOne({ user: req.params.firstName });
+    const User = await user.findOne({ firstName: req.params.firstName });
 
     if (!User) {
       return next(
