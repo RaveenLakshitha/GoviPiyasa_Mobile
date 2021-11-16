@@ -78,23 +78,12 @@ exports.getSingleUser = async (req, res, next) => {
     if (!User) {
       return res.status(400).json({ success: false });
     }
-    //res.status(200).json({ success: true, data: User });
+    res.status(200).json({ success: true, data: User });
   } catch (err) {
     next(err);
   }
 };
 
-/* User.findOne({ username: req.params.username }, (err, result) => {
-    if (err) return res.status(500).json({ msg: err });
-    if (result !== null) {
-      return res.json({
-        Status: true,
-      });
-    } else
-      return res.json({
-        Status: false,
-      });
-  });*/
 
 //@desc         Get a user
 //@route        Get /api/v1/auth/me
