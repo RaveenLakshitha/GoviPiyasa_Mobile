@@ -76,7 +76,7 @@ exports.getSingleUser = async (req, res, next) => {
     const User = await user.findOne({ firstName: req.params.firstName });
 
     if (!User) {
-      return res.status(400).json({ success: false });
+      return res.status(200).json({ success: false });
     }
     res.status(200).json({ success: true, data: User });
   } catch (err) {
