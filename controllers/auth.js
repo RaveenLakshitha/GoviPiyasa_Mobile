@@ -76,14 +76,9 @@ exports.getSingleUser = async (req, res, next) => {
     const User = await user.findOne({ firstName: req.params.firstName });
 
     if (!User) {
-      return next(
-        new ErrorResponse(
-          `User not Found With name of ${req.params.firstName}`,
-          404
-        )
-      );
+      return res.status(400).json({ success: false });
     }
-    res.status(200).json({ success: true, data: User });
+    //res.status(200).json({ success: true, data: User });
   } catch (err) {
     next(err);
   }
