@@ -1,26 +1,28 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 jwt = require("jsonwebtoken");
+const slugify = require("slugify");
 const userSchema = new mongoose.Schema(
   {
     firstName: {
       type: String,
       min: 3,
       max: 20,
-      ////required: true,
+      // required: true,
       trim: true,
     },
     lastName: {
       type: String,
       min: 3,
       max: 20,
-      ////required: true,
+      // required: true,
       trim: true,
     },
+    slug: String,
     email: {
       type: String,
       unique: true,
-      ////required: true,
+      // required: true,
       trim: true,
       lowercase: true,
       match: [
@@ -30,25 +32,25 @@ const userSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      //////required: [true, "Please add a Password"],
+      required: [true, "Please add a Password"],
       min: 6,
       select: false,
     },
     address: {
       type: String,
-      ////required: [true, "Please add a Address"],
+      //required: [true, "Please add a Address"],
       min: 6,
       max: 10,
       select: false,
     },
     city: {
       type: String,
-      ////required: true,
+      //required: true,
       trim: true,
     },
     contactNumber: {
       type: String,
-      ////required: true,
+      //required: true,
       minlength: 10,
       trim: true,
     },
@@ -66,6 +68,11 @@ const userSchema = new mongoose.Schema(
   },
   { timeStamps: true }
 );
+// Create users slugify from name
+userSchema.pre("save", function (next) {
+  this.slug = slugify(this.email, { lower: true });
+  next();
+});
 
 //Encrypt password using bcrypt
 userSchema.pre("save", async function (next) {
@@ -80,6 +87,7 @@ userSchema.methods.getSignedJwtToken = function () {
   });
 };
 
+//Match user entered password and hash+password in database
 userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };

@@ -5,20 +5,21 @@ const architectProfile = new mongoose.Schema({
     type: String,
     min: 3,
     max: 20,
-    //////required: true,
+    required: true,
     trim: true,
   },
+  slug: String,
   architectName: {
     type: String,
     min: 3,
     max: 20,
-    //////required: true,
+    required: true,
     trim: true,
   },
   description: {
     type: String,
     trim: true,
-    //////required: true,
+    required: true,
   },
   Category: {
     type: String,
@@ -26,14 +27,14 @@ const architectProfile = new mongoose.Schema({
   },
   contactNumber: {
     type: String,
-    //////required: true,
+    required: true,
     min: 10,
     trim: true,
   },
   email: {
     type: String,
     unique: true,
-    //////required: true,
+    required: true,
     trim: true,
     lowercase: true,
     match: [
@@ -46,14 +47,14 @@ const architectProfile = new mongoose.Schema({
   },
   address: {
     type: String,
-    //////required: [true, "Please add a Address"],
+    required: [true, "Please add a Address"],
     min: 6,
     max: 10,
     select: false,
   },
   city: {
     type: String,
-    //////required: true,
+    required: true,
     trim: true,
   },
   projects: [
@@ -61,7 +62,7 @@ const architectProfile = new mongoose.Schema({
       description: {
         type: String,
         trim: true,
-        ////required: true,
+        required: true,
       },
       reviews: [
         {

@@ -5,9 +5,12 @@ const morgan = require("morgan");
 const shops = require("./routes/shop");
 const users = require("./routes/user");
 const auths = require("./routes/auth");
+const categories = require("./routes/category");
+const advertisements = require("./routes/advertisement");
 const connectDB = require("./config/db");
-const errorHandler = require("./middleware/error");
 const cookieParser = require("cookie-parser");
+const errorHandler = require("./middleware/error");
+const cors = require("cors");
 //Read & Load env vars to process.env
 dotenv.config({ path: "./config/config.env" });
 
@@ -17,7 +20,7 @@ const PORT = process.env.PORT || 5000;
 connectDB();
 
 const app = express();
-
+app.use(cors());
 //body parser
 app.use(express.json());
 
@@ -33,6 +36,8 @@ if (process.env.NODE_ENV === "development") {
 app.use("/api/v1/shops", shops);
 app.use("/api/v1/users", users);
 app.use("/api/v1/auths", auths);
+app.use("/api/v1/categories", categories);
+app.use("/api/v1/advertisements", advertisements);
 
 //ErrorHandler(Must after mounting routes)
 app.use(errorHandler);

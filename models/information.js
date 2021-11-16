@@ -5,17 +5,18 @@ const information = mongoose.Schema({
     type: String,
     required: true,
   },
+  slug: String,
   Category: {
     type: String,
-    //required: true,
+    required: true,
   },
   Image: {
     type: String,
-    //required: true,
+    required: true,
   },
   DateAndTime: {
     type: String,
-    //required: true,
+    required: true,
   },
 });
 

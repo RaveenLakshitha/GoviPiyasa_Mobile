@@ -35,6 +35,23 @@ exports.getShop = async (req, res, next) => {
 //@access   Public
 exports.createShop = async (req, res, next) => {
   try {
+    //Add user to req.body
+    req.body.user = req.user.id;
+    console.log(req.user.id);
+
+    //Check for published shop
+    const createdShop = await Shop.findOne({ user: req.user.id });
+
+    //Admin can add more shops
+    if (createdShop && req.user.role !== "admin") {
+      return next(
+        new ErrorResponse(
+          `The user with ID ${req.user.id} has already published a shop`,
+          400
+        )
+      );
+    }
+
     const shop = await Shop.create(req.body);
     res.status(201).json({ success: true, data: shop });
   } catch (err) {
