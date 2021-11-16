@@ -76,31 +76,36 @@ exports.getSingleUser = async (req, res, next) => {
     const User = await user.findOne({ firstName: req.params.firstName });
 
     if (!User) {
+      return next(
+        new ErrorResponse(
+          `User not Found With name of ${req.params.firstName}`,
+          404
+        )
+      );
+    }
+    res.status(200).json({ success: true, data: User });
+
+    /*if (!User) {
+      return res.status(400).json({ success: false });
+    }
+    res.status(200).json({ success: true, data: User });*/
+  } catch (err) {
+    next(err);
+  }
+};
+/*exports.getSingleUser = async (req, res, next) => {
+  try {
+    const User = await user.findOne({ firstName: req.params.firstName });
+
+    if (!User) {
       return res.status(400).json({ success: false });
     }
     res.status(200).json({ success: true, data: User });
   } catch (err) {
     next(err);
   }
-};
+};*/
 
-
-//@desc         Get a user
-//@route        Get /api/v1/auth/me
-//@access       private
-
-exports.getMe = async (req, res, next) => {
-  try {
-    const logedUser = await user.findById(req.user.id);
-
-    res.status(200).json({
-      success: true,
-      data: logedUser,
-    });
-  } catch (err) {
-    next(err);
-  }
-};
 
 //@desc     Get all users
 //@route    Get /api/v1/users
