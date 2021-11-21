@@ -87,10 +87,16 @@ exports.getSingleUser = async (req, res, next) => {
       );
     }
     res.status(200).json({ success: true, data: User, usersShop: User.shop });
+
+    /*if (!User) {
+      return res.status(400).json({ success: false });
+    }
+    res.status(200).json({ success: true, data: User });*/
   } catch (err) {
     next(err);
   }
 };
+
 /* User.findOne({ username: req.params.username }, (err, result) => {
     if (err) return res.status(500).json({ msg: err });
     if (result !== null) {
@@ -102,6 +108,19 @@ exports.getSingleUser = async (req, res, next) => {
         Status: false,
       });
   });*/
+
+/*exports.getSingleUser = async (req, res, next) => {
+  try {
+    const User = await user.findOne({ firstName: req.params.firstName });
+
+    if (!User) {
+      return res.status(400).json({ success: false });
+    }
+    res.status(200).json({ success: true, data: User });
+  } catch (err) {
+    next(err);
+  }
+};*/
 
 //@desc     Get all users
 //@route    Get /api/v1/users
