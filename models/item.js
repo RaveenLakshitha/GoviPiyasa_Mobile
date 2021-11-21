@@ -3,22 +3,22 @@ const mongoose = require("mongoose");
 const itemSchema = mongoose.Schema({
   productName: {
     type: String,
-    required: true,
+    //required: true,
     trim: true,
   },
   slug: String,
   price: {
     type: Number,
-    required: true,
+    //required: true,
   },
   description: {
     type: String,
-    required: true,
+    //required: true,
     trim: true,
   },
   quantity: {
     type: Number,
-    required: true,
+    //required: true,
   },
   productPictures: [
     {
@@ -32,15 +32,16 @@ const itemSchema = mongoose.Schema({
     },
   ],
   category: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: String,
     ref: "Category",
-    required: true,
+    //required: true,
   },
-  createdBy: {
+  shopId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: true,
+    ref: "Shop",
+    //required: true,
   },
+
   updateAt: Date,
 });
 

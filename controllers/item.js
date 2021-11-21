@@ -1,35 +1,48 @@
-const Shop = require("../models/shop");
+const Item = require("../models/item");
 
-//@desc     Get all shops
-//@route    Get /api/v1/shops
+//@desc     Get all items
+//@route    Get /api/v1/items
 //@access   Public
-exports.getShops = (req, res, next) => {
-  res
-    .status(200)
-    .json({ success: true, msg: "Show all Shops", hello: req.hello });
+exports.getItems = async (req, res, next) => {
+  try {
+    const items = await Item.find().populate("shopId");
+    res.status(200).json({ success: true, count: items.length, data: items });
+  } catch (err) {
+    next(err);
+  }
 };
-//@desc     Get a shop
-//@route    Get /api/v1/shops/:id
+//@desc     Get a item
+//@route    Get /api/v1/items/:id
 //@access   Public
-exports.getShop = (req, res, next) => {
-  res.status(200).json({ success: true, msg: `Show Shop ${req.params.id}` });
-};
-//@desc     Create a shop
-//@route    Post /api/v1/shops
+exports.getItem = (req, res, next) => {};
+
+//@desc     Create a item
+//@route    Post /api/v1/items
 //@access   Public
-exports.createShop = async (req, res, next) => {
-  const shop = await Shop.create(req.body);
-  res.status(201).json({ success: true, data: shop });
+exports.createItem = async (req, res, next) => {
+  let productPictures = [];
+
+  if (req.files.length > 0) {
+    productPictures = req.files.map((file) => {
+      return { img: file.filename };
+    });
+  }
+  req.body.productPictures = productPictures;
+
+  // req.body.createdBy = req.user.id;
+  req.body.shopId = req.shop.id;
+  const item = await Item.create(req.body);
+  res.status(201).json({ success: true, data: item });
 };
-//@desc     Update a shop
-//@route    Put /api/v1/shops
+//@desc     Update a item
+//@route    Put /api/v1/items
 //@access   Public
-exports.updateShop = (req, res, next) => {
-  res.status(200).json({ success: true, msg: `Update Shop ${req.params.id}` });
+exports.updateItem = (req, res, next) => {
+  res.status(200).json({ success: true, msg: `Update item ${req.params.id}` });
 };
-//@desc     Delete a shop
-//@route    Delete /api/v1/shops
+//@desc     Delete a item
+//@route    Delete /api/v1/items
 //@access   Private
-exports.deleteShop = (req, res, next) => {
-  res.status(200).json({ success: true, msg: `Delete Shop ${req.params.id}` });
+exports.deleteItem = (req, res, next) => {
+  res.status(200).json({ success: true, msg: `Delete item ${req.params.id}` });
 };

@@ -4,14 +4,7 @@ jwt = require("jsonwebtoken");
 const slugify = require("slugify");
 const userSchema = new mongoose.Schema(
   {
-    firstName: {
-      type: String,
-      min: 3,
-      max: 20,
-      // required: true,
-      trim: true,
-    },
-    lastName: {
+    userName: {
       type: String,
       min: 3,
       max: 20,
@@ -54,6 +47,10 @@ const userSchema = new mongoose.Schema(
       minlength: 10,
       trim: true,
     },
+    shopId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Shop",
+    },
     role: {
       type: String,
       enum: ["admin", "user"],
@@ -65,6 +62,10 @@ const userSchema = new mongoose.Schema(
       enum: ["flowergardening", "vegetablegardening", "economicalcrops"],
     },
     createdDate: { type: Date },
+  },
+  {
+    toObject: { virtuals: true },
+    toJson: { virtuals: true },
   },
   { timeStamps: true }
 );
@@ -92,4 +93,14 @@ userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
+//Reverse populate
+userSchema.virtual("shop", {
+  ref: "Shop",
+  localField: "_id",
+  foreignField: "user",
+  justOne: true,
+});
+
 module.exports = mongoose.model("User", userSchema);
+/*
+,*/

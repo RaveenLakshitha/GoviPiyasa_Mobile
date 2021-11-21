@@ -17,5 +17,6 @@ router.route("/getLoggedUser").get(protect, getMe);
 router.route("/getUsers").get(getUsers);
 router.route("/signoutUser").get(signoutUser);
 router.route("/checkusername/:firstName").get(getSingleUser);
+//router.route("/checkusername/:id").get(getSingleUser);
 
 module.exports = router;

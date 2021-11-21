@@ -57,11 +57,12 @@ exports.loginUser = async (req, res, next) => {
 
 exports.getMe = async (req, res, next) => {
   try {
-    const logedUser = await user.findById(req.user.id);
-
+    const logedUser = await user.findById(req.user.id).populate("shopId");
+    // console.log(logedUser.shop.shopName);
     res.status(200).json({
       success: true,
       data: logedUser,
+      // usersShop: logedUser.shop,
     });
   } catch (err) {
     next(err);
@@ -73,17 +74,23 @@ exports.getMe = async (req, res, next) => {
 
 exports.getSingleUser = async (req, res, next) => {
   try {
-    const User = await user.findOne({ firstName: req.params.firstName });
+    const User = await user
+      .findOne({ username: req.params.username })
+      .populate("shop");
 
     if (!User) {
-      return res.status(400).json({ success: false });
+      return next(
+        new ErrorResponse(
+          `User not Found With name of ${req.params.userName}`,
+          404
+        )
+      );
     }
-    //res.status(200).json({ success: true, data: User });
+    res.status(200).json({ success: true, data: User, usersShop: User.shop });
   } catch (err) {
     next(err);
   }
 };
-
 /* User.findOne({ username: req.params.username }, (err, result) => {
     if (err) return res.status(500).json({ msg: err });
     if (result !== null) {
@@ -96,29 +103,12 @@ exports.getSingleUser = async (req, res, next) => {
       });
   });*/
 
-//@desc         Get a user
-//@route        Get /api/v1/auth/me
-//@access       private
-
-exports.getMe = async (req, res, next) => {
-  try {
-    const logedUser = await user.findById(req.user.id);
-
-    res.status(200).json({
-      success: true,
-      data: logedUser,
-    });
-  } catch (err) {
-    next(err);
-  }
-};
-
 //@desc     Get all users
 //@route    Get /api/v1/users
 //@access   Public
 exports.getUsers = async (req, res, next) => {
   try {
-    const users = await user.find();
+    const users = await user.find().populate("shopId");
     res.status(200).json({ success: true, count: users.length, data: users });
   } catch (err) {
     next(err);

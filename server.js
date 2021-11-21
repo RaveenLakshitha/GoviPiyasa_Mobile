@@ -6,6 +6,7 @@ const shops = require("./routes/shop");
 const users = require("./routes/user");
 const auths = require("./routes/auth");
 const categories = require("./routes/category");
+const items = require("./routes/item");
 const advertisements = require("./routes/advertisement");
 const connectDB = require("./config/db");
 const cookieParser = require("cookie-parser");
@@ -36,6 +37,7 @@ if (process.env.NODE_ENV === "development") {
 app.use("/api/v1/shops", shops);
 app.use("/api/v1/users", users);
 app.use("/api/v1/auths", auths);
+app.use("/api/v1/items", items);
 app.use("/api/v1/categories", categories);
 app.use("/api/v1/advertisements", advertisements);
 

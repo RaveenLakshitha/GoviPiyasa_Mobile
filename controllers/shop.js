@@ -1,5 +1,7 @@
 //const asyncHandler = require("../middleware/async");
+const item = require("../models/item");
 const Shop = require("../models/shop");
+const user = require("../models/user");
 const ErrorResponse = require("../utils/errorResponse");
 
 //@desc     Get all shops
@@ -7,7 +9,9 @@ const ErrorResponse = require("../utils/errorResponse");
 //@access   Public
 exports.getShops = async (req, res, next) => {
   try {
-    const shops = await Shop.find();
+    const shops = await Shop.find().populate("user");
+    const items = await Shop.find().populate("items");
+    console.log(items.items);
     res.status(200).json({ success: true, count: shops.length, data: shops });
   } catch (err) {
     next(err);
@@ -16,16 +20,20 @@ exports.getShops = async (req, res, next) => {
 //@desc     Get a shop
 //@route    Get /api/v1/shops/:id
 //@access   Public
-exports.getShop = async (req, res, next) => {
+exports.getUsersShop = async (req, res, next) => {
   try {
-    const shop = await Shop.findById(req.params.id);
-
+    const shop = await Shop.findOne({ user: req.user.id }).populate("items");
+    /* 
     if (!shop) {
       return next(
-        new ErrorResponse(`Shop not Found With id of ${req.params.id}`, 404)
+        new ErrorResponse(`Shop not Found With id of ${req.user.id}`, 404)
       );
-    }
-    res.status(200).json({ success: true, data: shop });
+    } */
+    console.log(shop.items);
+    const shopToken = shop.getShopSignedJwtToken();
+    res
+      .status(200)
+      .json({ success: true, data: shop, items: shop.items, shopToken });
   } catch (err) {
     next(err);
   }
@@ -53,7 +61,11 @@ exports.createShop = async (req, res, next) => {
     }
 
     const shop = await Shop.create(req.body);
-    res.status(201).json({ success: true, data: shop });
+    console.log(shop);
+    await user.findByIdAndUpdate(req.user.id, { shopId: shop.id });
+    //Create Token
+    const shopToken = shop.getShopSignedJwtToken();
+    res.status(201).json({ success: true, data: shop, shopToken });
   } catch (err) {
     next(err);
   }
