@@ -51,6 +51,10 @@ const userSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Shop",
     },
+    architectId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "../Architects/architect",
+    },
     role: {
       type: String,
       enum: ["admin", "user"],

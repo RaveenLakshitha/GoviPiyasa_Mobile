@@ -76,7 +76,7 @@ exports.getSingleUser = async (req, res, next) => {
   try {
     const User = await user
       .findOne({ username: req.params.username })
-      .populate("shop");
+      .populate("shopId");
 
     if (!User) {
       return next(

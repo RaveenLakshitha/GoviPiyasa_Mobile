@@ -41,7 +41,11 @@ const itemSchema = mongoose.Schema({
     ref: "Shop",
     //required: true,
   },
-
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    //required: true,
+  },
   updateAt: Date,
 });
 

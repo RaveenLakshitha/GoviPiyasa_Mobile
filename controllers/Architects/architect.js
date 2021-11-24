@@ -1,17 +1,19 @@
 //const asyncHandler = require("../middleware/async");
-const item = require("../models/item");
-const Shop = require("../models/shop");
-const user = require("../models/user");
-const ErrorResponse = require("../utils/errorResponse");
+//const item = require("../../models/item");
+const Architect = require("../../models/Architects/architect");
+const user = require("../../models/user");
+const ErrorResponse = require("../../utils/errorResponse");
 
-//@desc     Get all shops
-//@route    Get /api/v1/shops
+//@desc     Get all Architects
+//@route    Get /api/v1/architects
 //@access   Public
-exports.getShops = async (req, res, next) => {
+exports.getArchitects = async (req, res, next) => {
   try {
-    const shops = await Shop.find().populate("user").populate("shopItems");
+    const Architects = await Architect.find();
 
-    res.status(200).json({ success: true, count: shops.length, data: shops });
+    res
+      .status(200)
+      .json({ success: true, count: Architects.length, data: Architects });
   } catch (err) {
     next(err);
   }
@@ -19,23 +21,21 @@ exports.getShops = async (req, res, next) => {
 //@desc     Get a shop
 //@route    Get /api/v1/shops/:id
 //@access   Public
-exports.getUsersShop = async (req, res, next) => {
+exports.getUsersArchitectProfile = async (req, res, next) => {
   try {
-    const shop = await Shop.findOne({ user: req.user.id }).populate(
-      "shopItems"
-    );
-    console.log(shop.items);
-    if (!shop) {
+    const architect = await Architect.findOne({ user: req.user.id });
+    console.log(architect.items);
+    if (!architect) {
       return next(
         new ErrorResponse(`Shop not Found With id of ${req.user.id}`, 404)
       );
     }
 
-    const shopToken = shop.getShopSignedJwtToken();
+    const architectToken = architect.getArchitectSignedJwtToken();
     res
       .status(200)
-      // .json({ success: true, data: shop, items: shop.items, shopToken });
-      .json({ success: true, data: shop, shopToken });
+      //.json({ success: true, data: shop, items: shop.items, shopToken });
+      .json({ success: true, data: architect, architectToken });
   } catch (err) {
     next(err);
   }
@@ -43,17 +43,19 @@ exports.getUsersShop = async (req, res, next) => {
 //@desc     Create a shop
 //@route    Post /api/v1/shops
 //@access   Public
-exports.createShop = async (req, res, next) => {
+exports.createArchitect = async (req, res, next) => {
   try {
     //Add user to req.body
     req.body.user = req.user.id;
     console.log(req.user.id);
 
     //Check for published shop
-    const createdShop = await Shop.findOne({ user: req.user.id });
+    const createdArchitectProfile = await Architect.findOne({
+      user: req.user.id,
+    });
 
     //Admin can add more shops
-    if (createdShop && req.user.role !== "admin") {
+    if (createdArchitectProfile && req.user.role !== "admin") {
       return next(
         new ErrorResponse(
           `The user with ID ${req.user.id} has already published a shop`,
@@ -62,12 +64,13 @@ exports.createShop = async (req, res, next) => {
       );
     }
 
-    const shop = await Shop.create(req.body);
-    console.log(shop);
-    await user.findByIdAndUpdate(req.user.id, { shopId: shop.id });
+    req.body.logo = req.file.filename;
+    const architect = await Architect.create(req.body);
+    console.log(architect);
+    await user.findByIdAndUpdate(req.user.id, { architectId: architect.id });
     //Create Token
-    const shopToken = shop.getShopSignedJwtToken();
-    res.status(201).json({ success: true, data: shop, shopToken });
+    const architectToken = architect.getArchitectSignedJwtToken();
+    res.status(201).json({ success: true, data: architect, architectToken });
   } catch (err) {
     next(err);
   }
@@ -75,7 +78,7 @@ exports.createShop = async (req, res, next) => {
 //@desc     Update a shop
 //@route    Put /api/v1/shops
 //@access   Public
-exports.updateShop = async (req, res, next) => {
+exports.updateArchitect = async (req, res, next) => {
   try {
     const shop = await Shop.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
@@ -95,7 +98,7 @@ exports.updateShop = async (req, res, next) => {
 //@desc     Delete a shop
 //@route    Delete /api/v1/shops
 //@access   Private
-exports.deleteShop = async (req, res, next) => {
+exports.deleteArchitect = async (req, res, next) => {
   try {
     const shop = await Shop.findByIdAndDelete(req.params.id);
 

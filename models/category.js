@@ -16,6 +16,12 @@ const categorytSchema = mongoose.Schema({
     enum: ["Main", "Sub", "Mini"],
     //required: true,
   },
+  Items: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Item",
+    },
+  ],
   createdDate: { type: Date },
 });
 // Create users slugify from name

@@ -51,6 +51,18 @@ const shopSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
+    shopReviews: [
+      {
+        userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+        review: String,
+      },
+    ],
+    shopItems: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Item",
+      },
+    ],
     logo: { type: String },
     coverImage: { type: String },
     createdDate: { type: Date },
