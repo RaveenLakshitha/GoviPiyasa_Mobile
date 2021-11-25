@@ -1,6 +1,7 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const morgan = require("morgan");
+const path = require("path");
 // Route Files
 const shops = require("./routes/shop");
 const architects = require("./routes/Architects/architect");
@@ -35,6 +36,9 @@ app.use(cookieParser());
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
+
+//Set static folder
+app.use(express.static(path.join(__dirname, "uploads")));
 
 // Mount routes
 app.use("/api/v1/shops", shops);

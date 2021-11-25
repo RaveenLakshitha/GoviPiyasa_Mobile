@@ -64,6 +64,7 @@ exports.createArchitect = async (req, res, next) => {
       );
     }
 
+    console.log(req.file.filename);
     req.body.logo = req.file.filename;
     const architect = await Architect.create(req.body);
     console.log(architect);

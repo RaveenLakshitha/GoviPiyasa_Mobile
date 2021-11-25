@@ -29,7 +29,7 @@ exports.getCategories = (req, res, next) => {
     Category.find({}).exec((error, categories) => {
       if (categories) {
         const categoryList = createCategories(categories);
-        res.status(200).json({ categoryList });
+        res.status(200).json({ success: true, data: categoryList });
       }
     });
   } catch (err) {
