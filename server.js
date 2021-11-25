@@ -40,6 +40,9 @@ if (process.env.NODE_ENV === "development") {
 //Set static folder
 app.use(express.static(path.join(__dirname, "uploads")));
 
+//Set static folder
+app.use(express.static(path.join(__dirname, "uploads")));
+
 // Mount routes
 app.use("/api/v1/shops", shops);
 app.use("/api/v1/architects", architects);
