@@ -16,6 +16,7 @@ const connectDB = require("./config/db");
 const cookieParser = require("cookie-parser");
 const errorHandler = require("./middleware/error");
 const cors = require("cors");
+const mongoose = require("mongoose");
 //Read & Load env vars to process.env
 dotenv.config({ path: "./config/config.env" });
 
@@ -23,7 +24,6 @@ const PORT = process.env.PORT || 5000;
 
 //Connect Database
 connectDB();
-
 const app = express();
 app.use(cors());
 //body parser

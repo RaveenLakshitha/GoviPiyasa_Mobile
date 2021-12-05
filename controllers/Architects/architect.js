@@ -3,6 +3,26 @@
 const Architect = require("../../models/Architects/architect");
 const user = require("../../models/user");
 const ErrorResponse = require("../../utils/errorResponse");
+const mongo = require("mongodb");
+const multer = require("multer");
+var Grid = require("gridfs-stream");
+const crypto = require("crypto");
+const GridFsStorage = require("multer-gridfs-storage");
+const mongoose = require("mongoose");
+const conn = mongoose.connection;
+const mongodb = require("mongodb");
+const fs = require("fs");
+const url =
+  "mongodb+srv://Raveen_lw_learn:Raveen@govipiyasav1.8foh6.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+let gfs;
+/* 
+conn.once("open", () => {
+  gfs = Grid(conn.db, mongoose.mongo);
+  gfs.collection("uploads");
+}); */
+conn.once("open", () => {
+  gfs = new mongoose.mongo.GridFSBucket(conn.db);
+});
 
 //@desc     Get all Architects
 //@route    Get /api/v1/architects
@@ -18,6 +38,94 @@ exports.getArchitects = async (req, res, next) => {
     next(err);
   }
 };
+//@desc     Get all Files
+//@route    Get /api/v1/files
+//@access   Public
+exports.getFiles = async (req, res, next) => {
+  try {
+    /* gfs.files.find().toArray((err, files) => {
+      res.status(200).json({ success: true, data: files });
+    }); */
+    bucket.find().toArray((err, files) => {
+      res.status(200).json({ success: true, data: files });
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+//@desc     Get all Files
+//@route    Get /api/v1/files
+//@access   Public
+exports.getImage = async ({ params: { id } }, res, next) => {
+  try {
+    const _id = new mongoose.Types.ObjectId(id);
+    gfs.find({ _id }).toArray((err, files) => {
+      gfs.openDownloadStream(_id).pipe(res);
+    });
+    /* gfs.find().toArray((err, files) => {
+      res.status(200).json({ success: true, data: files });
+    }); */
+  } catch (err) {
+    next(err);
+  }
+};
+/* //@desc     Get a File
+//@route    Get /api/v1/file
+//@access   Public
+exports.getFile = async (req, res, next) => {
+  try {
+    /* const file = await gfs.files.findOne({ filename: req.params.filename });
+
+    const readStream = await gfs.createReadStream(file.filename);
+    readStream.pipe(res);
+    //res.status(200).json({ success: true, data: file }); 
+    mongodb.MongoClient.connect(url, function (error, client) {
+      const db = client.db("myFirstDatabase");
+      const bucket = new mongodb.GridFSBucket(db);
+      const uploadStream = bucket.openUploadStream("bigBUck");
+      const readStream = fs.createReadStream(req.file);
+      readStream.pipe(uploadStream);
+      res.status(200).json({ success: true });
+    });
+  } catch (err) {
+    next(err);
+  }
+}; */
+/* //@desc     Get a File
+//@route    Get /api/v1/file
+//@access   Public
+exports.getImage = async (req, res, next) => {
+  try {
+    /* const file = await gfs.files.findOne({ filename: req.params.filename });
+
+    const readStream = await gfs.createReadStream(file.filename);
+    readStream.pipe(res);
+    //res.status(200).json({ success: true, data: file }); 
+    mongodb.MongoClient.connect(url, function (error, client) {
+      const db = client.db("myFirstDatabase");
+      /* db.collection("fs.files").findOne({}, (err, file) => {
+        const bucket = new mongodb.openDownloadStreamByName();
+        downloadStream.pipe(res);
+      }); */
+/* db.collection("fs.files")
+        .find()
+        .toArray((err, files) => {
+          res.status(200).json({ success: true, data: files });
+        }); 
+
+      const bucket = new mongodb.GridFSBucket(db);
+      bucket
+        .openDownloadStreamByName("bigBUck")
+        .pipe(res)
+        .on("finish", () => {
+          console.log("done downloading!");
+          client.close();
+        });
+    });
+  } catch (err) {
+    next(err);
+  }
+}; */
 //@desc     Get a shop
 //@route    Get /api/v1/shops/:id
 //@access   Public
@@ -71,7 +179,9 @@ exports.createArchitect = async (req, res, next) => {
     await user.findByIdAndUpdate(req.user.id, { architectId: architect.id });
     //Create Token
     const architectToken = architect.getArchitectSignedJwtToken();
-    res.status(201).json({ success: true, data: architect, architectToken });
+    res
+      .status(201)
+      .json({ success: true, data: architect, architectToken, file: req.file });
   } catch (err) {
     next(err);
   }
