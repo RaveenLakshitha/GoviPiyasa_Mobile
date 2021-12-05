@@ -69,7 +69,7 @@ const upload = multer({ storage });
 */
 router.route("/files").get(getFiles);
 //router.route("/file").get(getFile);
-router.route("/getImage/:id").get(getImage);
+router.route("/getImage/:filename").get(getImage);
 
 router.route("/uploadImage").post(upload.single("logo"));
 router

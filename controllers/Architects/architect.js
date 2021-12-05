@@ -56,12 +56,15 @@ exports.getFiles = async (req, res, next) => {
 //@desc     Get all Files
 //@route    Get /api/v1/files
 //@access   Public
-exports.getImage = async ({ params: { id } }, res, next) => {
+exports.getImage = async (req, res, next) => {
   try {
-    const _id = new mongoose.Types.ObjectId(id);
+    gfs.find({ filename: req.params.filename }).toArray((err, files) => {
+      gfs.openDownloadStreamByName(req.params.filename).pipe(res);
+    });
+    /* const _id = req.params.id;
     gfs.find({ _id }).toArray((err, files) => {
       gfs.openDownloadStream(_id).pipe(res);
-    });
+    }); */
     /* gfs.find().toArray((err, files) => {
       res.status(200).json({ success: true, data: files });
     }); */
