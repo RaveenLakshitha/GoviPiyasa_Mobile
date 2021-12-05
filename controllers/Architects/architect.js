@@ -58,7 +58,8 @@ exports.getFiles = async (req, res, next) => {
 //@access   Public
 exports.getImage = async (req, res, next) => {
   try {
-    gfs.find({ filename: req.params.filename }).toArray((err, files) => {
+    const filename = req.params.filename;
+    gfs.find({ filename: filename.trim() }).toArray((err, files) => {
       gfs.openDownloadStreamByName(req.params.filename).pipe(res);
     });
     /* const _id = req.params.id;
