@@ -20,6 +20,8 @@ const {
   deleteArchitect,
   getFiles,
   getImage,
+  updateLogo,
+  getSingleArchitect,
 } = require("../../controllers/Architects/architect");
 
 const router = express.Router();
@@ -80,7 +82,12 @@ router
 router
   .route("/getUsersArchitectProfile")
   .get(protect, getUsersArchitectProfile);
-router.route("/:id").put(updateArchitect).delete(deleteArchitect);
+router
+  .route("/:id")
+  .get(getSingleArchitect)
+  .put(upload.single("logo"), updateArchitect)
+  .delete(deleteArchitect);
+router.route("/updateLogo/:id").put(upload.single("logo"), updateLogo);
 //router.route("/:filename").get(getFile);
 
 module.exports = router;

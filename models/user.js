@@ -60,6 +60,18 @@ const userSchema = new mongoose.Schema(
       enum: ["admin", "user"],
       default: "user",
     },
+    questLiked: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Forum",
+      },
+    ],
+    ansLiked: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Forum",
+      },
+    ],
     profilePicture: { type: String },
     interestedCategories: {
       type: String,

@@ -5,6 +5,7 @@ const {
   createItem,
   updateItem,
   deleteItem,
+  getImage,
 } = require("../controllers/item");
 const { protect } = require("../middleware/auth");
 const { accessShop } = require("../middleware/shopAuth");
@@ -59,5 +60,6 @@ router
   .get(getItems)
   .post(accessShop, upload.array("productPicture"), createItem);
 router.route("/:id").get(getItem).put(updateItem).delete(deleteItem);
+router.route("/getImage/:filename").get(getImage);
 
 module.exports = router;

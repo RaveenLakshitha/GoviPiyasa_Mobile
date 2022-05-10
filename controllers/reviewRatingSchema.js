@@ -1,6 +1,6 @@
 const item = require("../models/item");
 const reviews = require("../models/reviewRating");
-
+const ErrorResponse = require("../utils/errorResponse");
 //@desc     Get all reviews
 //@route    Get /api/v1/reviews
 //@access   Public
@@ -31,20 +31,20 @@ exports.createRewiew = async (req, res, next) => {
     console.log(req.user.id);
 
     //Check for published shop
-    const createdShop = await Shop.findOne({ user: req.user.id });
+    const createdReview = await reviews.findOne({ user: req.user.id });
 
     //Admin can add more shops
-    if (createdShop && req.user.role !== "admin") {
+    if (createdReview && req.user.role !== "admin") {
       return next(
         new ErrorResponse(
-          `The user with ID ${req.user.id} has already published a shop`,
+          `The user with ID ${req.user.id} has already published a Review`,
           400
         )
       );
     }
 
-    const shop = await Shop.create(req.body);
-    console.log(shop);
+    const review = await reviews.create(req.body);
+    console.log(review);
     await user.findByIdAndUpdate(req.user.id, { shopId: shop.id });
     //Create Token
     const shopToken = shop.getShopSignedJwtToken();

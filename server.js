@@ -8,9 +8,12 @@ const architects = require("./routes/Architects/architect");
 //const awardsAndPubd = require("./routes/Architects/awards&pubs");
 //const projects = require("./routes/Architects/projects");
 const users = require("./routes/user");
+const cart = require("./routes/cart");
 const auths = require("./routes/auth");
 const categories = require("./routes/category");
 const items = require("./routes/item");
+const forum = require("./routes/Forum/Forum");
+const orders = require("./routes/order");
 const advertisements = require("./routes/advertisement");
 const connectDB = require("./config/db");
 const cookieParser = require("cookie-parser");
@@ -49,10 +52,13 @@ app.use("/api/v1/architects", architects);
 //app.use("/api/v1/architects/awardsAndPubd", awardsAndPubd);
 //app.use("/api/v1/architects/projects", projects);
 app.use("/api/v1/users", users);
+app.use("/api/v1/cart", cart);
 app.use("/api/v1/auths", auths);
 app.use("/api/v1/items", items);
 app.use("/api/v1/categories", categories);
 app.use("/api/v1/advertisements", advertisements);
+app.use("/api/v1/forum", forum);
+app.use("/api/v1/orders", orders);
 
 //ErrorHandler(Must after mounting routes)
 app.use(errorHandler);

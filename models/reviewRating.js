@@ -20,6 +20,7 @@ const reviewRatingSchema = mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Item",
   },
+  createdDate: { type: Date },
 });
 
 module.exports = mongoose.model("ReviewsRatings", reviewRatingSchema);

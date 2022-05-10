@@ -1,15 +1,18 @@
 const express = require("express");
 const {
-  getOrders,
-  getOrder,
-  createOrder,
-  updateOrder,
-  deleteOrder,
-} = require("../controllers/user");
+  getReviews,
+  getReview,
+  createReview,
+  updateReview,
+  deleteReview,
+  getUsersReview,
+} = require("../controllers/reviewRatingSchema");
 
 const router = express.Router();
+const { protect } = require("../middleware/auth");
 
-router.route("/").get(getOrders).post(createOrder);
-router.route("/:id").get(getOrder).put(updateOrder).delete(deleteOrder);
+router.route("/").get(getReviews).post(protect, createReview);
+router.route("/getUsersReview").get(protect, getUsersReview);
+router.route("/:id").put(updateReview).delete(deleteReview);
 
 module.exports = router;

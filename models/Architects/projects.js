@@ -4,7 +4,7 @@ const projectSchema = new mongoose.Schema({
   description: {
     type: String,
     trim: true,
-    required: true,
+    //required: true,
   },
   reviews: [
     {
@@ -17,6 +17,16 @@ const projectSchema = new mongoose.Schema({
       img: { type: String },
     },
   ],
+  architectId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Architect",
+    //required: true,
+  },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    //required: true,
+  },
   designTeam: [
     {
       memberName: {

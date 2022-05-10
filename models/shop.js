@@ -63,6 +63,12 @@ const shopSchema = new mongoose.Schema(
         ref: "Item",
       },
     ],
+    orders: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "order",
+      },
+    ],
     logo: { type: String },
     coverImage: { type: String },
     createdDate: { type: Date },

@@ -7,6 +7,7 @@ const asyncHandler = require("../middleware/async");
 //@access   Public
 exports.createUser = async (req, res, next) => {
   try {
+    req.body.profilePicture = req.file.filename;
     const User = await user.create(req.body);
 
     //Create Token
@@ -17,6 +18,7 @@ exports.createUser = async (req, res, next) => {
     next(err);
   }
 };
+
 //@desc     Login User
 //@route    Post /api/v1/users
 //@access   Public
@@ -165,5 +167,75 @@ exports.signoutUser = async (req, res, next) => {
     res.status(200).json({ success: true, message: "Signout success" });
   } catch (err) {
     next(err);
+  }
+};
+//@desc     Update a user
+//@route    Put /api/v1/users/:id
+//@access   Public
+exports.updateUser = async (req, res, next) => {
+  try {
+    const User = await user.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (!User) {
+      return res.status(400).json({ success: false });
+    }
+    res.status(200).json({ success: true, data: User });
+  } catch (err) {
+    return res.status(400).json({ success: false });
+  }
+};
+//@desc     Delete a user
+//@route    Delete /api/v1/users/:id
+//@access   Private
+exports.deleteUser = async (req, res, next) => {
+  try {
+    const User = await user.findByIdAndDelete(req.params.id);
+
+    if (!User) {
+      return res.status(400).json({ success: false });
+    }
+    res.status(200).json({ success: true, data: {} });
+  } catch (err) {
+    return res.status(400).json({ success: false });
+  }
+};
+
+//@desc     Get all Files
+//@route    Get /api/v1/files
+//@access   Public
+exports.getImage = async (req, res, next) => {
+  try {
+    const filename = req.params.filename;
+    gfs.find({ filename: filename.trim() }).toArray((err, files) => {
+      gfs.openDownloadStreamByName(req.params.filename).pipe(res);
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+//@desc     Update a user
+//@route    Put /api/v1/users/:id
+//@access   Public
+exports.updateProfilePic = async (req, res, next) => {
+  try {
+    const User = await user.findByIdAndUpdate(
+      req.params.id,
+      { profilePicture: req.file.filename },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
+    if (!User) {
+      return res.status(400).json({ success: false });
+    }
+    res.status(200).json({ success: true, data: User });
+  } catch (err) {
+    return res.status(400).json({ success: false, error: err });
   }
 };

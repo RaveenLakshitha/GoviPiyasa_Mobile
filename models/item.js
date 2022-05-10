@@ -20,6 +20,10 @@ const itemSchema = mongoose.Schema({
     type: Number,
     //required: true,
   },
+  rating: {
+    type: Number,
+    //required: true,
+  },
   productPictures: [
     {
       img: { type: String },

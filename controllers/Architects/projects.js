@@ -9,7 +9,9 @@ const Project = require("../../models/Architects/projects");
 //@access   Public
 exports.getProjects = async (req, res, next) => {
   try {
-    const projects = await Project.find();
+    const projects = await Project.find()
+      .populate("architectId")
+      .populate("userId");
     res
       .status(200)
       .json({ success: true, count: projects.length, data: projects });
@@ -36,12 +38,12 @@ exports.createProject = async (req, res, next) => {
   req.body.gallery = gallery;
 
   // req.body.createdBy = req.user.id;
-  //req.body.shopId = req.shop.id;
-  // req.body.userId = req.shop.user;
+  req.body.architectId = req.architect.id;
+  req.body.userId = req.architect.user;
 
   const project = await Project.create(req.body);
   await Architect.findOneAndUpdate(
-    { user: req.shop.user },
+    { user: req.architect.user },
     {
       $push: {
         projects: project.id,
@@ -55,15 +57,36 @@ exports.createProject = async (req, res, next) => {
 //@route    Put /api/v1/projects
 //@access   Public
 exports.updateProject = (req, res, next) => {
-  res
-    .status(200)
-    .json({ success: true, msg: `Update project ${req.params.id}` });
+  try {
+    const project = await Project.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (!project) {
+      return next(
+        new ErrorResponse(`project not Found With id of ${req.params.id}`, 404)
+      );
+    }
+    res.status(200).json({ success: true, data: project });
+  } catch (err) {
+    next(err);
+  }
 };
 //@desc     Delete a project
 //@route    Delete /api/v1/projects
 //@access   Private
 exports.deleteProject = (req, res, next) => {
-  res
-    .status(200)
-    .json({ success: true, msg: `Delete project ${req.params.id}` });
+  try {
+    const project = await Project.findByIdAndDelete(req.params.id);
+
+    if (!project) {
+      return next(
+        new ErrorResponse(`Project not Found With id of ${req.params.id}`, 404)
+      );
+    }
+    res.status(200).json({ success: true, data: {} });
+  } catch (err) {
+    next(err);
+  }
 };

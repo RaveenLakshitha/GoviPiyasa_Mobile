@@ -15,6 +15,7 @@ const fs = require("fs");
 const url =
   "mongodb+srv://Raveen_lw_learn:Raveen@govipiyasav1.8foh6.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 let gfs;
+
 /* 
 conn.once("open", () => {
   gfs = Grid(conn.db, mongoose.mongo);
@@ -46,9 +47,15 @@ exports.getFiles = async (req, res, next) => {
     /* gfs.files.find().toArray((err, files) => {
       res.status(200).json({ success: true, data: files });
     }); */
-    bucket.find().toArray((err, files) => {
+    /* bucket.find().toArray((err, files) => {
       res.status(200).json({ success: true, data: files });
-    });
+    }); */
+    gfs
+      .find()
+      .toArray()
+      .then((files) => {
+        console.log(files);
+      });
   } catch (err) {
     next(err);
   }
@@ -59,9 +66,10 @@ exports.getFiles = async (req, res, next) => {
 exports.getImage = async (req, res, next) => {
   try {
     const filename = req.params.filename;
-    gfs.find({ filename: filename.trim() }).toArray((err, files) => {
+    await gfs.find({ filename: filename.trim() }).toArray((err, files) => {
       gfs.openDownloadStreamByName(req.params.filename).pipe(res);
     });
+
     /* const _id = req.params.id;
     gfs.find({ _id }).toArray((err, files) => {
       gfs.openDownloadStream(_id).pipe(res);
@@ -195,17 +203,44 @@ exports.createArchitect = async (req, res, next) => {
 //@access   Public
 exports.updateArchitect = async (req, res, next) => {
   try {
-    const shop = await Shop.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
-    });
+    const architect = await Architect.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
 
-    if (!shop) {
+    if (!architect) {
       return next(
-        new ErrorResponse(`Shop not Found With id of ${req.params.id}`, 404)
+        new ErrorResponse(
+          `Architect not Found With id of ${req.params.id}`,
+          404
+        )
       );
     }
-    res.status(200).json({ success: true, data: shop });
+    res.status(200).json({ success: true, data: architect });
+  } catch (err) {
+    next(err);
+  }
+};
+//@desc     Get a single shop
+//@route    Put /api/v1/shops
+//@access   Public
+exports.getSingleArchitect = async (req, res, next) => {
+  try {
+    const architect = await Architect.findById(req.params.id);
+
+    if (!architect) {
+      return next(
+        new ErrorResponse(
+          `Architect not Found With id of ${req.params.id}`,
+          404
+        )
+      );
+    }
+    res.status(200).json({ success: true, data: architect });
   } catch (err) {
     next(err);
   }
@@ -237,3 +272,26 @@ exports.getShops = asyncHandler( async (req, res, next) => {
     res.status(200).json({ success: true, count: shops.length, data: shops });
   } 
 ); */
+
+//@desc     Update a user
+//@route    Put /api/v1/users/:id
+//@access   Public
+exports.updateLogo = async (req, res, next) => {
+  try {
+    const architect = await Architect.findByIdAndUpdate(
+      req.params.id,
+      { logo: req.file.filename },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
+    if (!architect) {
+      return res.status(400).json({ success: false });
+    }
+    res.status(200).json({ success: true, data: architect });
+  } catch (err) {
+    return res.status(400).json({ success: false });
+  }
+};
