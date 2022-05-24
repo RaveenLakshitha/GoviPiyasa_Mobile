@@ -27,7 +27,7 @@ const mongodb = require("mongodb");
 const conn = mongoose.connection;
 const fs = require("fs");
 
-const storage = new GridFsStorage({
+/* const storage = new GridFsStorage({
   url: "mongodb+srv://Raveen_lw_learn:Raveen@govipiyasav1.8foh6.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
   file: (req, file) => {
     return new Promise((resolve, reject) => {
@@ -45,6 +45,16 @@ const storage = new GridFsStorage({
     });
   },
 });
+const upload = multer({ storage }); */
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.join(path.dirname(__dirname), "uploads/users"));
+  },
+  filename: function (req, file, cb) {
+    cb(null, shortid.generate() + "-" + file.originalname);
+  },
+});
+
 const upload = multer({ storage });
 
 router.route("/register").post(upload.single("profilePicture"), createUser);

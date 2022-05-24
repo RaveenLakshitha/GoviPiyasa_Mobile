@@ -18,6 +18,18 @@ exports.createUser = async (req, res, next) => {
     next(err);
   }
 };
+/* exports.createUser = async (req, res, next) => {
+  try {
+    const User = await user.create(req.body);
+
+    //Create Token
+    const token = User.getSignedJwtToken();
+
+    res.status(201).json({ success: true, data: User, token });
+  } catch (err) {
+    next(err);
+  }
+}; */
 
 //@desc     Login User
 //@route    Post /api/v1/users

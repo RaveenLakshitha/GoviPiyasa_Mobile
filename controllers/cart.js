@@ -7,12 +7,13 @@ exports.addItemToCart = async (req, res, next) => {
   try {
     const cart = new Cart({
       user: req.user.id,
-      cartItems: [req.body.cartItems],
+      cartItems: req.body.cartItems,
       cartTotalPrice: req.body.cartTotalPrice,
     });
 
     //Check for createdCart
     const createdCart = await Cart.findOne({ user: req.user.id });
+
     if (createdCart) {
       //Check for addedItem in createdCart
       const product = req.body.cartItems.product;
@@ -32,16 +33,29 @@ exports.addItemToCart = async (req, res, next) => {
             },
           }
         );
+
+        await Cart.findOneAndUpdate(
+          { user: req.user._id, "cartItems.product": product },
+          {
+            $set: {
+              cartItems: {
+                ...req.body.cartItems,
+                cartTotalPrice:
+                  createdCart.cartTotalPrice + req.body.cartTotalPrice,
+              },
+            },
+          }
+        );
+      } else {
+        await Cart.findOneAndUpdate(
+          { user: req.user._id },
+          {
+            $push: {
+              cartItems: req.body.cartItems,
+            },
+          }
+        );
       }
-      await Cart.findOneAndUpdate(
-        { user: req.user._id, "cartItems.product": product },
-        {
-          $set: {
-            cartTotalPrice:
-              createdCart.cartTotalPrice + req.body.cartItems.price,
-          },
-        }
-      );
 
       return res.status(200).json({ success: true, data: cart });
     }
@@ -58,7 +72,7 @@ exports.addItemToCart = async (req, res, next) => {
 //@desc     Remove item from Cart
 //@route    Post /api/v1/Categories
 //@access   Public
-exports.removeItemToCart = async (req, res, next) => {
+exports.removeItemFromCart = async (req, res, next) => {
   try {
     const cart = new Cart({
       user: req.user.id,

@@ -9,7 +9,10 @@ const ErrorResponse = require("../utils/errorResponse");
 //@access   Public
 exports.getShops = async (req, res, next) => {
   try {
-    const shops = await Shop.find().populate("user").populate("shopItems");
+    const shops = await Shop.find()
+      .populate("user")
+      .populate("shopItems")
+      .populate("orders");
 
     res.status(200).json({ success: true, count: shops.length, data: shops });
   } catch (err) {
@@ -97,6 +100,7 @@ exports.updateShop = async (req, res, next) => {
 //@access   Private
 exports.deleteShop = async (req, res, next) => {
   try {
+    await user.findByIdAndUpdate(req.body.userId, { $set: { shopId: null } });
     const shop = await Shop.findByIdAndDelete(req.params.id);
 
     if (!shop) {
@@ -104,6 +108,7 @@ exports.deleteShop = async (req, res, next) => {
         new ErrorResponse(`Shop not Found With id of ${req.params.id}`, 404)
       );
     }
+
     res.status(200).json({ success: true, data: {} });
   } catch (err) {
     next(err);
