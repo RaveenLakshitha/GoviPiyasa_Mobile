@@ -15,8 +15,7 @@ class _AboutState extends State<About> {
   String _imagepath;
 
   var token;
-  String finalemail="ashennilura@gmail.com";
-
+  String finalemail="raveenlw44@gmail.com\nashennilurgjgga@gmail.com\nnethmiwarnakula@gmail.com\nsajinirageesha@gmail.com";
 
   void initState() {
 
@@ -81,18 +80,18 @@ class _AboutState extends State<About> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-
                                     Text("Govi Piyasa",
                                       style: TextStyle(
-                                        fontSize: 17.0,
+                                        fontSize: 30.0,
+                                        fontFamily: 'Indies',
                                         fontWeight: FontWeight.w800,
                                       ),),
 
                                     Text(
                                       finalemail,
                                       style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 15.0,
+                                        color: Colors.grey,
+                                        fontSize: 16.0,
                                       ),
                                     ),
 
@@ -119,8 +118,9 @@ class _AboutState extends State<About> {
                                     Text(
                                       "About Us",
                                       style: TextStyle(
-                                        fontSize: 17.0,
+                                        fontSize: 20.0,
                                         fontWeight: FontWeight.w800,
+
                                       ),
                                     ),
                                     Divider(
@@ -130,7 +130,6 @@ class _AboutState extends State<About> {
                                       mainAxisAlignment:
                                       MainAxisAlignment.center,
                                       children: [
-
                                         SizedBox(
                                           width: 10.0,
                                         ),
@@ -141,13 +140,13 @@ class _AboutState extends State<About> {
                                             Text(
                                               "Group Members",
                                               style: TextStyle(
-                                                fontSize: 15.0,
+                                                fontSize: 20.0,
                                               ),
                                             ),
                                             Text(
                                               members,
                                               style: TextStyle(
-                                                fontSize: 12.0,
+                                                fontSize: 16.0,
                                                 color: Colors.grey[400],
                                               ),
                                             )
@@ -166,10 +165,4 @@ class _AboutState extends State<About> {
         ],
       ),
     );
-  }
-
-
-
-
-
-}
+  }}

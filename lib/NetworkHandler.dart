@@ -30,7 +30,7 @@ class NetworkHandler {
   Future<http.Response> post(String url, Map<String, String> body) async {
     String token = await storage.read(key: "token");
     url = formater(url);
-    log.d(body);
+    //log.d(body);
     var response = await http.post(
       url,
       headers: {

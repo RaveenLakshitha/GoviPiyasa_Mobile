@@ -1,4 +1,3 @@
-import 'package:blogapp/checkout/widgets/itemdetails.dart';
 import 'package:flutter/material.dart';
 
 import 'Api_service.dart';
@@ -42,15 +41,7 @@ class SearchUser extends SearchDelegate {
           return ListView.builder(
               itemCount: data?.length,
               itemBuilder: (context, index) {
-
                 return ListTile(
-                  onTap: (){
-                 Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => Itemdetails(text: '${data[index].producyName}',price:'${data[index].description}',image:'https://source.unsplash.com/random?sig=$index',description:'${data[index].description}',quantity:'${data[index].description}',category:'${data[index].description}'),
-                        ));
-                  },
                   title: Row(
                     children: [
                       Container(
@@ -76,13 +67,13 @@ class SearchUser extends SearchDelegate {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              '${data[index].producyName}',
+                              '${data[index].productName}',
                               style: TextStyle(
                                   fontSize: 18, fontWeight: FontWeight.w600),
                             ),
                             SizedBox(height: 10),
                             Text(
-                              '${data[index].description}',
+                              '${data[index].quantity}',
                               style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 14,

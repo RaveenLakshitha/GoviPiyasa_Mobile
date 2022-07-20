@@ -36,7 +36,7 @@ class MapState extends State<Map> {
                     builder: (context) => HomePage(),
                   ));
             }),
-        title: Text("r"),
+        title: Text("Map"),
         actions: <Widget>[
           IconButton(
               icon: Icon(FontAwesomeIcons.search),

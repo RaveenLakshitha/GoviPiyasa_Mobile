@@ -138,7 +138,7 @@ class _WelcomePageState extends State<WelcomePage>
                     Text(
                       "Already have an account?",
                       style: TextStyle(
-                        color: Colors.grey,
+                        color: Colors.black,
                         fontSize: 17,
                       ),
                     ),
@@ -154,7 +154,7 @@ class _WelcomePageState extends State<WelcomePage>
                       child: Text(
                         "Sign In",
                         style: TextStyle(
-                          color: Colors.green,
+                          color: Colors.black,
                           fontSize: 17,
                           fontWeight: FontWeight.bold,
                         ),

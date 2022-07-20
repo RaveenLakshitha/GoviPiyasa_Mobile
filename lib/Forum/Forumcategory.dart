@@ -97,9 +97,9 @@ class _ForumCategoryState extends State<ForumCategory> {
         backgroundColor: Colors.white,
         appBar: AppBar(
           elevation: 0,
-          backgroundColor: Colors.lightGreen,
+         // backgroundColor: Colors.lightGreen,
           actions: <Widget>[
-            _shoppingCartBadge()
+           // _shoppingCartBadge()
           ],
         ),
         body: Container(
@@ -110,7 +110,7 @@ class _ForumCategoryState extends State<ForumCategory> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    "Category",
+                    "Categories",
                     style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,

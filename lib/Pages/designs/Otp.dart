@@ -45,7 +45,7 @@ class _OtpState extends State<Otp> {
      Navigator.push(
          context,
          MaterialPageRoute(
-             builder: (context) => ForgotPasswordPage()));
+             builder: (context) => Forgetpassword()));
      Fluttertoast.showToast(
        msg: 'Sucessfull',
        toastLength: Toast.LENGTH_SHORT,
@@ -62,6 +62,8 @@ class _OtpState extends State<Otp> {
   Widget build(BuildContext context) {
     return Scaffold(
       body:Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
 
            Container(

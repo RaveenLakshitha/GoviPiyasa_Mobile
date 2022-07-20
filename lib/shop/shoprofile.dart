@@ -15,6 +15,7 @@ import 'Chart.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import 'DataModel.dart';
+import 'Editshop.dart';
 import 'item.dart';
 import 'itemservice.dart';
 
@@ -31,6 +32,9 @@ class _ShowitemState extends State<Showitem> {
   String shopName;
   String email;
   String shopid;
+  String rating;
+  String address;
+
   var _shopjson;
   String _imagepath;
   List<Widget> widgets = [Showitem(), Chart()];
@@ -54,8 +58,11 @@ class _ShowitemState extends State<Showitem> {
         shopName = _shopjson['shopName'].toString();
         email = _shopjson['email'].toString();
         shopid = _shopjson['_id'].toString();
+        rating = _shopjson['rating'].toString();
+        address = _shopjson['address'].toString();
 
       });
+      print(rating.toString());
     } catch (err) {}
   }
   var _itemsJson = [];
@@ -151,6 +158,7 @@ class _ShowitemState extends State<Showitem> {
     setState(() {
       _image = File(image.path);
     });
+    SaveImage(_image.path);
   }
 
   void initState() {
@@ -185,16 +193,51 @@ class _ShowitemState extends State<Showitem> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Text(
-                                    "ShopName :${shopName.toString()}",
+                                    "${shopName.toString()}",
                                     style: TextStyle(
                                       color: Colors.red,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 30.0,
                                     ),
                                   ),
-                                  SizedBox(
-                                    height: 5.0,
-                                  ),
+                                  Container(
+                                    width: 340,
+                                    child:Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.only(right: 1.0),
+                                          child:Material(
+                                            type: MaterialType.transparency,
+                                            child: Ink(
+                                              decoration: BoxDecoration(
+                                                border: Border.all(color: Colors.green, width: 2.0),
+                                                color: Colors.lightGreen,
+                                                shape: BoxShape.circle,
+                                              ),
+                                              child: InkWell(
+                                                borderRadius: BorderRadius.circular(500.0),
+                                                onTap: () {   Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          Editshop(id:"${shopid}",shopName:"${shopName}",email:"${email}",address:"${address}"),
+                                                    ));},
+                                                child: Padding(
+                                                  padding: EdgeInsets.all(2.0),
+                                                  child: Icon(
+                                                    Icons.article_sharp,
+                                                    size: 25.0,
+                                                    color: Colors.blue,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                  ),),
+
                                   Container(
                                     child: _image != null
                                         ? Container(
@@ -254,12 +297,28 @@ class _ShowitemState extends State<Showitem> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          "${shopid.toString()}",
+                          "${email.toString()}",
                           style: TextStyle(
                             color: Colors.blue,
                             fontSize: 15.0,
                           ),
                         ),
+                        Container(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.star,color: Colors.yellow,),
+                              Text(
+                                "${rating.toString()}",
+                                style: TextStyle(
+                                  color: Colors.blue,
+                                  fontSize: 15.0,
+                                ),
+                              ),
+                            ],
+                          )
+                        ),
+
                         SizedBox(
                           height: 50,
                           child: Center(
@@ -273,7 +332,7 @@ class _ShowitemState extends State<Showitem> {
                                             chooseImage(ImageSource.gallery);
                                           },
                                           icon: Icon(Icons.camera_alt_sharp)),
-                                      IconButton(
+                             /*         IconButton(
                                           onPressed: () {
                                             SaveImage(_image.path);
                                             Fluttertoast.showToast(
@@ -285,7 +344,7 @@ class _ShowitemState extends State<Showitem> {
                                               fontSize: 16.0,
                                             );
                                           },
-                                          icon: Icon(Icons.api_outlined)),
+                                          icon: Icon(Icons.api_outlined)),*/
                                     ]),
                               ),
                             ]),

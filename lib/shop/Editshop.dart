@@ -3,53 +3,65 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 
 class Editshop extends StatefulWidget {
-  const Editshop({Key key}) : super(key: key);
 
+  final String id;
+  final String shopName;
+  final String email;
+  final String address;
+  Editshop(
+      {
+        @required this.id,
+        @required this.shopName,
+        @required this.email,
+        @required this.address,});
   @override
-  State<Editshop> createState() => _EditshopState();
+  State<Editshop> createState() => _EditshopState(id,shopName,email,address);
 }
 class Shop {
   final String id;
-  final String userName;
+  final String shopName;
   final String email;
-  final String contactNumber;
-  final String city;
+ // final String contactNumber;
+  final String address;
 
 
-  const Shop({@required this.id, @required this.userName,@required this.email,@required this.contactNumber,@required this.city,});
+  const Shop({@required this.id, @required this.shopName,@required this.email,@required this.address,});
 
   factory Shop.fromJson(Map<String, dynamic> json) {
     return Shop(
       id: json['id'],
-      userName: json['userName'],
+      shopName: json['shopName'],
       email: json['email'],
-      contactNumber:json['contactNumber'],
-      city:json['contactNumber'],
+      address:json['address'],
 
 
     );
   }
 }
 class _EditshopState extends State<Editshop> with SingleTickerProviderStateMixin{
+  final String id;
+  final String shopName;
+  final String email;
+  final String address;
+  _EditshopState(this.id,this.shopName, this.email, this.address,);
   bool _status = true;
   final FocusNode myFocusNode = FocusNode();
-  Future<Shop> updateShop(String id,String userName,String email, String contactNumber ,String city,String password) async {
+  Future<Shop> updateShop(String id,String shopName,String email, String address) async {
     print(id);
     final response = await http.put(
-      Uri.parse('https://govi-piyasa-v-0-1.herokuapp.com/api/v1/auths/$id'),
+      Uri.parse('https://govi-piyasa-v-0-1.herokuapp.com/api/v1/shops/$id'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, dynamic>{
         '_id':id,
-        'userName':userName,
+        'shopName':shopName,
         'email':email,
-        'contactNumber':contactNumber,
-        'city':city,
-        'password':password
+        'address':address,
 
       }),
     );
@@ -65,6 +77,20 @@ class _EditshopState extends State<Editshop> with SingleTickerProviderStateMixin
   }
   Future<Null> refreshList() async {
     await Future.delayed(Duration(seconds: 3));
+  }
+
+
+  void initState() {
+    // TODO: implement initState
+    setState(() {
+      myController1.text=shopName;
+      myController2.text=email;
+      myController3.text=address;
+      myController4.text=id;
+
+
+    });
+    super.initState();
   }
   FlutterSecureStorage storage = FlutterSecureStorage();
   final myController1 = TextEditingController();
@@ -105,7 +131,7 @@ class _EditshopState extends State<Editshop> with SingleTickerProviderStateMixin
                                         mainAxisSize: MainAxisSize.min,
                                         children: <Widget>[
                                           new Text(
-                                            'Parsonal Information',
+                                            'Edit Shop Information',
                                             style: TextStyle(
                                                 fontSize: 18.0,
                                                 fontWeight: FontWeight.bold),
@@ -132,7 +158,7 @@ class _EditshopState extends State<Editshop> with SingleTickerProviderStateMixin
                                         mainAxisSize: MainAxisSize.min,
                                         children: <Widget>[
                                           new Text(
-                                            'Name',
+                                            'ShopName',
                                             style: TextStyle(
                                                 fontSize: 16.0,
                                                 fontWeight: FontWeight.bold),
@@ -152,47 +178,11 @@ class _EditshopState extends State<Editshop> with SingleTickerProviderStateMixin
                                         child: new TextField(
                                           controller: myController1,
                                           decoration: const InputDecoration(
-                                            hintText: "Enter Your Name",
+                                            hintText: "Enter Your shopName",
                                           ),
                                           enabled: !_status,
                                           autofocus: !_status,
 
-                                        ),
-                                      ),
-                                    ],
-                                  )),
-                              Padding(
-                                  padding: EdgeInsets.only(
-                                      left: 25.0, right: 25.0, top: 25.0),
-                                  child: new Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: <Widget>[
-                                      new Column(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: <Widget>[
-                                          new Text(
-                                            "Password",
-                                            style: TextStyle(
-                                                fontSize: 16.0,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  )),
-                              Padding(
-                                  padding: EdgeInsets.only(
-                                      left: 25.0, right: 25.0, top: 2.0),
-                                  child: new Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: <Widget>[
-                                      new Flexible(
-                                        child: new TextField(
-                                          controller: myController6,
-                                          decoration: const InputDecoration(
-                                              hintText:"Enter New Password" ),
-                                          enabled: !_status,
                                         ),
                                       ),
                                     ],
@@ -227,7 +217,7 @@ class _EditshopState extends State<Editshop> with SingleTickerProviderStateMixin
                                         child: new TextField(
                                           controller: myController2,
                                           decoration: const InputDecoration(
-                                              hintText:"Enter Email Address" ),
+                                              hintText:"Enter your Email" ),
                                           enabled: !_status,
                                         ),
                                       ),
@@ -244,7 +234,7 @@ class _EditshopState extends State<Editshop> with SingleTickerProviderStateMixin
                                         mainAxisSize: MainAxisSize.min,
                                         children: <Widget>[
                                           new Text(
-                                            'Mobile',
+                                            "Address",
                                             style: TextStyle(
                                                 fontSize: 16.0,
                                                 fontWeight: FontWeight.bold),
@@ -263,13 +253,49 @@ class _EditshopState extends State<Editshop> with SingleTickerProviderStateMixin
                                         child: new TextField(
                                           controller: myController3,
                                           decoration: const InputDecoration(
-                                              hintText: "Enter Mobile Number"),
+                                              hintText:"Enter your Address" ),
                                           enabled: !_status,
                                         ),
                                       ),
                                     ],
                                   )),
                               Padding(
+                                  padding: EdgeInsets.only(
+                                      left: 25.0, right: 25.0, top: 25.0),
+                                  child: new Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: <Widget>[
+                                      new Column(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: <Widget>[
+                                          new Text(
+                                            'Contact No',
+                                            style: TextStyle(
+                                                fontSize: 16.0,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  )),
+                              Padding(
+                                  padding: EdgeInsets.only(
+                                      left: 25.0, right: 25.0, top: 2.0),
+                                  child: new Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: <Widget>[
+                                      new Flexible(
+                                        child: new TextField(
+                                          controller:myController4,
+                                          decoration: const InputDecoration(
+                                              hintText: "Enter Contact Number"),
+                                          enabled: false,
+                                        ),
+                                      ),
+                                    ],
+                                  )),
+                           /*   Padding(
                                   padding: EdgeInsets.only(
                                       left: 25.0, right: 25.0, top: 25.0),
                                   child: new Row(
@@ -299,7 +325,7 @@ class _EditshopState extends State<Editshop> with SingleTickerProviderStateMixin
                                         flex: 2,
                                       ),
                                     ],
-                                  )),
+                                  )),*/
                               Padding(
                                   padding: EdgeInsets.only(
                                       left: 25.0, right: 25.0, top: 2.0),
@@ -307,7 +333,7 @@ class _EditshopState extends State<Editshop> with SingleTickerProviderStateMixin
                                     mainAxisSize: MainAxisSize.max,
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: <Widget>[
-                                      Flexible(
+                                /*      Flexible(
                                         child: Padding(
                                           padding: EdgeInsets.only(right: 10.0),
                                           child: new TextField(
@@ -327,7 +353,7 @@ class _EditshopState extends State<Editshop> with SingleTickerProviderStateMixin
                                           enabled: !_status,
                                         ),
                                         flex: 2,
-                                      ),
+                                      ),*/
                                     ],
                                   )),
                               !_status ? _getActionButtons() : new Container(),
@@ -354,11 +380,19 @@ class _EditshopState extends State<Editshop> with SingleTickerProviderStateMixin
               padding: EdgeInsets.only(right: 10.0),
               child: Container(
                   child: new RaisedButton(
-                    child: new Text("Save"),
+                    child: new Text("Update"),
                     textColor: Colors.white,
                     color: Colors.green,
                     onPressed: () {
-                     // updateShop(myController1.text, myController2.text, myController3.text,myController4.text,myController6.text);
+                      updateShop(myController4.text,myController1.text, myController2.text, myController3.text);
+                      Fluttertoast.showToast(
+                        msg: "Shop Updated",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.BOTTOM,
+                        backgroundColor: Colors.red,
+                        textColor: Colors.white,
+                        fontSize: 16.0,
+                      );
                       setState(() {
                         _status = true;
                         FocusScope.of(context).requestFocus(new FocusNode());

@@ -44,7 +44,7 @@ class _ArchitectState extends State<Architect> {
     return Scaffold(
       appBar: AppBar(
         title: Text("${widget.name}"),
-        backgroundColor: Colors.lightGreen,
+      //  backgroundColor: Colors.lightGreen,
         centerTitle: true,
       ),
       body: Container(

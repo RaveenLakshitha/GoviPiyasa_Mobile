@@ -31,7 +31,11 @@ class CartPdt extends StatelessWidget {
           ),
           title: Text(name),
           subtitle: Text('Total: Rs${(price * quantity)}'),
-          trailing: Text('$quantity x'),
+          trailing: GestureDetector(
+              onTap: (){
+                print("hello");
+              },
+              child:Text('$quantity x')),
         ),
       ),
     );

@@ -2,10 +2,13 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:blogapp/CustumWidget/shopservice.dart';
+import 'package:blogapp/Pages/HomePage.dart';
+import 'package:blogapp/shop/shoprofile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
@@ -25,13 +28,22 @@ class _ArchitectState extends State<Architect> {
       _image=File(image.path);
     });
   }
-
+  final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
   var AName,about,designation,token,team,phoneNo;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.lightGreen,
+          leading: IconButton(
+              icon: Icon(FontAwesomeIcons.arrowLeft),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => HomePage(),
+                    ));
+              }),
+         // backgroundColor: Colors.lightGreen,
           elevation: 0.0,
           centerTitle: true,
           title: Text('Create Architecture Profile',
@@ -62,6 +74,7 @@ class _ArchitectState extends State<Architect> {
                 SizedBox(height:5.0),
                 Container(
                   child: Form(
+                    key:_formkey,
                     child: Column(
                       children: <Widget>[
                         Container(
@@ -213,17 +226,36 @@ class _ArchitectState extends State<Architect> {
                             ),
 
                           onPressed:(){
-                            ShopService().addArchitect(AName,phoneNo,about,team).then((val){
+                            if(_formkey.currentState.validate())
+                            {
+                              ShopService().addArchitect(AName,phoneNo,about,team).then((val){
+                                Fluttertoast.showToast(
+                                  msg: val.data['msg'],
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.BOTTOM,
+                                  backgroundColor: Colors.red,
+                                  textColor: Colors.white,
+                                  fontSize: 16.0,
+                                );
+
+                              });
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Showitem()));
+                            }else
+                            {
                               Fluttertoast.showToast(
-                                msg: val.data['msg'],
+                                msg: "Unsuccessfull",
                                 toastLength: Toast.LENGTH_SHORT,
                                 gravity: ToastGravity.BOTTOM,
                                 backgroundColor: Colors.red,
                                 textColor: Colors.white,
                                 fontSize: 16.0,
                               );
+                            }
 
-                            });
+
                           },
                           child:Text("Create Architect shop",style:TextStyle(
                             fontSize: 16,

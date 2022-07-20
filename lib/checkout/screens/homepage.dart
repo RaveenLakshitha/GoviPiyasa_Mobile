@@ -1,10 +1,9 @@
 import 'package:badges/badges.dart';
 import 'package:blogapp/Pages/HomePage.dart';
+import 'package:blogapp/Search/search.dart';
 import 'package:blogapp/checkout/widgets/allproducts.dart';
-
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
 import '../screens/cart_screen.dart';
 
 class HomePage1 extends StatelessWidget {
@@ -12,7 +11,7 @@ class HomePage1 extends StatelessWidget {
   Widget customSearchBar = const Text('My Personal Journal');
   final FocusNode _textFocusNode = FocusNode();
   TextEditingController _textEditingController = TextEditingController();
-  static int _counter;
+  static int _counter=0;
   @override
   void dispose() {
     _textFocusNode.dispose();
@@ -24,8 +23,9 @@ class HomePage1 extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          toolbarHeight: 70,
           leading: IconButton(
-              icon: Icon(FontAwesomeIcons.arrowLeft),
+              icon: Icon(FontAwesomeIcons.arrowLeft,color:Colors.black),
               onPressed: () {
                 Navigator.push(
                     context,
@@ -33,29 +33,34 @@ class HomePage1 extends StatelessWidget {
                       builder: (context) => HomePage(),
                     ));
               }),
-          backgroundColor: Colors.lightGreen,
+          backgroundColor: Colors.white,
           title: Container(
-            margin: EdgeInsets.fromLTRB(0, 1, 0, 1),
-
             decoration: BoxDecoration(
-                color: Colors.lightGreen,
                 borderRadius: BorderRadius.circular(20)),
-            child: TextField(
-              controller: _textEditingController,
-              focusNode: _textFocusNode,
-              cursorColor: Colors.black,
-              decoration: new InputDecoration(
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.greenAccent, width: 1.0),
+            child: Container(
+              child: TextField(
+                controller: _textEditingController,
+                focusNode: _textFocusNode,
+                cursorColor: Colors.black,
+                decoration: new InputDecoration(
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.greenAccent, width: 1.0),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.red, width: 1.0),
+                  ),
+                  hintText: 'Search here',
                 ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.red, width: 1.0),
-                ),
-                hintText: 'Search here',
               ),
             ),
           ),
           actions: <Widget>[
+            IconButton(
+              onPressed: () {
+                showSearch(context: context, delegate: SearchUser());
+              },
+              icon: Icon(Icons.search_sharp,color:Colors.black),
+            ),
         Container(
           child:Badge(
             position: BadgePosition.topEnd(top: 0, end: 3),
@@ -65,7 +70,7 @@ class HomePage1 extends StatelessWidget {
               _counter.toString(),
               style: TextStyle(color: Colors.white),
             ),
-            child: IconButton(icon: Icon(Icons.shopping_cart), onPressed: () =>
+            child: IconButton(icon: Icon(Icons.shopping_cart,color:Colors.black), onPressed: () =>
                 Navigator.of(context).pushNamed(CartScreen.routeName)),
           )
         ),

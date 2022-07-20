@@ -113,7 +113,7 @@ class _WidgetScreenState extends State<WidgetScreen> {
                           children: <Widget>[
 
                             Image.asset(
-                              'assets/flowers.png',
+                              'assets/Delivery.png',
                               width: 90.0,
                               height: 90.0,
                               fit: BoxFit.contain,

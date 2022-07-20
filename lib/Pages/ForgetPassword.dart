@@ -1,167 +1,88 @@
 import 'dart:convert';
 
-import 'package:blogapp/Pages/HomePage.dart';
-import 'package:blogapp/Pages/SignUpPage.dart';
-import 'package:blogapp/Pages/WelcomePage.dart';
-import "package:flutter/material.dart";
-
-import '../NetworkHandler.dart';
+import 'package:email_auth/email_auth.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
-class ForgotPasswordPage extends StatefulWidget {
-  ForgotPasswordPage({Key key}) : super(key: key);
+import 'package:http/http.dart' as http;
+class Forgetpassword extends StatefulWidget {
+  const Forgetpassword({Key key}) : super(key: key);
 
   @override
-  _ForgotPasswordPageState createState() => _ForgotPasswordPageState();
+  State<Forgetpassword> createState() => _ForgetpasswordState();
 }
 
-class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
-  bool vis = true;
-  final _globalkey = GlobalKey<FormState>();
-  NetworkHandler networkHandler = NetworkHandler();
-  TextEditingController _usernameController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
-  String errorText;
-  bool validate = false;
-  bool circular = false;
-  final storage = new FlutterSecureStorage();
+class _ForgetpasswordState extends State<Forgetpassword> {
+
+  forget(email)async{
+    var headers = {
+      'Content-Type':'application/json',
+    };
+
+    final body = {
+      "email":email,
+
+    };
+    http.post(
+      "https://govi-piyasa-v-0-1.herokuapp.com/api/v1/auths/forgotPassword",body:jsonEncode(body),
+      headers: {
+        "Content-Type": "application/json",
+      },
+
+    ).then((response) {
+      if (response.statusCode == 200) {
+        print(json.decode(response.body));
+        // Do the rest of job here
+      }
+    });
+  }
+  final TextEditingController _passwordController=TextEditingController();
+  final TextEditingController _otp=TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.white, Colors.green[200]],
-            begin: const FractionalOffset(0.0, 1.0),
-            end: const FractionalOffset(0.0, 1.0),
-            stops: [0.0, 1.0],
-            tileMode: TileMode.repeated,
-          ),
-        ),
-        child: Form(
-          key: _globalkey,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Forgot Password",
-                  style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 2,
-                  ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                usernameTextField(),
-                SizedBox(
-                  height: 15,
-                ),
-                passwordTextField(),
-                SizedBox(
-                  height: 20,
-                ),
+      backgroundColor: Colors.white70,
+        body:Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
 
-                SizedBox(
-                  height: 30,
-                ),
-                InkWell(
-                  onTap: () async {
-                    Map<String, String> data = {
-                      "password": _passwordController.text
-                    };
-                    print("/user/update/${_usernameController.text}");
-                    var response = await networkHandler.patch(
-                        "/user/update/${_usernameController.text}", data);
 
-                    if (response.statusCode == 200 ||
-                        response.statusCode == 201) {
-                      print("/user/update/${_usernameController.text}");
-                      Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => WelcomePage()),
-                          (route) => false);
-                    }
-
-                    // login logic End here
-                  },
-                  child: Container(
-                    width: 150,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Color(0xff00A86B),
+            SizedBox(height: 20.0,),
+            Padding(
+                padding: const EdgeInsets.all(18.0),
+                child:Column(
+                  children: [
+                    TextField(
+                      controller: _passwordController,
+                      keyboardType: TextInputType.emailAddress,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: "Enter email",
+                        labelText: "Email",
+                        suffixIcon: TextButton(
+                          child:Text("Send Otp"),
+                          onPressed: (){
+                          },
+                        ),
+                      ),
                     ),
-                    child: Center(
-                      child: circular
-                          ? CircularProgressIndicator()
-                          : Text(
-                              "Update Password",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                    ),
-                  ),
-                ),
-                // Divider(
-                //   height: 50,
-                //   thickness: 1.5,
-                // ),
-              ],
+                    SizedBox(height: 20.0,),
+                    ElevatedButton(
+                      child:Text('Change Password'),
+                      onPressed: (){
+                        forget(_passwordController);
+                      },
+                    )
+                  ],
+                )
             ),
-          ),
-        ),
-      ),
-    );
-  }
+          ],
 
-  Widget usernameTextField() {
-    return Column(
-      children: [
-        Text("Username"),
-        TextFormField(
-          controller: _usernameController,
-          decoration: InputDecoration(
-            border: OutlineInputBorder(),
-            errorText: validate ? null : errorText,
-          ),
+
         )
-      ],
-    );
-  }
-
-  Widget passwordTextField() {
-    return Column(
-      children: [
-        Text("Password"),
-        TextFormField(
-          controller: _passwordController,
-          obscureText: vis,
-          decoration: InputDecoration(
-            border: OutlineInputBorder(),
-            errorText: validate ? null : errorText,
-            suffixIcon: IconButton(
-              icon: Icon(vis ? Icons.visibility_off : Icons.visibility),
-              onPressed: () {
-                setState(() {
-                  vis = !vis;
-                });
-              },
-            ),
-            helperStyle: TextStyle(
-              fontSize: 14,
-            ),
-
-          ),
-        )
-      ],
     );
   }
 }

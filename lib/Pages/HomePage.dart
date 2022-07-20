@@ -1,4 +1,7 @@
 import 'dart:convert';
+import 'package:badges/badges.dart';
+import 'package:blogapp/Architectureprofile/ArchitectDashboard.dart';
+import 'package:blogapp/Cart/main.dart';
 import 'package:blogapp/Expertprofile/Expertdashboard.dart';
 import 'package:blogapp/Language/translator.dart';
 import 'package:blogapp/Notification/destination_screen.dart';
@@ -11,12 +14,10 @@ import 'package:blogapp/Screen/Navbar/About.dart';
 import 'package:blogapp/Screen/Navbar/Delivery.dart';
 import 'package:blogapp/Screen/HomeScreen.dart';
 import 'package:blogapp/Screen/Navbar/Architectlist.dart';
-import 'package:blogapp/Screen/Maps/googlemap.dart';
 import 'package:blogapp/Screen/Services/Settings.dart';
 import 'package:blogapp/Screen/Navbar/feedback.dart';
 import 'package:blogapp/Screen/Navbar/expertlist.dart';
 import 'package:blogapp/Search/HomeScreen.dart';
-
 import 'package:blogapp/architecture/widget_screen.dart';
 import 'package:blogapp/shop/Shopdashboard.dart';
 import 'package:blogapp/shop/shoprofile.dart';
@@ -30,6 +31,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:showcaseview/showcase_widget.dart';
 
+import '../Imagelabel.dart';
 import 'bg_drawer.dart';
 
 //import 'package:blogapp/onesignal_flutter/onesignal_flutter.dart';
@@ -55,14 +57,14 @@ Future<void> initPlateformState() async{
 
   List<Widget> widgets = [HomeScreen(), ProfilePage()];
   List<String> titleString = ["Home Page", "Profile Page"];
-  bool approval=true;
-  bool approval2=true;
-  bool approval3=true;
+  bool approval=false;
+  bool approval2=false;
+  bool approval3=false;
   final storage = FlutterSecureStorage();
   NetworkHandler networkHandler = NetworkHandler();
   var username1="";
   int _counter;
-
+  int _counter1 = 0;
   String visibility;
   String value;
   var jsonData;
@@ -82,6 +84,7 @@ Future<void> initPlateformState() async{
     setState(() {
       _counter = (prefs.getInt('counter') ?? 0);
     });
+    print(_counter);
   }
 
   void fetchPosts() async {
@@ -97,7 +100,7 @@ Future<void> initPlateformState() async{
           });
       print('Token : ${token}');
 
-      print('ERROR FOR SHOW : ${response.body}');
+      print(' SHOW : ${response.body}');
       final jsonData = jsonDecode(response.body)['data'];
       setState(() {
         _postsJson = jsonData;
@@ -118,7 +121,13 @@ Future<void> initPlateformState() async{
 
     } catch (err) {}
   }
-
+  void _increment() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      prefs.setInt('counter', _counter1);
+    });
+    print(_counter1);
+  }
    Future  readuser() async {
     username1 = await storage.read(key: "id");
     print(username1);
@@ -126,8 +135,8 @@ Future<void> initPlateformState() async{
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   @override
   void initState() {
-
     loadCounter();
+
     requestPermissions();
     FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     var initializationSettingsAndroid = AndroidInitializationSettings('app_icon'); // <- default icon name is @mipmap/ic_launcher
@@ -179,7 +188,26 @@ Future<void> initPlateformState() async{
   }
 
   bool isloading=false;
-
+  Widget _NotificationBadge() {
+    return Badge(
+      position: BadgePosition.topEnd(top: 0, end: 3),
+      animationDuration: Duration(milliseconds: 300),
+      animationType: BadgeAnimationType.slide,
+      badgeContent: Text(
+        _counter.toString(),
+        style: TextStyle(color: Colors.white),
+      ),
+      child: IconButton(icon: Icon(Icons.notifications), onPressed: () {
+        _increment();
+        loadCounter();
+        Navigator.push(context,
+          MaterialPageRoute(
+            builder: (_) => Notify(),
+          ),
+        );
+      }),
+    );
+  }
   @override
   Widget build(BuildContext context) {
     String _message;
@@ -221,7 +249,7 @@ Future<void> initPlateformState() async{
               ),
 
                   Text(
-                    "${_counter}",
+                    "Govipiyasa",
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 15,
@@ -272,16 +300,16 @@ Future<void> initPlateformState() async{
         ),
       )),
       appBar: AppBar(
-        backgroundColor: Colors.lightGreen,
-        elevation: 0.3,
+        //backgroundColor: Colors.white,
+        elevation: 5,
         //centerTitle: true,
         title: Text(_message,
             style: TextStyle(
-                fontFamily: 'Indies', fontSize: 20.0, color: Colors.green)),
-        flexibleSpace: Image(
+                fontFamily: 'Roboto',fontWeight: FontWeight.bold, fontSize: 20.0, color: Colors.black)),
+      /*  flexibleSpace: Image(
           image: AssetImage('assets/about.jpg'),
           fit: BoxFit.cover,
-        ),
+        ),*/
         actions: <Widget>[
           /* Showcase(key:keyOne,
             showcaseBackgroundColor: Colors.lightBlue,
@@ -302,7 +330,8 @@ Future<void> initPlateformState() async{
               // );
             },),
              description:'Tap to see menu options',),*/
-          IconButton(
+          _NotificationBadge(),
+      /*    IconButton(
               icon: Icon(Icons.notifications),
               onPressed: () {
                 Navigator.push(
@@ -311,8 +340,9 @@ Future<void> initPlateformState() async{
                     builder: (_) => Notify(),
                   ),
                 );
-              }),
+              }),*/
           PopupMenuButton<int>(
+
             onSelected: (item) => onSelected(context, item),
             itemBuilder: (context) => [
               PopupMenuItem<int>(
@@ -386,7 +416,7 @@ Future<void> initPlateformState() async{
       ),
       bottomNavigationBar:BottomAppBar(
         elevation: 10,
-        color: Colors.lightGreen,
+       // color: Colors.lightGreen,
         shape: CircularNotchedRectangle(),
         notchMargin: 12,
         child: Container(
@@ -398,7 +428,7 @@ Future<void> initPlateformState() async{
               children: <Widget>[
                 IconButton(
                   icon: Icon(Icons.home),
-                  color: currentState == 0 ? Colors.white : Colors.white54,
+                  color: currentState == 0 ? Colors.black : Colors.black12,
                   onPressed: () {
                     setState(() {
                       currentState = 0;
@@ -408,7 +438,7 @@ Future<void> initPlateformState() async{
                 ),
                 IconButton(
                   icon: Icon(Icons.person),
-                  color: currentState == 1 ? Colors.white : Colors.white54,
+                  color: currentState == 1 ? Colors.black12 : Colors.black,
                   onPressed: () {
                     setState(() {
                       currentState = 1;
@@ -441,11 +471,11 @@ Future<void> initPlateformState() async{
         break;
       case 3:
         Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => MapActivity()));
+            MaterialPageRoute(builder: (context) => Imagelabel()));
         break;
       case 4:
         Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) =>translator()));
+            .push(MaterialPageRoute(builder: (context) =>CartNew()));
         break;
       case 5:
         Navigator.of(context)
@@ -472,7 +502,7 @@ Future<void> initPlateformState() async{
             onTap: () async{
 
              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => Showitem()));
+                  context, MaterialPageRoute(builder: (context) =>Architectdashboard()));
              },
             child: Visibility(
               child: ListTile(

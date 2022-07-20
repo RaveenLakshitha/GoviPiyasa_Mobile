@@ -1,258 +1,269 @@
 import 'dart:convert';
 
+import 'package:blogapp/checkout/screens/cart_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:stripe_payment/stripe_payment.dart';
+import 'dart:io';
 
-import 'Constants.dart';
 
-class PaymentScreen extends StatefulWidget {
+
+class Payment extends StatefulWidget {
 
   final String amount;
 
-  PaymentScreen({this.amount});
 
+  // receive data from the FirstScreen as a parameter
+  Payment(
+      {
+        @required this.amount});
   @override
-  _PaymentScreenState createState() => _PaymentScreenState();
+  _PaymentState createState() => new _PaymentState(amount);
 }
 
-class _PaymentScreenState extends State<PaymentScreen> {
-  WebViewController _webController;
-  bool _loadingPayment = true;
-  String _responseStatus = STATUS_LOADING;
+class _PaymentState extends State<Payment> {
+  Token _paymentToken;
+  PaymentMethod _paymentMethod;
+  String _error;
+  final String _currentSecret = "sk_test_51LKO0gCYjXLJaAUhcEWIcH87GmyyGGngSYANPzRHMEjlJZG7Hi5gRL2ejwDyMG8yvQNRXn6V42eoKQ8Ur0tgVFcp00ycD2XGtT"; //set this yourself, e.g using curl
+  PaymentIntentResult _paymentIntent;
+  Source _source;
 
+  ScrollController _controller = ScrollController();
 
-  String _loadHTML() {
-    return "<html> <body onload='document.f.submit();'> <form id='f' name='f' method='post' action='$PAYMENT_URL'><input type='hidden' name='orderID' value='ORDER_${DateTime.now().millisecondsSinceEpoch}'/>" +
-        "<input  type='hidden' name='custID' value='${ORDER_DATA["custID"]}' />" +
-        "<input  type='hidden' name='amount' value='${widget.amount}' />" +
-        "<input type='hidden' name='custEmail' value='${ORDER_DATA["custEmail"]}' />" +
-        "<input type='hidden' name='custPhone' value='${ORDER_DATA["custPhone"]}' />" +
-        "</form> </body> </html>";
+  final CreditCard testCard = CreditCard(
+    number: '4111111111111111',
+    expMonth: 07,
+    expYear: 22,
+  );
+
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
+final String amount;
+  _PaymentState(this.amount);
+  int myInt = int.parse("133");
+  @override
+  initState() {
+    super.initState();
+
+    StripePayment.setOptions(
+        StripeOptions(publishableKey: "pk_test_51LKO0gCYjXLJaAUh1TCykxvzLtH4BdTvfUsbXtorwSLZlqYA666xIJtCUx45sHCXRnESP6z4hVbk4tRtpSghUVLY006aL1suZ5",
+            merchantId: "acct_1LKO0gCYjXLJaAUh",
+            androidPayMode: 'test'));
   }
 
-  void getData() {
-    _webController.evaluateJavascript("document.body.innerText").then((data) {
-      var decodedJSON = jsonDecode(data);
-      Map<String, dynamic> responseJSON = jsonDecode(decodedJSON);
-      final checksumResult = responseJSON["status"];
-      final paytmResponse = responseJSON["data"];
-      if (paytmResponse["STATUS"] == "TXN_SUCCESS") {
-        if (checksumResult==0) {
-          _responseStatus = STATUS_SUCCESSFUL;
-        } else {
-          _responseStatus = STATUS_CHECKSUM_FAILED;
-        }
-      } else if (paytmResponse["STATUS"] == "TXN_FAILURE") {
-        _responseStatus = STATUS_FAILED;
-      }
-      this.setState((){});
+  void setError(dynamic error) {
+    _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(error.toString())));
+    setState(() {
+      _error = error.toString();
     });
   }
 
-  Widget getResponseScreen() {
-    switch (_responseStatus) {
-      case STATUS_SUCCESSFUL:
-        return PaymentSuccessfulScreen();
-      case STATUS_CHECKSUM_FAILED:
-        return CheckSumFailedScreen();
-      case STATUS_FAILED:
-        return PaymentFailedScreen();
-    }
-    return PaymentSuccessfulScreen();
-  }
-
-  @override
-  void dispose() {
-    _webController = null;
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Stack(
-          children: <Widget>[
-            Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-              child: WebView(
-                debuggingEnabled: false,
-                javascriptMode: JavascriptMode.unrestricted,
-                onWebViewCreated: (controller){
-                  _webController = controller;
-                  _webController
-                      .loadUrl(new Uri.dataFromString(_loadHTML(), mimeType: 'text/html').toString());
-                },
-                onPageFinished: (page){
-                  if (page.contains("/process")) {
-                    if (_loadingPayment) {
-                      this.setState(() {
-                        _loadingPayment = false;
-                      });
-                    }
-                  }
-                  if (page.contains("/paymentReceipt")) {
-                    getData();
-                  }
-                },
-              ),
-            ),
-            (_loadingPayment)
-                ? Center(
-              child: CircularProgressIndicator(),
-            )
-                : Center(),
-            (_responseStatus != STATUS_LOADING) ? Center(child:getResponseScreen()) : Center()
-          ],
-        )
+    return Scaffold(
+      backgroundColor: Colors.grey[800],
+      key: _scaffoldKey,
+      appBar: new AppBar(
+        leading: IconButton(
+            icon: Icon(FontAwesomeIcons.arrowLeft),
+            onPressed: () {
+              Navigator.of(context).pushNamed(CartScreen.routeName);
+            }),
+        backgroundColor: Colors.lightGreen,
+        title: new Text(' Select Payment Method '),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.clear),
+            onPressed: () {
+              setState(() {
+                _source = null;
+                _paymentIntent = null;
+                _paymentMethod = null;
+                _paymentToken = null;
+              });
+            },
+          )
+        ],
       ),
-    );
-  }
-}
-
-class PaymentSuccessfulScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      height: MediaQuery.of(context).size.height,
-      width: MediaQuery.of(context).size.width,
-      child: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "Great!",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 25),
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Text(
-                "Thank you making the payment!",
-                style: TextStyle(fontSize: 30),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              MaterialButton(
-                  color: Colors.black,
-                  child: Text(
-                    "Close",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  onPressed: () {
-                    Navigator.popUntil(context, ModalRoute.withName("/"));
-                  })
-            ],
+      body: ListView(
+        controller: _controller,
+        padding: const EdgeInsets.all(20),
+        children: <Widget>[
+/*          RaisedButton(
+            child: Text("Create Source"),
+            onPressed: () {
+              StripePayment.createSourceWithParams(SourceParams(
+                type: 'ideal',
+                amount: myInt,
+                currency: 'eur',
+                returnURL: 'example://stripe-redirect',
+              )).then((source) {
+                _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text('Received ${source.sourceId}')));
+                setState(() {
+                  _source = source;
+                });
+              }).catchError(setError);
+            },
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class PaymentFailedScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      height: MediaQuery.of(context).size.height,
-      width: MediaQuery.of(context).size.width,
-      child: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "OOPS!",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 25),
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Text(
-                "Payment was not successful, Please try again Later!",
-                style: TextStyle(fontSize: 30),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              MaterialButton(
-                  color: Colors.black,
-                  child: Text(
-                    "Close",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  onPressed: () {
-                    Navigator.popUntil(context, ModalRoute.withName("/"));
-                  })
-            ],
+          Divider(),
+          RaisedButton(
+            child: Text("Create Token with Card Form"),
+            onPressed: () {
+              StripePayment.paymentRequestWithCardForm(CardFormPaymentRequest()).then((paymentMethod) {
+                _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text('Received ${paymentMethod.id}')));
+                setState(() {
+                  _paymentMethod = paymentMethod;
+                });
+              }).catchError(setError);
+            },
+          ),*/
+          RaisedButton(
+            child: Text("Create Token with Card"),
+            onPressed: () {
+              StripePayment.createTokenWithCard(
+                testCard,
+              ).then((token) {
+                _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text('Received ${token.tokenId}')));
+                setState(() {
+                  _paymentToken = token;
+                });
+              }).catchError(setError);
+            },
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class CheckSumFailedScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      height: MediaQuery.of(context).size.height,
-      width: MediaQuery.of(context).size.width,
-      child: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "Oh Snap!",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 25),
+          Divider(),
+          RaisedButton(
+            child: Text("Create Payment Method with Card"),
+            onPressed: () {
+              StripePayment.createPaymentMethod(
+                PaymentMethodRequest(
+                  card: testCard,
                 ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Text(
-                "Problem Verifying Payment, If you balance is deducted please contact our customer support and get your payment verified!",
-                style: TextStyle(fontSize: 30),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              MaterialButton(
-                  color: Colors.black,
-                  child: Text(
-                    "Close",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  onPressed: () {
-                    Navigator.popUntil(context, ModalRoute.withName("/"));
-                  })
-            ],
+              ).then((paymentMethod) {
+                _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text('Received ${paymentMethod.id}')));
+                setState(() {
+                  _paymentMethod = paymentMethod;
+                });
+              }).catchError(setError);
+            },
           ),
-        ),
+       /*   RaisedButton(
+            child: Text("Create Payment Method with existing token"),
+            onPressed: _paymentToken == null
+                ? null
+                : () {
+              StripePayment.createPaymentMethod(
+                PaymentMethodRequest(
+                  card: CreditCard(
+                    token: _paymentToken.tokenId,
+                  ),
+                ),
+              ).then((paymentMethod) {
+                _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text('Received ${paymentMethod.id}')));
+                setState(() {
+                  _paymentMethod = paymentMethod;
+                });
+              }).catchError(setError);
+            },
+          ),*/
+   /*       Divider(),
+          RaisedButton(
+            child: Text("Confirm Payment Intent"),
+            onPressed: _paymentMethod == null || _currentSecret == null
+                ? null
+                : () {
+              StripePayment.confirmPaymentIntent(
+                PaymentIntent(
+                  clientSecret: _currentSecret,
+                  paymentMethodId: _paymentMethod.id,
+                ),
+              ).then((paymentIntent) {
+                _scaffoldKey.currentState
+                    .showSnackBar(SnackBar(content: Text('Received ${paymentIntent.paymentIntentId}')));
+                setState(() {
+                  _paymentIntent = paymentIntent;
+                });
+              }).catchError(setError);
+            },
+          ),
+          RaisedButton(
+            child: Text("Authenticate Payment Intent"),
+            onPressed: _currentSecret == null
+                ? null
+                : () {
+              StripePayment.authenticatePaymentIntent(clientSecret: _currentSecret).then((paymentIntent) {
+                _scaffoldKey.currentState
+                    .showSnackBar(SnackBar(content: Text('Received ${paymentIntent.paymentIntentId}')));
+                setState(() {
+                  _paymentIntent = paymentIntent;
+                });
+              }).catchError(setError);
+            },
+          ),*/
+          Divider(),
+          RaisedButton(
+            child: Text("Proceed payment"),
+            onPressed: () {
+              if (Platform.isIOS) {
+                _controller.jumpTo(450);
+              }
+              StripePayment.paymentRequestWithNativePay(
+                androidPayOptions: AndroidPayPaymentRequest(
+                  totalPrice: "2.40",
+                  currencyCode: "EUR",
+                ),
+                applePayOptions: ApplePayPaymentOptions(
+                  countryCode: 'DE',
+                  currencyCode: 'EUR',
+                  items: [
+                    ApplePayItem(
+                      label: 'Test',
+                      amount: '100',
+                    )
+                  ],
+                ),
+              ).then((token) {
+                setState(() {
+                  _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text('Received ${token.tokenId}')));
+                  _paymentToken = token;
+                });
+              }).catchError(setError);
+            },
+          ),
+       /*   RaisedButton(
+            child: Text("Complete Native Payment"),
+            onPressed: () {
+              StripePayment.completeNativePayRequest().then((_) {
+                _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text('Completed successfully')));
+              }).catchError(setError);
+            },
+          ),
+          Divider(),
+          Text('Current source:'),
+          Text(
+            JsonEncoder.withIndent('  ').convert(_source?.toJson() ?? {}),
+            style: TextStyle(fontFamily: "Monospace"),
+          ),
+          Divider(),
+          Text('Current token:'),
+          Text(
+            JsonEncoder.withIndent('  ').convert(_paymentToken?.toJson() ?? {}),
+            style: TextStyle(fontFamily: "Monospace"),
+          ),
+          Divider(),
+          Text('Current payment method:'),
+          Text(
+            JsonEncoder.withIndent('  ').convert(_paymentMethod?.toJson() ?? {}),
+            style: TextStyle(fontFamily: "Monospace"),
+          ),
+          Divider(),
+          Text('Current payment intent:'),
+          Text(
+            JsonEncoder.withIndent('  ').convert(_paymentIntent?.toJson() ?? {}),
+            style: TextStyle(fontFamily: "Monospace"),
+          ),
+          Divider(),
+          Text('Current error: $_error'),*/
+        ],
       ),
     );
   }

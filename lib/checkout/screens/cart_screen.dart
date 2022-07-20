@@ -1,11 +1,14 @@
 import 'package:blogapp/Pdf/pdf.dart';
 import 'package:blogapp/checkout/models/orders.dart';
 import 'package:blogapp/payment/gateway/PaymentScreen.dart';
-import 'package:blogapp/payment/gateway/payment.dart';
+
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
+import '../mainpage.dart';
 import '../models/cart.dart';
 import '../widgets/cart_item.dart';
 
@@ -17,10 +20,16 @@ class CartScreen extends StatelessWidget {
     final cart = Provider.of<Cart>(context);
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+            icon: Icon(FontAwesomeIcons.arrowLeft),
+            onPressed: () {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => MyApp1()));
+            }),
         backgroundColor: Colors.lightGreen,
         title: Text(
           'My Cart',
-          style: TextStyle(fontSize: 30, color: Theme.of(context).accentColor),
+          style: TextStyle(fontSize: 20, color: Theme.of(context).accentColor),
         ),
       ),
       body: Column(
@@ -35,22 +44,52 @@ class CartScreen extends StatelessWidget {
                     cart.items.values.toList()[i].quantity,
                     cart.items.values.toList()[i].name)),
           ),
-          CheckoutButton(
+     /*     CheckoutButton(
             cart: cart,
-          ),
-           FlatButton(
-               onPressed: () {
-                 Navigator.push(
-                     context,
-                     MaterialPageRoute(
-                       builder: (context) =>    Payment(),
-                     ));
+          ),*/
+          cart.items.length!=0?
+          OutlinedButton(
+            style:OutlinedButton.styleFrom(
+              padding:const EdgeInsets.symmetric(horizontal: 40),
+              shape:RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
 
+            ),
+
+            onPressed:(){
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>   Payment(),
+                  ));
+
+
+            },
+            child:Text("Checkout",style:TextStyle(
+              fontSize: 16,
+              letterSpacing: 2.2,
+              color:Colors.black,
+            )),
+
+          ):
+          FlatButton(
+               onPressed: () {
+
+                 Fluttertoast.showToast(
+                   msg: "Cart is empty",
+                   toastLength: Toast.LENGTH_SHORT,
+                   gravity: ToastGravity.BOTTOM,
+                   backgroundColor: Colors.red,
+                   textColor: Colors.white,
+                   fontSize: 16.0,
+                 );
               },
              child: Text(
-                'Checkout',
+                'No More items',
                  style: TextStyle(color: Colors.blue, fontSize: 20),
-             ))
+             )),
+          SizedBox(height: 10.0,),
         ],
       ),
     );
@@ -75,7 +114,7 @@ class _CheckoutButtonState extends State<CheckoutButton> {
           ?   Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) =>    PaymentScreen(amount:"${widget.cart.totalAmount}"),
+            builder: (context) =>    Payment(amount:"${widget.cart.totalAmount}"),
           ))
           : () async {
               await Provider.of<Orders>(context, listen: false).addOrder(

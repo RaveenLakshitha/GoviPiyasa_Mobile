@@ -3,9 +3,9 @@ import 'package:blogapp/Search/user_model.dart';
 import 'package:blogapp/checkout/widgets/itemdetails.dart';
 import 'package:blogapp/shop/shopview.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 import 'Api_service.dart';
+
 
 class Searchitems extends StatefulWidget {
   @override
@@ -13,23 +13,14 @@ class Searchitems extends StatefulWidget {
 }
 
 class _SearchitemsState extends State<Searchitems> {
-  double rating=4;
   FetchUserList _userList = FetchUserList();
-  Widget buildRating(rating1)=>RatingBar.builder(
-    minRating: 1,
-    itemSize: 20,
-    itemPadding: EdgeInsets.symmetric(horizontal: 4),
-    itemBuilder:(context,_)=>Icon(Icons.star,color:Colors.amber),
-    updateOnDrag: false,
-    onRatingUpdate:(rating)=>setState((){
-      this.rating=rating1;
-    }),);
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Products'),
+          title: Text('UserList'),
           actions: [
             IconButton(
               onPressed: () {
@@ -59,25 +50,37 @@ class _SearchitemsState extends State<Searchitems> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => Itemdetails(text: '${data[index].producyName}',price:'${data[index].description}',image:'https://source.unsplash.com/random?sig=$index',description:'${data[index].description}',quantity:'${data[index].description}',category:'${data[index].description}'),
+                                    builder: (context) => Itemdetails(text: '${data[index].productName}',price:'${data[index].description}',image:'https://source.unsplash.com/random?sig=$index',description:'${data[index].description}',quantity:'${data[index].description}',category:'${data[index].description}'),
                                   ));
                             },
-                      /*      trailing: IconButton(
-                                icon: Icon(Icons.shopping_cart),
-                                onPressed: () {
-                                  Scaffold.of(context).showSnackBar(SnackBar(
-                                    duration: Duration(seconds: 3),
-                                    content: Text('Item Added to Cart'),
-                                  ));
-                                  //String num="$item['price']";
-                                  double  myDouble = double.parse("${data[index].price}");
-                                  cart.addItem("${data[index].producyName}", "${data[index].producyName}",myDouble);
-                                }),*/
                             title: Row(
                               children: [
                                 GestureDetector(
-                                  child:   Container(
+                                  onTap: (){
 
+                                 /*   Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => Shopview(
+                                              id:'${data[index].id}',
+                                              text: '${data[index].productName}',
+                                              price: '${data[index].description}',
+                                              image:'https://source.unsplash.com/random?sig=$index',
+                                              description: '${data[index].description}',
+                                              quantity: '${data[index].description}',
+                                              category: '${data[index].categoryName}',
+                                              itemCount:'${data[index].quantity}',
+                                              shopitems:'${data[index].description}',
+                                              latlang:'${data[index].description}}',
+                                              longitude:'${data[index].description}}'
+
+                                          ),
+
+                                        ));
+                                    Navigator.push(context,MaterialPageRoute(
+                                      builder: (context) => Shopview(text: '${data[index].productName}',price:'${data[index].description}',image:'https://source.unsplash.com/random?sig=$index',description:'${data[index].description}',quantity:'${data[index].description}',category:'${data[index].description}'),));*/
+                                  },
+                                  child:   Container(
                                     width: 60,
                                     height: 60,
                                     decoration: BoxDecoration(
@@ -87,46 +90,48 @@ class _SearchitemsState extends State<Searchitems> {
                                       ),
                                       borderRadius: BorderRadius.circular(10),
                                     ),
-                                  /*  child: Center(
-                                      child: Text(
-                                        '${data[index].id}',
-                                        style: TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.white),
-                                      ),
-                                    ),*/
+                                    /*      child: Center(
+                                    child: Text(
+                                      '${data[index].id}',
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white),
+                                    ),
+                                  ),*/
                                   ),
-                                  onTap: (){
-                                    Navigator.push(context,MaterialPageRoute(
-                                      builder: (context) => Shopview(text: '${data[index].producyName}',price:'${data[index].description}',image:'https://source.unsplash.com/random?sig=$index',description:'${data[index].description}',quantity:'${data[index].description}',category:'${data[index].description}'),));
-                                  },
                                 ),
-
                                 SizedBox(width: 20),
                                 Column(
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    CrossAxisAlignment.start,
                                     children: [
+
                                       Text(
-                                        '${data[index].producyName}',
+                                        '${data[index].productName}',
                                         style: TextStyle(
                                             fontSize: 18,
                                             fontWeight: FontWeight.w600),
                                       ),
                                       SizedBox(height: 10),
                                       Text(
-                                        '${data[index].description}',
+                                        '${data[index].categoryName}',
                                         style: TextStyle(
                                           color: Colors.black,
                                           fontSize: 14,
                                           fontWeight: FontWeight.w400,
                                         ),
                                       ),
-                                    ]),
-                                buildRating(2),
+                                      Text(
+                                        '${data[index].price}',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      )
+                                    ])
                               ],
-
                             ),
                             // trailing: Text('More Info'),
                           ),

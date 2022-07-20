@@ -45,7 +45,7 @@ class _googlemapState extends State<googlemap> {
       _markers.add(
           Marker(
             markerId: MarkerId('id-1'),
-            position: LatLng(lat, 	long),
+            position: LatLng(lat,long),
             icon:mapMarker,
             infoWindow: InfoWindow(
               title: 'colombo',
@@ -54,6 +54,10 @@ class _googlemapState extends State<googlemap> {
             ),
           )
       );
+      _markers.add(newyork1Marker);
+      _markers.add(newyork2Marker);
+      _markers.add(newyork3Marker);
+
     });
   }
 
@@ -92,9 +96,9 @@ class _googlemapState extends State<googlemap> {
         onMapCreated: (GoogleMapController controller) {
           _controller.complete(controller);
         },
-        markers: {
-          newyork1Marker,newyork2Marker,newyork3Marker
-        },
+        markers:
+          _markers
+
       ),
     );
   }
@@ -272,6 +276,7 @@ class _googlemapState extends State<googlemap> {
   }
 
 }
+
 Marker newyork1Marker = Marker(
   markerId: MarkerId('Eliyakanda'),
   position: LatLng(5.9410021,80.5638167),
@@ -289,9 +294,9 @@ Marker newyork2Marker = Marker(
   ),
 );
 Marker newyork3Marker = Marker(
-  markerId: MarkerId('Matara'),
-  position: LatLng(5.9520765,80.5156422),
-  infoWindow: InfoWindow(title: 'Matara'),
+  markerId: MarkerId('Kandy'),
+  position: LatLng(7.2946291,80.5907617),
+  infoWindow: InfoWindow(title: 'Kandy'),
   icon: BitmapDescriptor.defaultMarkerWithHue(
     BitmapDescriptor.hueViolet,
   ),

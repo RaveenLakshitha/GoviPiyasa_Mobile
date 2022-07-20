@@ -54,7 +54,6 @@ class _ExpertdashboardState extends State<Expertdashboard> {
 
   @override
   Widget build(BuildContext context) {
-    String city = "Ja-ela";
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -82,7 +81,7 @@ class _ExpertdashboardState extends State<Expertdashboard> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.business),
-            label: 'Charts',
+            label: 'Answerd Question',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),

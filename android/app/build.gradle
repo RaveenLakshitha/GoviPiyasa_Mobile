@@ -28,6 +28,7 @@ apply plugin: 'com.google.gms.google-services'
 android {
     compileSdkVersion 29
 
+
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
@@ -39,8 +40,8 @@ android {
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.example.blogapp"
-        minSdkVersion 20
-        targetSdkVersion 29
+        minSdkVersion 21
+        targetSdkVersion 28
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         multiDexEnabled true
@@ -61,4 +62,6 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'com.android.support:multidex:1.0.3'
+    implementation 'com.google.mlkit:image-labeling:17.0.2'
 }

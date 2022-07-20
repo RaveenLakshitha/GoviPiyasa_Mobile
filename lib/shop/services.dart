@@ -79,7 +79,7 @@ class _ServiceState extends State<Service> {
                   ));
             },
           ),
-          GestureDetector(
+       /*   GestureDetector(
             child: Container(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -100,7 +100,7 @@ class _ServiceState extends State<Service> {
                   builder: (context) => Chart(),
                 ));
           },
-          ),
+          ),*/
           GestureDetector(
             child: Container(
               child: Column(
@@ -123,7 +123,7 @@ class _ServiceState extends State<Service> {
                   ));
             },
           ),
-          GestureDetector(
+        /*  GestureDetector(
             child: Container(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -144,7 +144,7 @@ class _ServiceState extends State<Service> {
                     builder: (context) => FormPage(),
                   ));
             },
-          ),
+          ),*/
 
           GestureDetector(
             child: Container(

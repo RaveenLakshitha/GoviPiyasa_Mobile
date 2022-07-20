@@ -1,6 +1,7 @@
 import 'package:blogapp/Notification/notification1.dart';
 import 'package:blogapp/Screen/Services/shop.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geocoding/geocoding.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -22,6 +23,16 @@ class _HomeState extends State<Map1> {
   Widget build(BuildContext context) {
     return  Scaffold(
         appBar: AppBar(
+
+          leading: IconButton(
+              icon: Icon(FontAwesomeIcons.arrowLeft),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Shop(),
+                    ));
+              }),
           title: Text("Google Map Picker"),
           backgroundColor: Colors.lightGreen,
         ),
@@ -87,7 +98,7 @@ class _HomeState extends State<Map1> {
           Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => Shop(location:location,latlang:latlang.toString()),
+                builder: (context) => Shop(location:location,latlang:latlang.toString(),longitude: longitude.toString(),),
               ));
           //Navigator.pop(context);
         }

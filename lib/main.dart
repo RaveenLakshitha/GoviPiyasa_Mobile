@@ -103,15 +103,18 @@ class _MyAppState extends State<MyApp> {
 
       theme:  theme.getTheme(),
       home:AnimatedSplashScreen(
-        duration: 1000,
+        duration: 2000,
         splash: Container(
         color: Colors.white,
-        child:Image.asset('assets/3.png' ,height: 500,    width: 500,),
+        child:Container(
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20.0),
+              ),child:Image.asset('assets/31.png' , height: 300,
+          width: 300,),)
       ),
-
-
         nextScreen:page,
-        splashTransition: SplashTransition.fadeTransition,
+        splashTransition: SplashTransition.scaleTransition,
         backgroundColor: Colors.white,
 
 

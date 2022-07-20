@@ -96,7 +96,7 @@ void initState() {
         builder: (context, theme, _) => MaterialApp(
         theme: theme.getTheme(),home: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.lightGreen,
+         // backgroundColor: Colors.lightGreen,
           elevation: 0.0,
           centerTitle: true,
           flexibleSpace: Image(

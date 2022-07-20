@@ -1,9 +1,9 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:http/http.dart' as http;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dart:convert';
-
 
 class Weather extends StatefulWidget{
   @override
@@ -14,6 +14,19 @@ class Weather extends StatefulWidget{
 
 }
 class _HomeState extends State<Weather>{
+
+  static const Citylist=[
+    "Jaela",
+    "Colombo",
+    "Matara",
+    "Galle",
+    "Gampaha",
+    "Balangoda",
+    "Kaluthara",
+    "Ambilipitiya"
+  ];
+  final _formkey=GlobalKey<FormState>();
+
   //http://api.openweathermap.org/data/2.5/weather?q=Ja-ela&appid=717bc49fc1d9c03e85f08c1e362c2bf3
   var temp;
   var description;
@@ -53,24 +66,47 @@ class _HomeState extends State<Weather>{
             decoration: BoxDecoration(
                 color: Colors.white, borderRadius: BorderRadius.circular(5)),
             child: Center(
-              child: TextField(
-                controller: _textEditingController,
-                decoration: InputDecoration(
-                    prefixIcon:IconButton(
-                    icon: Icon(Icons.search),
-                onPressed: () {
-                  getWeather(_textEditingController.text);
-                },
-              ),
-                    suffixIcon: IconButton(
-                      icon: Icon(Icons.clear),
-                      onPressed: () {
-                      _textEditingController.clear();
-                      },
+
+              child:Form(
+                key:_formkey,
+                child: TypeAheadFormField(
+
+                    suggestionsCallback: (pattern)=>Citylist.where((item)=>item.toLowerCase().contains(pattern.toLowerCase())
                     ),
-                    hintText: 'Search...',
-                    border: InputBorder.none),
-              ),
+                    itemBuilder: (_, String item)=>ListTile(title:Text(item)),
+                  onSuggestionSelected: (String val){
+                      this._textEditingController.text=val;
+                      print(val);
+                  },
+                  getImmediateSuggestions: true,
+                  hideSuggestionsOnKeyboardHide: false,
+                  hideOnEmpty: false,
+                  noItemsFoundBuilder: (context)=>Padding(
+                    padding:const EdgeInsets.all(8.0),
+                    child:Text('No item found'),
+                  ),
+                  textFieldConfiguration: TextFieldConfiguration(
+                    controller: this._textEditingController,
+                    decoration: InputDecoration(
+                        prefixIcon:IconButton(
+                          icon: Icon(Icons.search),
+                          onPressed: () {
+                            getWeather(_textEditingController.text);
+                          },
+                        ),
+                        suffixIcon: IconButton(
+                          icon: Icon(Icons.clear),
+                          onPressed: () {
+                            _textEditingController.clear();
+                          },
+                        ),
+                        hintText: 'Search...',
+                        border: InputBorder.none),
+                  ),
+
+                ),
+              )
+
             ),
           )),
       body: Column(

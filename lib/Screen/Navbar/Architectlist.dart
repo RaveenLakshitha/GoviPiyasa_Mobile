@@ -37,7 +37,7 @@ class _expertState extends State<expert> {
         appBar: AppBar(
           title: Text('Architectures'),
           centerTitle: true,
-            backgroundColor: Colors.lightGreen,
+          //  backgroundColor: Colors.lightGreen,
           actions: [
             Switch(
                 value: isGrid,

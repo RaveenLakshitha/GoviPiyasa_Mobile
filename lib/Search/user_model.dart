@@ -1,42 +1,42 @@
 class Userlist {
   int id;
-  String producyName;
-  String username;
-  String email;
+  String categoryName;
+  String productName;
+  int quantity;
   Address address;
-  String price;
+  int price;
   String description;
   Company company;
 
   Userlist(
       {this.id,
-      this.producyName,
-      this.username,
-      this.email,
-      this.address,
-      this.price,
-      this. description,
-      this.company});
+        this.categoryName,
+        this.productName,
+        this.quantity,
+        this.address,
+        this.price,
+        this.description,
+        this.company});
 
   Userlist.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    producyName = json['productName'];
-    username = json['username'];
-    email = json['email'];
+    id = json['_id'];
+    categoryName = json['categoryName'];
+    productName = json['productName'];
+    quantity = json['quantity'];
     address =
-        json['address'] != null ? new Address.fromJson(json['address']) : null;
+    json['address'] != null ? new Address.fromJson(json['address']) : null;
     price = json['price'];
     description = json['description'];
     company =
-        json['company'] != null ? new Company.fromJson(json['company']) : null;
+    json['company'] != null ? new Company.fromJson(json['company']) : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['productName'] = this.producyName;
-    data['username'] = this.username;
-    data['email'] = this.email;
+    data['_id'] = this.id;
+    data['categoryName'] = this.categoryName;
+    data['productName'] = this.productName;
+    data['quantity'] = this.quantity;
     if (this.address != null) {
       data['address'] = this.address?.toJson();
     }

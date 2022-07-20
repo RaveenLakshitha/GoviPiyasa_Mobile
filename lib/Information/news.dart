@@ -30,15 +30,6 @@ class _NewsScreenState extends State<NewsScreen> {
             title: Text("Latest News", style: Styles.navBarTitle,),
           backgroundColor: Colors.lightGreen,
           actions: [
-            IconButton(
-                icon: Icon(FontAwesomeIcons.plus),
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => Weather(),
-                      ));
-                }),
 
           ],
         ),

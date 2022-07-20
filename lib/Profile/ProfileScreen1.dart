@@ -97,7 +97,7 @@ class MapScreenState extends State<ProfilePage>
       });
       print('Token : ${token}');
 
-      print('ERROR FOR SHOW : ${response.body}');
+      print('Profile Data : ${response.body}');
       final jsonData = jsonDecode(response.body)['data'];
       setState(() {
         _postsJson = jsonData;
@@ -252,18 +252,36 @@ class MapScreenState extends State<ProfilePage>
                                           fontFamily: 'sans-serif-light',
                                           color: Colors.black)),
                                 ),
+
                                 Padding(
-                                  padding: EdgeInsets.only(right: 5.0),
-                                  child:IconButton(
-                                      icon: Icon(Icons.article_sharp, color: Colors.blue),
-                                      onPressed: () {
-                                        Navigator.push(
+                                  padding: EdgeInsets.only(right: 3.0),
+                                  child:Material(
+                                    type: MaterialType.transparency,
+                                    child: Ink(
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: Colors.green, width: 2.0),
+                                        color: Colors.lightGreen,
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: InkWell(
+                                        borderRadius: BorderRadius.circular(500.0),
+                                        onTap: () {   Navigator.push(
                                             context,
                                             MaterialPageRoute(
                                               builder: (context) =>
                                                   Orderhistory(),
-                                            ));
-                                      }),
+                                            ));},
+                                        child: Padding(
+                                          padding: EdgeInsets.all(20.0),
+                                          child: Icon(
+                                            Icons.article_sharp,
+                                            size: 25.0,
+                                            color: Colors.blue,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                 ),
 
                               ],
@@ -518,7 +536,7 @@ class MapScreenState extends State<ProfilePage>
                                   Expanded(
                                     child: Container(
                                       child: new Text(
-                                        'Role',
+                                        'ID',
                                         style: TextStyle(
                                             fontSize: 16.0,
                                             fontWeight: FontWeight.bold),
@@ -551,8 +569,8 @@ class MapScreenState extends State<ProfilePage>
                                     child: new TextField(
                                       controller: myController5,
                                       decoration: const InputDecoration(
-                                          hintText: "Role"),
-                                      enabled: !_status,
+                                          hintText: "ID"),
+                                      enabled: false,
                                     ),
                                     flex: 2,
                                   ),

@@ -2,10 +2,12 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:blogapp/CustumWidget/shopservice.dart';
+import 'package:blogapp/Pages/HomePage.dart';
 import 'package:blogapp/Profile/map.dart';
 import 'package:blogapp/shop/shoprofile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
@@ -27,11 +29,22 @@ class _ExpertFormState extends State<ExpertForm> {
     });
   }
   var shopName,email,sellerName,phoneNo,address,city;
+  final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
 
     return Scaffold(
         appBar: AppBar(
+
+          leading: IconButton(
+              icon: Icon(FontAwesomeIcons.arrowLeft),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => HomePage(),
+                    ));
+              }),
           backgroundColor: Colors.lightGreen,
           elevation: 0.0,
           centerTitle: true,
@@ -64,6 +77,7 @@ class _ExpertFormState extends State<ExpertForm> {
                 SizedBox(height:5.0),
                 Container(
                   child: Form(
+                    key:_formkey,
                     child: Column(
                       children: <Widget>[
                         Container(

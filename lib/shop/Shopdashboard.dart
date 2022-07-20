@@ -101,12 +101,12 @@ class _ShopdashboardState extends State<Shopdashboard> {
             label: 'MyShop',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.business),
+            icon: Icon(Icons.addchart_sharp),
             label: 'Charts',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.school),
-            label: 'Ads',
+            label: 'Advertistment',
           ),
         ],
         currentIndex: _selectedIndex,

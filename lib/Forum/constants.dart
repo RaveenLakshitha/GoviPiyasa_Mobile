@@ -3,24 +3,24 @@ const FOOD_DATA = [
     "name":"Vegetables",
     "brand":"Hawkers",
     "price":2.99,
-    "image":"about.jpg"
+    "image":"vegetables.jpg"
   },{
     "name":"Onion",
     "brand":"Hawkers",
     "price":4.99,
-    "image":"leaf.png"
+    "image":"onion.jpg"
   },
   {
     "name":"Fruits",
-    "brand":"Mcdonald",
+    "brand":"Category",
     "price":1.49,
-    "image":"fertilizer.jpg"
+    "image":"fruits.jpg"
   },
   {
     "name":"Rice",
-    "brand":"Mcdonald",
+    "brand":"Category",
     "price":2.99,
-    "image":"about.jpg"
+    "image":"rice.jpg"
   },
 
 ];

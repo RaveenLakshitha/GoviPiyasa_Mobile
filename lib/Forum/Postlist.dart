@@ -9,6 +9,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 
+import 'Answers.dart';
 import 'CreatePost.dart';
 import 'Qmodel.dart';
 
@@ -33,22 +34,22 @@ class _State extends State<Postlist> {
 
   _State(this.categoryName);
 
-  addAnswer(title,category,description)async{
+  addAnswer(answerbody,Qid)async{
 
     String token = await storage.read(key: "token");
     print(token);
+    print(Qid);
     var headers = {
       'Content-Type':'application/json',
       'authorization':'Basic $token'
     };
 
     final body = {
-      "Title": title,
-      "Category": category,
-      "QuestionBody": description
+      "AnswerBody":answerbody,
+      "QuestionId": Qid
     };
     http.post(
-      "https://govi-piyasa-v-0-1.herokuapp.com/api/v1/forum/Answers",body:jsonEncode(body),
+      "https://govi-piyasa-v-0-1.herokuapp.com/api/v1/forum/Answers/addAnswer/$Qid",body:jsonEncode(body),
       headers: {
         "Content-Type": "application/json",
         'Authorization': 'Bearer $token',
@@ -106,6 +107,7 @@ class _State extends State<Postlist> {
     readuser();
     super.initState();
   }
+  final _comment = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -113,13 +115,13 @@ class _State extends State<Postlist> {
         appBar: AppBar(
           title: Text("${categoryName}",
               style: TextStyle(
-                  fontFamily: 'Varela', fontSize: 25.0, color: Colors.white)),
-          backgroundColor: Colors.lightGreen,
+                  fontFamily: 'Varela', fontSize: 25.0, color: Colors.black)),
+     /*     //backgroundColor: Colors.lightGreen,
           centerTitle: true,
           flexibleSpace: Image(
             image: AssetImage('assets/about.jpg'),
             fit: BoxFit.cover,
-          ),
+          ),*/
           actions: [
             IconButton(
                 icon: Icon(FontAwesomeIcons.plus, color: Colors.blue),
@@ -152,15 +154,19 @@ class _State extends State<Postlist> {
                         children: <Widget>[
                           Center(
                             child: Text(
-                              "Question:${post['Title']}",
+                              "${post['Title']}",
                               style: TextStyle(
-                                  fontSize: 20,
+                                  fontSize: 25,
                                   fontFamily: 'Varela',
                                   fontWeight: FontWeight.bold),
                             ),
                           ),
-                          Text("Category:${post['Category']}"),
-                          Text("description:${post['QuestionBody']}"),
+                          Text("${post['Category']}",style: TextStyle(
+                              fontSize: 15,
+                              color:Colors.red,
+                              fontFamily: 'Varela',
+                              fontWeight: FontWeight.bold)),
+                          Text("${post['QuestionBody']}"),
                           Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: <Widget>[
@@ -168,12 +174,14 @@ class _State extends State<Postlist> {
                                 height: 10.0,
                               ),
                               TextFormField(
+                                controller: _comment,
                                 decoration: InputDecoration(
                                     labelText: 'Comment here',
+
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(15.0),
                                     ),
-                                    prefixIcon: Icon(Icons.comment)),
+                                    prefixIcon: Icon(Icons.comment,color: Colors.lightGreen,)),
                                 onChanged: (val) {
                                   answer = val;
                                 },
@@ -194,7 +202,8 @@ class _State extends State<Postlist> {
                                   color:Colors.black,
                                 ),
                                 ),
-                                onPressed: () => showAnswer(post, count),
+                                onPressed: (){    /*Navigator.push(context,MaterialPageRoute(
+                                  builder: (context) => Answers(answer: '${post['Answers'][]['AnswerBody']}',count:count),));*/}
                               ),
                               Row(
                                 mainAxisAlignment:
@@ -203,9 +212,11 @@ class _State extends State<Postlist> {
 
                                   IconButton(
                                       icon: Icon(
-                                        Icons.add_task_rounded,
+                                        Icons.beenhere_rounded ,
                                       ),
                                       onPressed: () {
+                                        addAnswer(_comment.text,post['_id']);
+                                        _comment.clear();
                                         Fluttertoast.showToast(
                                           msg: "Added",
                                           toastLength: Toast.LENGTH_SHORT,
@@ -216,7 +227,7 @@ class _State extends State<Postlist> {
                                         );
                                       }),
                                   LikeButton(
-                                    size: 10,
+                                    size: 20,
                                     circleColor:
                                     CircleColor(start: Color(0xff00ddff), end: Color(0xff0099cc)),
                                     bubblesColor: BubblesColor(
@@ -225,12 +236,12 @@ class _State extends State<Postlist> {
                                     ),
                                     likeBuilder: (bool isLiked) {
                                       return Icon(
-                                        Icons.home,
-                                        color: isLiked ? Colors.deepPurpleAccent : Colors.grey,
-                                        size: 10,
+                                        Icons.favorite_border,
+                                        color: isLiked ? Colors.red : Colors.grey,
+                                        size: 20,
                                       );
                                     },
-                                    likeCount: 665,
+                                    likeCount: 5,
                                     countBuilder: (int count, bool isLiked, String text) {
                                       var color = isLiked ? Colors.deepPurpleAccent : Colors.grey;
                                       Widget result;
@@ -249,7 +260,7 @@ class _State extends State<Postlist> {
                                   ),
                                   IconButton(
                                       icon: Icon(
-                                        Icons.add_task_rounded,
+                                        Icons.block,
                                       ),
                                       onPressed: () {
                                         Fluttertoast.showToast(
@@ -338,7 +349,7 @@ class _State extends State<Postlist> {
         ));
   }
 
-  void showAnswer(post, index) {
+  void showAnswer(post, total,index) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -352,8 +363,9 @@ class _State extends State<Postlist> {
                       fontFamily: 'Varela',
                       fontSize: 20.0,
                       color: Color(0xFF545D68))),
-              for (var i = 1; i <= index; i++)
-                Text('$i):${post['Answers'][index - i]['AnswerBody']}\n',
+              for (var i = 0; i<total; i++)
+                //if(){}
+                Text('$i):${post['Answers'][i]['AnswerBody']}\n',
                     style: TextStyle(
                         fontFamily: 'Varela',
                         fontSize: 15.0,

@@ -198,19 +198,26 @@ class Itemdetails extends StatelessWidget {
                                               crossAxisAlignment:
                                               CrossAxisAlignment.center,
                                               children: [
-                                                Text(
-                                                  "Item Name",
-                                                  style: TextStyle(
-                                                    fontSize: 20.0,
+                                                Container(
+
+                                                  padding: EdgeInsets.all(10.0),
+                                                  decoration: BoxDecoration(
+                                                    color:Colors.amber[50],
+                                                    borderRadius: BorderRadius.circular(25),
+                                                    border:Border.all(
+                                                      color:Colors.purple,
+                                                      width:1,
+                                                    )
                                                   ),
+                                                  child: Text(
+                                                    text,
+                                                    style: TextStyle(
+                                                      fontSize: 18.0,
+                                                      color: Colors.blue,
+                                                    ),
+                                                  )
                                                 ),
-                                                Text(
-                                                  text,
-                                                  style: TextStyle(
-                                                    fontSize: 18.0,
-                                                    color: Colors.blue,
-                                                  ),
-                                                )
+
                                               ],
                                             ),
 

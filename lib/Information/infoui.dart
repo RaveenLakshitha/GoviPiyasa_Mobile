@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:blogapp/Information/weather.dart';
 import 'package:blogapp/shop/Chart.dart';
 import 'package:blogapp/shop/item.dart';
@@ -5,7 +7,9 @@ import 'package:blogapp/shop/table/main.dart';
 import 'package:blogapp/shop/vieworders.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 
+import 'infocategory.dart';
 import 'news.dart';
 
 class Categorylist extends StatefulWidget {
@@ -16,6 +20,28 @@ class Categorylist extends StatefulWidget {
 }
 
 class _CategorylistState extends State<Categorylist> {
+  final url = "https://govi-piyasa-v-0-1.herokuapp.com/api/v1/infoCategories";
+  var _inforJson = [];
+
+  void infocategory() async {
+    try {
+      final response = await get(Uri.parse(url));
+      final jsonData = jsonDecode(response.body)['data'] as List;
+      setState(() {
+        _inforJson = jsonData;
+      });
+      print(_inforJson);
+      print(_inforJson[3]['Information'].toString());
+    } catch (err) {}
+  }
+
+@override
+  void initState() {
+  infocategory();
+  // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,154 +57,55 @@ class _CategorylistState extends State<Categorylist> {
         ),
       ),
       body:Container(
-        decoration: BoxDecoration(
+   /*     decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/.png"),
+            image: AssetImage("assets/about.jpg"),
             fit: BoxFit.cover,
           ),
-        ),
-        child:GridView.count(
-        primary: false,
-        padding: const EdgeInsets.all(20),
-        crossAxisSpacing: 10,
-        mainAxisSpacing: 10,
-        crossAxisCount: 2,
-        children: <Widget>[
-          GestureDetector(
-            child: Card(
-              child: Container(
-                height: 300,
-                width: 300,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.0),
-                    image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: AssetImage('assets/flowers2.png'))),
-                child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Text(
-                      'Rose',
-                      style: TextStyle(
-                        fontFamily: 'Indies',
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 30.0,
-                      ),
-                    )),
+        ),*/
+        child:GridView.builder(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2),
+            itemCount: _inforJson.length,
+            physics: ScrollPhysics(),
+            shrinkWrap: true,
+            itemBuilder: (BuildContext context, int index){
+              final infor = _inforJson[index];
+              return     GestureDetector(
+                  child:Card(
+                child: Container(
+                  height: 300,
+                  width: 300,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10.0),
+                      image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: NetworkImage('${infor['image']}'))),
+                  child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Text(
+                        '${infor['categoryName']}',
+                        style: TextStyle(
+                          fontFamily: 'Indies',
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 30.0,
+                        ),
+                      )),
+                ),
+                margin: EdgeInsets.only(left: 20.0, right: 20.0, top: 5.0),
               ),
-              margin: EdgeInsets.only(left: 20.0, right: 20.0, top: 5.0),
-            ),
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Weather(),
-                  ));
-            },
-          ),
-          GestureDetector(
-            child: Card(
-              child: Container(
-                height: 300,
-                width: 300,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.0),
-                    image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: AssetImage('assets/fertilizer.jpg'))),
-                child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Text(
-                      'Fertilizer',
-                      style: TextStyle(
-                        fontFamily: 'Indies',
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 30.0,
-                      ),
-                    )),
-              ),
-              margin: EdgeInsets.only(left: 20.0, right: 20.0, top: 5.0),
-            ),
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Chart(),
-                  ));
-            },
-          ),
-          GestureDetector(
-            child: Card(
-              child: Container(
-                height: 300,
-                width: 300,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.0),
-                    image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: AssetImage('assets/plants1.jpg'))),
-                child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Text(
-                      'Plants',
-                      style: TextStyle(
-                        fontFamily: 'Indies',
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 30.0,
-                      ),
-                    )),
-              ),
-              margin: EdgeInsets.only(left: 20.0, right: 20.0, top: 5.0),
-            ),
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => FormPage(),
-                  ));
-            },
-          ),
+              onTap:(){
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Infordescription(Title:"${_inforJson[index]['Information']['Title']}"),
 
-          GestureDetector(
-            child: Card(
-              child: Container(
-                height: 300,
-                width: 300,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.0),
-                    image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: AssetImage('assets/flowers3.jpg'))),
-                child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Text(
-                      'Rose',
-                      style: TextStyle(
-                        fontFamily: 'Indies',
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 30.0,
-                      ),
-                    )),
-              ),
-              margin: EdgeInsets.only(left: 20.0, right: 20.0, top: 5.0),
-            ),
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => FormPage(),
-                  ));
-            },
-          ),
+                    ));
+              } ,);
 
 
-
-
-        ],
-      ),)
+        }),)
     );
   }
 }

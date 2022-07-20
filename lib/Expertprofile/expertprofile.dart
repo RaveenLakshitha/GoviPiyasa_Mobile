@@ -14,6 +14,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:fluttertoast/fluttertoast.dart';
 
+import 'Answered question.dart';
+
 
 
 class expertprofile extends StatefulWidget {
@@ -30,8 +32,8 @@ class _expertprofileState extends State<expertprofile> {
   String email;
   String shopid;
   var _shopjson;
-  String _imagepath;
-  List<Widget> widgets = [expertprofile(), Chart()];
+  String _imagepath1;
+  List<Widget> widgets = [expertprofile(), AnsweredQuestion()];
   void fetchshop() async {
     print('Shop');
     String token = await storage.read(key: "token");
@@ -104,11 +106,7 @@ class _expertprofileState extends State<expertprofile> {
   }
 
 
-  void SaveImage(path) async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    pref.setString("imagepath", path);
-    print(path);
-  }
+
 
   Future deletePost(String id) async {
     print(id);
@@ -144,12 +142,29 @@ class _expertprofileState extends State<expertprofile> {
       return Future.error("error: status code ${response.statusCode}");
     return await response.stream.bytesToString();
   }
-  chooseImage(ImageSource source) async {
-    final image = await picker.getImage(source: source);
+  chooseImage(ImageSource source) async{
+    final image=await picker.getImage(source:source);
+
     setState(() {
-      _image = File(image.path);
+      _image=File(image.path);
     });
+    SaveImage(_image.path);
+
   }
+  void SaveImage(path) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setString("imagepath2", path);
+    print(path);
+    Fluttertoast.showToast(
+      msg: "save",
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      backgroundColor: Colors.red,
+      textColor: Colors.white,
+      fontSize: 16.0,
+    );
+  }
+
 
   void initState() {
     fetchitems();
@@ -160,10 +175,7 @@ class _expertprofileState extends State<expertprofile> {
 
   @override
   Widget build(BuildContext context) {
-    String city = "Ja-ela";
     return Scaffold(
-
-      //AssetImage("assets/architect.jpg")
       body: Container(
         margin: const EdgeInsets.all(10.0),
         decoration: BoxDecoration(
@@ -183,7 +195,7 @@ class _expertprofileState extends State<expertprofile> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Text(
-                                    "ShopName :${shopName.toString()}",
+                                    "ProfileName :${shopName.toString()}",
                                     style: TextStyle(
                                       color: Colors.red,
                                       fontWeight: FontWeight.bold,
@@ -194,7 +206,7 @@ class _expertprofileState extends State<expertprofile> {
                                     height: 5.0,
                                   ),
                                   Container(
-                                    child: _image != null
+                                    child: _image == null
                                         ? Container(
                                       height: 150,
                                       width: 150,
@@ -212,33 +224,14 @@ class _expertprofileState extends State<expertprofile> {
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(8.0)),
-                                        image: DecorationImage(
-                                          image: NetworkImage(
-                                              'https://firebasestorage.googleapis.com/v0/b/myweb-72a93.appspot.com/o/govipiyasa%2Fshop.jpg?alt=media&token=fbe35e0b-76fc-4f7c-ad9b-730b9476860c'),
-                                        ),
+                                        image: new DecorationImage(
+                                        image: _image!=null?FileImage(_image): ExactAssetImage(
+                                            'assets/about.jpg'),
+                                        fit: BoxFit.cover,
+                                      ),
                                       ),
                                     ),
-                                  ), /*
-                                  Container(
-                                    decoration: BoxDecoration(
-                                        border: Border.all(
-                                            color: Colors.greenAccent)),
-                                    child: Padding(
-                                      padding: EdgeInsets.all(5.0),
-                                      child: Container(
-                                        height: 140,
-                                        width: 150,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(8.0)),
-                                          image: DecorationImage(
-                                            image: NetworkImage(
-                                                'https://firebasestorage.googleapis.com/v0/b/myweb-72a93.appspot.com/o/govipiyasa%2Fshop.jpg?alt=media&token=fbe35e0b-76fc-4f7c-ad9b-730b9476860c'),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),*/
+                                  ),
                                 ]),
                           ),
                         ),
@@ -271,7 +264,7 @@ class _expertprofileState extends State<expertprofile> {
                                             chooseImage(ImageSource.gallery);
                                           },
                                           icon: Icon(Icons.camera_alt_sharp)),
-                                      IconButton(
+                         /*             IconButton(
                                           onPressed: () {
                                             SaveImage(_image.path);
                                             Fluttertoast.showToast(
@@ -283,7 +276,7 @@ class _expertprofileState extends State<expertprofile> {
                                               fontSize: 16.0,
                                             );
                                           },
-                                          icon: Icon(Icons.api_outlined)),
+                                          icon: Icon(Icons.api_outlined)),*/
                                     ]),
                               ),
                             ]),
@@ -294,38 +287,7 @@ class _expertprofileState extends State<expertprofile> {
                 ),
               ),
               Divider(),
-              Container(
 
-                height: 50,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: <Widget>[
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.blueAccent),
-                        borderRadius: BorderRadius.all(Radius.circular(5.0) //                 <--- border radius here
-                        ),
-                      ),
-                      width: 185,
-
-                      child: const Center(child: Text('Items', style: TextStyle(fontSize: 18, color: Colors.lightGreen),)),
-                    ),
-                    Container(
-
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.blueAccent),
-                        borderRadius: BorderRadius.all(Radius.circular(5.0) //                 <--- border radius here
-                        ),
-                      ),
-                      width: 185,
-
-                      child: const Center(child: Text('RentItems', style: TextStyle(fontSize: 18, color: Colors.green),)),
-                    ),
-
-
-                  ],
-                ),
-              ),
 
             ],
           ),
@@ -338,9 +300,9 @@ class _expertprofileState extends State<expertprofile> {
   Future loadImage() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     setState(() {
-      _imagepath = pref.getString("imagepath");
-      _image = File(_imagepath.toString());
+      _imagepath1 = pref.getString("imagepath2");
+      _image = File(_imagepath1.toString());
     });
-    print(_imagepath);
+    print(_imagepath1);
   }
 }

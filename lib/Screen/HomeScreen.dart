@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:translator/translator.dart';
 import 'package:blogapp/Forum/Forumcategory.dart';
 import 'package:blogapp/Information/infoui.dart';
-import 'package:blogapp/Information/news.dart';
 import 'package:blogapp/Screen/Navbar/expertlist.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -39,6 +38,7 @@ class _HomeScreenState extends State<HomeScreen>
       new GoogleTranslator(); //using google translator
 
   Translation out;
+  var index=0;
   String txt = "නිෂ්පාදන";
 
   //getting text
@@ -105,7 +105,7 @@ class _HomeScreenState extends State<HomeScreen>
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10.0),
                       image: DecorationImage(
-                        image: NetworkImage("${post['name']}"),
+                        image: post!=null?NetworkImage("${post['name']}"):Image.asset('assets/31.png'),
                         fit: BoxFit.cover,
                       ),
                     ),
