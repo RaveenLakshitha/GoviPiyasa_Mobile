@@ -1,11 +1,11 @@
-import 'package:blogapp/shop/Chart.dart';
+import 'package:blogapp/shop/ShopProfile/Chart.dart';
 import 'package:blogapp/shop/item.dart';
 import 'package:blogapp/shop/table/main.dart';
 import 'package:blogapp/shop/vieworders.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'ReaqustAds.dart';
+import 'ShopProfile/ReaqustAds.dart';
 
 class Service extends StatefulWidget {
   const Service({Key key}) : super(key: key);

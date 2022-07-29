@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
-import 'custom/OptionButton.dart';
+import '../custom/OptionButton.dart';
 class Shopview extends StatefulWidget {
   final String id;
   final String text;

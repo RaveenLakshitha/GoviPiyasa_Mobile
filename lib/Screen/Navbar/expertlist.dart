@@ -1,42 +1,92 @@
+import 'package:blogapp/Expertprofile/expertview.dart';
+import 'package:blogapp/Pages/HomePage.dart';
+import 'package:blogapp/assets/my_flutter_app_icons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
 
 import 'package:http/http.dart';
+
 import 'package:url_launcher/url_launcher.dart';
 
-class SellerList extends StatefulWidget {
+class SellerList extends StatefulWidget{
   @override
   _SellerListState createState() => _SellerListState();
 }
 
 class _SellerListState extends State<SellerList> {
-  Future<http.Response> addrate(String rate) {
+  FlutterSecureStorage storage = FlutterSecureStorage();
+
+  addrate(String rate,String id)async{
+
+    String token = await storage.read(key: "token");
+    print(token);
+    print(id);
+    print(rate);
+    final body = {
+      "rating": rate,
+      "expertId":id
+    };
+    http.post(
+      "https://govi-piyasa-v-0-1.herokuapp.com/api/v1/rating",body:jsonEncode(body),
+      headers: {
+        "Content-Type": "application/json",
+        'Authorization': 'Bearer $token',
+      },
+
+    ).then((response) {
+      if (response.statusCode == 200) {
+        print(json.decode(response.body));
+        // Do the rest of job here
+      }
+    });
+  }
+/*  Future<http.Response> addrate(String rate,String id) async{
+    String token = await storage.read(key: "token");
+    print(id);
+    print(rate);
     return http.post(
-      Uri.parse('https://jsonplaceholder.typicode.com/albums'),
+      Uri.parse('https://govi-piyasa-v-0-1.herokuapp.com/api/v1/ratings'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, String>{
         'rating': rate,
+        'expertId':id
       }),
     );
+  }*/
+  addreview(String review,String id) async{
+
+    String token = await storage.read(key: "token");
+    print(token);
+    print(id);
+    print(review);
+    final body = {
+      "review": review,
+      "expertId":id
+    };
+    http.post(
+      "https://govi-piyasa-v-0-1.herokuapp.com/api/v1/reviews",body:jsonEncode(body),
+      headers: {
+        "Content-Type": "application/json",
+        'Authorization': 'Bearer $token',
+      },
+
+    ).then((response) {
+      if (response.statusCode == 200) {
+        print(json.decode(response.body));
+        // Do the rest of job here
+      }
+    });
   }
 
-  Future<http.Response> addreview(String review) {
-    return http.post(
-      Uri.parse('https://jsonplaceholder.typicode.com/albums'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(<String, String>{
-        'review': review,
-      }),
-    );
-  }
 
   double rating;
 
@@ -50,13 +100,15 @@ class _SellerListState extends State<SellerList> {
 
   //https://jsonplaceholder.typicode.com/posts
   // https://mongoapi3.herokuapp.com/users
-  final url = "https://govi-piyasa-v-0-1.herokuapp.com/api/v1/auths/getExperts";
+
+  final url = "https://govi-piyasa-v-0-1.herokuapp.com/api/v1/experts/";
   var _postsJson = [];
 
   void fetchPosts() async {
     try {
       final response = await get(Uri.parse(url));
       final jsonData = jsonDecode(response.body)['data'] as List;
+      print(jsonData);
       setState(() {
         _postsJson = jsonData;
       });
@@ -85,6 +137,15 @@ class _SellerListState extends State<SellerList> {
           backgroundColor: Colors.lightGreen,
           elevation: 0.0,
           centerTitle: true,
+          leading: IconButton(
+              icon: Icon(FontAwesomeIcons.arrowLeft,color:Colors.black),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => HomePage(),
+                    ));
+              }),
           title: Text('ExpertList',
               style: TextStyle(
                   fontFamily: 'Varela',
@@ -97,64 +158,99 @@ class _SellerListState extends State<SellerList> {
               itemCount: _postsJson.length,
               itemBuilder: (BuildContext context, index) {
                 final post = _postsJson[index];
-                return Container(
-                  margin: const EdgeInsets.all(20.0),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.blueAccent),
-                    borderRadius: BorderRadius.all(Radius.circular(
-                            5.0) //                 <--- border radius here
-                        ),
-                  ),
-                  child: ListTile(
-                    leading: Image.network("${post['profilePicture']}"),
-                    title: Text("Name:${post['userName']}"),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text("Email:${post['email']}"),
-                        Text("City:${post['city']}"),
-                        Text("Contact:+94${post['contactNumber']}"),
-                        Row(children: [
-                          Text("$rating"),
-                          buildRating1(),
-                        ]),
-                        Row(
-                          children: [
-                            TextButton(
-                              child: Text(
-                                'Rate',
-                                style: TextStyle(fontSize: 14),
-                              ),
-                              onPressed: () => showRating(),
-                            ),
-                            TextButton(
-                              child: Text(
-                                'Review',
-                                style: TextStyle(fontSize: 14),
-                              ),
-                              onPressed: () => showReview(),
-                            ),
-                          ],
-                        ),
-                        GestureDetector(
-                          child: Icon(Icons.settings_phone_rounded),
-                          onTap: () {
-                            launch("tel://+94${post['contact']}");
-                            // launch("mailto:ashennilura@gmail.com?subject=Meeting&body=Can we meet via Google Meet");
-                          },
-                        ),
-                      ],
+                return GestureDetector(
+                  child:Container(
+                    margin: const EdgeInsets.all(20.0),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.blueAccent),
+                      borderRadius: BorderRadius.all(Radius.circular(
+                          5.0) //                 <--- border radius here
+                      ),
                     ),
-                    trailing: GestureDetector(
-                      child: Icon(Icons.add_call),
-                      onTap: () {
-                        lanchwhatsapp(
-                            number: "+94${post['contact']}", message: "hello");
-                      },
+                    child: ListTile(
+                      leading: Image.network("https://source.unsplash.com/random?sig=$index"),
+                      title: Text("Name:${post['userName']}",style: TextStyle(
+                          fontSize: 15,
+                          color:Colors.black,
+                          fontFamily: 'Varela',
+                          fontWeight: FontWeight.bold)),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text("Designation:${post['designation']}"),
+                          Text("City:${post['city']}"),
+                          Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("Contact:+94${post['contactNumber']}"),]),
+
+                          Row(
+                              children: [
+                                Text("${post['rating'].toStringAsFixed(3)}",style: TextStyle(
+                                    color:Colors.amber)),
+                                buildRating1(post['rating']),
+                              ]),
+                          Row(
+                            children: [
+                              TextButton(
+                                child: Text(
+                                  'Rate',
+                                  style: TextStyle(fontSize: 14,color:Colors.red),
+                                ),
+                                onPressed: () => showRating(post['_id']),
+                              ),
+                              TextButton(
+                                child: Text(
+                                  'Review',
+                                  style: TextStyle(fontSize: 14),
+                                ),
+                                onPressed: () => showReview(post['_id']),
+                              ),
+                            ],
+                          ),
+
+                        ],
+                      ),
+                      trailing: Column(
+                          children:[
+                            GestureDetector(
+                              child: Icon(MyFlutterApp.whatsapp),
+                              onTap: () {
+                                lanchwhatsapp(
+                                    number: "+94${post['contactNumber']}", message: "hello");
+                              },
+                            ),
+                            SizedBox(height: 5,),
+                            GestureDetector(
+                              child: Icon(Icons.settings_phone_rounded),
+                              onTap: () {
+                                launch("tel://+94${post['contactNumber']}");
+                                // launch("mailto:ashennilura@gmail.com?subject=Meeting&body=Can we meet via Google Meet");
+                              },
+                            ),
+                          ]
+                      ),
+                      isThreeLine: true,
                     ),
-                    isThreeLine: true,
                   ),
+                  onTap: (){
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => expertView(
+                              designation:"${post['designation']}",
+                              description:"${post['description']}",
+                             city:"${post['city']}",
+                             contact:"${post['contactNumber']}",
+                             name:"${post['city']}",
+                            qualification:"${post['Qualification']}",
+                              list:_postsJson[index]['expertReviews'],
+                            rating:"${post['rating']}",
+                            docs:_postsJson[index]['proofDocuments'],
+                            image:"https://source.unsplash.com/random?sig=$index",)));
+                  },
                 );
+
               }),
         ));
   }
@@ -170,18 +266,19 @@ class _SellerListState extends State<SellerList> {
         }),
       );
 
-  Widget buildRating1() => RatingBar.builder(
+  Widget buildRating1(rating) => RatingBar.builder(
         minRating: 1,
         itemSize: 18,
+    initialRating: rating,
         itemPadding: EdgeInsets.symmetric(horizontal: 4),
         itemBuilder: (context, _) => Icon(Icons.star, color: Colors.amber),
-        updateOnDrag: true,
+        updateOnDrag: false,
         onRatingUpdate: (rating) => setState(() {
           this.rating = rating;
         }),
       );
 
-  void showRating() => showDialog(
+  void showRating(id) => showDialog(
         context: context,
         builder: (context) => AlertDialog(
           title: Text('Rate this Product'),
@@ -190,7 +287,7 @@ class _SellerListState extends State<SellerList> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text('Please leave a star rating',
-                    style: TextStyle(fontSize: 10)),
+                    style: TextStyle(fontSize: 20)),
                 SizedBox(
                   height: 5.0,
                 ),
@@ -203,9 +300,19 @@ class _SellerListState extends State<SellerList> {
               ]),
           actions: [
             TextButton(
-                onPressed: () {
+                onPressed: ()async {
+
+                  addrate(rating.toString(),id);
+                  await Future.delayed(Duration(seconds: 3));
                   Navigator.pop(context);
-                  addrate(rating.toString());
+                  Fluttertoast.showToast(
+                    msg: "successfull",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.BOTTOM,
+                    backgroundColor: Colors.red,
+                    textColor: Colors.white,
+                    fontSize: 16.0,
+                  );
                 },
                 child: Text('Ok', style: TextStyle(fontSize: 20))),
             TextButton(
@@ -217,7 +324,7 @@ class _SellerListState extends State<SellerList> {
         ),
       );
 
-  void showReview() => showDialog(
+  void showReview(id) => showDialog(
         context: context,
         builder: (context) => AlertDialog(
           title: Text('Review this Product'),
@@ -254,9 +361,24 @@ class _SellerListState extends State<SellerList> {
           actions: [
             TextButton(
                 onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('Cancel', style: TextStyle(fontSize: 20))),
+            TextButton(
+                onPressed: () async{
                   if (_formKey.currentState.validate()) {
-                    addreview(myController.text);
+                    addreview(myController.text,id);
+                    myController.clear();
+                    await Future.delayed(Duration(seconds: 3));
                     Navigator.pop(context);
+                    Fluttertoast.showToast(
+                      msg: "successfull",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.BOTTOM,
+                      backgroundColor: Colors.red,
+                      textColor: Colors.white,
+                      fontSize: 16.0,
+                    );
                   }
 
                 },

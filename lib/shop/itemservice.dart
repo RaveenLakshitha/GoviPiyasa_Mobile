@@ -19,6 +19,19 @@ class Itemservice {
         },
         options: Options(contentType: Headers.formUrlEncodedContentType));
   }
+  addappointment(description,date,time)async{
+String token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYWMwMWY2NWRiMzVmMWIxOWU2YTIyYiIsImlhdCI6MTY1OTAzMDUyNCwiZXhwIjoxNjYxNjIyNTI0fQ.8PVtUAAEI2QC8XDd12kDLNjXBkCGR1X7UsxolkX_I4A";
+    return await dio.post('https://govi-piyasa-v-0-1.herokuapp.com/api/v1/forum/Questions/AddQuestion', data: {
+      'description': description,
+      'date': date,
+      'time': time,
+    },
+        options: Options(contentType: Headers.formUrlEncodedContentType,headers: {
+          "Content-Type": "application/json",
+          'Authorization': 'Bearer $token',
+        },
+        ));
+  }
   addQuestion(title,category,description) async {
     return await dio.post('https://govi-piyasa-v-0-1.herokuapp.com/api/v1/forum/Questions/AddQuestion', data: {
           "Title": title,

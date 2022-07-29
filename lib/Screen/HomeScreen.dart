@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:blogapp/LoadingScreen/loading.dart';
 import 'package:translator/translator.dart';
 import 'package:blogapp/Forum/Forumcategory.dart';
 import 'package:blogapp/Information/infoui.dart';
@@ -92,53 +93,60 @@ class _HomeScreenState extends State<HomeScreen>
           children: <Widget>[
             Container(
               child: CarouselSlider.builder(
-                itemCount: _imagesJson?.length,
+                itemCount: _imagesJson.length,
                 options: CarouselOptions(
                   autoPlay: true,
                   aspectRatio: 2.0,
                   enlargeCenterPage: true,
                 ),
                 itemBuilder: (context, index, realIdx) {
-                  final post = _imagesJson[index];
-                  return Container(
-                    width: 300.0,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10.0),
-                      image: DecorationImage(
-                        image: post!=null?NetworkImage("${post['name']}"):Image.asset('assets/31.png'),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Expanded(
-                          child: Text(
-                            '${post['type']}',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: 'Indies',
-                              fontWeight: FontWeight.bold,
-                              fontSize: 30.0,
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: Text(
-                            '${post['contact']}',
-                            style: TextStyle(
-                              fontFamily: 'Indies',
-                              color: Colors.blue,
-                              fontSize: 15.0,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
+
+                 if(_imagesJson != null &&_imagesJson.length > index){
+                   final post = _imagesJson[index];
+                   return Container(
+                     width: 300.0,
+                     decoration: BoxDecoration(
+                       borderRadius: BorderRadius.circular(10.0),
+                       image: DecorationImage(
+                         image: post!=null?NetworkImage("${post['name']}"):Image.asset('assets/31.png'),
+                         fit: BoxFit.cover,
+                       ),
+                     ),
+                     child: Column(
+                       mainAxisAlignment: MainAxisAlignment.center,
+                       crossAxisAlignment: CrossAxisAlignment.center,
+                       children: <Widget>[
+                         Expanded(
+                           child: Text(
+                             '${post['type']}',
+                             style: TextStyle(
+                               color: Colors.white,
+                               fontFamily: 'Indies',
+                               fontWeight: FontWeight.bold,
+                               fontSize: 30.0,
+                             ),
+                           ),
+                         ),
+                         Padding(
+                           padding: const EdgeInsets.all(15.0),
+                           child: Text(
+                             '${post['contact']}',
+                             style: TextStyle(
+                               fontFamily: 'Indies',
+                               color: Colors.blue,
+                               fontSize: 15.0,
+                             ),
+                             textAlign: TextAlign.center,
+                           ),
+                         ),
+                       ],
+                     ),
+                   );
+                 } else{
+                   return SizedBox.shrink();
+                 }
+
+
                 },
               ),
             ),
@@ -330,7 +338,7 @@ class _HomeScreenState extends State<HomeScreen>
                 ),
                 onTap: () {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => SellerList()));
+                      MaterialPageRoute(builder: (context) => Loading()));
                 }),
             SizedBox(
               height: 10.0,
@@ -374,14 +382,25 @@ class _HomeScreenState extends State<HomeScreen>
                 ),
               ),
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Categorylist()));
+                Navigator.of(context).push(_createRoute());
               },
             ),
           ],
         ),
       ),
 
+    );
+  }
+  Route _createRoute() {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => Categorylist(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(0.0, 1.0);
+        const end = Offset.zero;
+        final tween = Tween(begin: begin, end: end);
+        final offsetAnimation = animation.drive(tween);
+        return child;
+      },
     );
   }
 }

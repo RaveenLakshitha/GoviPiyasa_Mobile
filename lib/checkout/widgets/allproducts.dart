@@ -3,7 +3,7 @@ import 'package:blogapp/Search/Api_service.dart';
 import 'package:blogapp/checkout/models/cart.dart';
 import 'package:blogapp/checkout/models/products.dart';
 import 'package:blogapp/checkout/widgets/itemdetails.dart';
-import 'package:blogapp/shop/shopview.dart';
+import 'package:blogapp/shop/ShopProfile/shopview.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:badges/badges.dart';
 import 'package:blogapp/Architectureprofile/ArchitectDashboard.dart';
 import 'package:blogapp/Cart/main.dart';
@@ -9,18 +10,21 @@ import 'package:blogapp/Notification/notify.dart';
 import 'package:blogapp/Pages/WelcomePage.dart';
 import 'package:blogapp/Profile/ProfileScreen1.dart';
 import 'package:blogapp/Screen/Maps/Map.dart';
+import 'package:blogapp/Screen/Maps/Map2.dart';
+
 import 'package:blogapp/Screen/Maps/MapActivity.dart';
 import 'package:blogapp/Screen/Navbar/About.dart';
 import 'package:blogapp/Screen/Navbar/Delivery.dart';
 import 'package:blogapp/Screen/HomeScreen.dart';
 import 'package:blogapp/Screen/Navbar/Architectlist.dart';
+import 'package:blogapp/Screen/Navbar/chatBot.dart';
 import 'package:blogapp/Screen/Services/Settings.dart';
 import 'package:blogapp/Screen/Navbar/feedback.dart';
 import 'package:blogapp/Screen/Navbar/expertlist.dart';
 import 'package:blogapp/Search/HomeScreen.dart';
 import 'package:blogapp/architecture/widget_screen.dart';
-import 'package:blogapp/shop/Shopdashboard.dart';
-import 'package:blogapp/shop/shoprofile.dart';
+import 'package:blogapp/shop/ShopProfile/Shopdashboard.dart';
+import 'package:blogapp/shop/ShopProfile/shoprofile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -32,6 +36,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:showcaseview/showcase_widget.dart';
 
 import '../Imagelabel.dart';
+import '../bot.dart';
 import 'bg_drawer.dart';
 
 //import 'package:blogapp/onesignal_flutter/onesignal_flutter.dart';
@@ -57,9 +62,9 @@ Future<void> initPlateformState() async{
 
   List<Widget> widgets = [HomeScreen(), ProfilePage()];
   List<String> titleString = ["Home Page", "Profile Page"];
-  bool approval=false;
-  bool approval2=false;
-  bool approval3=false;
+  bool approval=true;
+  bool approval2=true;
+  bool approval3=true;
   final storage = FlutterSecureStorage();
   NetworkHandler networkHandler = NetworkHandler();
   var username1="";
@@ -197,7 +202,7 @@ Future<void> initPlateformState() async{
         _counter.toString(),
         style: TextStyle(color: Colors.white),
       ),
-      child: IconButton(icon: Icon(Icons.notifications), onPressed: () {
+      child: IconButton(icon: Icon(Icons.notifications,color:Colors.black), onPressed: () {
         _increment();
         loadCounter();
         Navigator.push(context,
@@ -283,6 +288,14 @@ Future<void> initPlateformState() async{
               },
             ),
             ListTile(
+              title: Text("Bot"),
+              trailing: Icon(Icons.assignment_sharp, color: Colors.green),
+              onTap: () {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) => Chatbot()));
+              },
+            ),
+            ListTile(
               title: Text("About"),
               trailing: Icon(Icons.assignment_sharp, color: Colors.green),
               onTap: () {
@@ -303,9 +316,18 @@ Future<void> initPlateformState() async{
         //backgroundColor: Colors.white,
         elevation: 5,
         //centerTitle: true,
-        title: Text(_message,
-            style: TextStyle(
-                fontFamily: 'Roboto',fontWeight: FontWeight.bold, fontSize: 20.0, color: Colors.black)),
+        title:TextLiquidFill(
+          waveDuration:  Duration(milliseconds: 4000),
+          text: _message,
+          waveColor: Colors.blueAccent,
+          boxBackgroundColor: Colors.white,
+          textStyle: TextStyle(
+            fontSize: 30.0,
+            fontWeight: FontWeight.bold,
+              fontFamily: 'Roboto'
+          ),
+          boxHeight: 300.0,
+        ),
       /*  flexibleSpace: Image(
           image: AssetImage('assets/about.jpg'),
           fit: BoxFit.cover,
@@ -358,7 +380,7 @@ Future<void> initPlateformState() async{
                 value: 1,
                 child: Row(
                   children: [
-                    Icon(Icons.api_sharp, color: Colors.blue),
+                    Icon(Icons.build_rounded , color: Colors.blue),
                     Text("Settings"),
                   ],
                 ),
@@ -376,7 +398,7 @@ Future<void> initPlateformState() async{
                 value: 3,
                 child: Row(
                   children: [
-                    Icon(Icons.article_sharp, color: Colors.blue),
+                    Icon(Icons.dynamic_feed_rounded, color: Colors.blue),
                     Text("Create architecture Profile"),
                   ],
                 ),
@@ -392,6 +414,15 @@ Future<void> initPlateformState() async{
               ),
               PopupMenuItem<int>(
                 value: 5,
+                child: Row(
+                  children: [
+                    Icon(Icons.my_location_outlined, color: Colors.blue),
+                    Text("My Location"),
+                  ],
+                ),
+              ),
+              PopupMenuItem<int>(
+                value: 6,
                 child: Row(
                   children: [
                     Icon(Icons.add_location_rounded, color: Colors.blue),
@@ -479,12 +510,17 @@ Future<void> initPlateformState() async{
         break;
       case 5:
         Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) =>  googlemap(lat:7.0766391,long:79.8771548)));
+            .push(MaterialPageRoute(builder: (context) =>  Map2()));
+        break;
+      case 6:
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) =>  googlemap(lat:6.0559758,long:80.1769773)));
         break;
     }
   }
 
   void logout() async {
+
     await storage.delete(key: "token");
     Navigator.pushAndRemoveUntil(
         context,

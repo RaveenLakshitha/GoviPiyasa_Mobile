@@ -22,7 +22,7 @@ class _DeliveryState extends State<Delivery> {
                 fontFamily: 'Varela',
                 fontSize: 20.0,
                 color: Color(0xFF545D68))),
-      ),
+      ),//
       body: WebView(
         javascriptMode: JavascriptMode.unrestricted,
         initialUrl: "https://www.domex.lk/",

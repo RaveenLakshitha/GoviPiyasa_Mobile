@@ -21,7 +21,6 @@ import 'Splash/page/onboarding_page.dart';
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
 
-
   await Firebase.initializeApp();
   return runApp(ChangeNotifierProvider<ThemeNotifier>(
     create: (_) => new ThemeNotifier(),

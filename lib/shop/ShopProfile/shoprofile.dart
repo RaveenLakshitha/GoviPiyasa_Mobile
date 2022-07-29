@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:blogapp/checkout/widgets/itemdetails.dart';
-import 'package:blogapp/shop/updateitem.dart';
+import 'package:blogapp/shop/ShopProfile/updateitem.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -14,10 +14,10 @@ import 'Chart.dart';
 
 import 'package:fluttertoast/fluttertoast.dart';
 
-import 'DataModel.dart';
+import '../DataModel.dart';
 import 'Editshop.dart';
-import 'item.dart';
-import 'itemservice.dart';
+import '../item.dart';
+import '../itemservice.dart';
 
 class Showitem extends StatefulWidget {
 //  final Album cases;
@@ -170,7 +170,6 @@ class _ShowitemState extends State<Showitem> {
 
   @override
   Widget build(BuildContext context) {
-    String city = "Ja-ela";
     return Scaffold(
 
       //AssetImage("assets/architect.jpg")
@@ -427,9 +426,7 @@ class _ShowitemState extends State<Showitem> {
                                         ),
                                         borderRadius: BorderRadius.circular(10),
                                       ),
-                                   /*   child: Center(
-                                        child: Text("Rs:${item['price']}",style:TextStyle(color:Colors.white)),
-                                      ),*/
+
                                     ),
                                     onTap: () {
                                       //Navigator.push(context,MaterialPageRoute(

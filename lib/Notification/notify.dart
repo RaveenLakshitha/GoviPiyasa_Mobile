@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:blogapp/Notification/viewnotification.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
@@ -112,7 +114,8 @@ class _NotifyState extends State<Notify> {
 
       },
     );
-  }  Future<Null> refreshList2() async {
+  }
+  Future<Null> refreshList2() async {
     await Future.delayed(Duration(seconds: 3));
   }
 
@@ -144,7 +147,7 @@ class _NotifyState extends State<Notify> {
             ),
           ),
           ),
-          Container(child:Text("Private Messages",style: TextStyle(fontFamily: 'Roboto',fontWeight: FontWeight.bold),)),
+          Container(child:Text("Private Messages",style: TextStyle(fontSize:25,fontFamily: 'Roboto',fontWeight: FontWeight.bold),)),
           Expanded(child:
           Container(
             child: RefreshIndicator(
@@ -185,7 +188,7 @@ class _NotifyState extends State<Notify> {
             ),
           )
           ),
-          Container(child:Text("Public Messages",style: TextStyle(fontFamily: 'Roboto',fontWeight: FontWeight.bold),),),
+          Container(child:Text("Public Messages",style: TextStyle(fontSize:25 ,fontFamily: 'Roboto',fontWeight: FontWeight.bold),),),
           Expanded(child:
           Container(
             child: RefreshIndicator(
@@ -194,34 +197,42 @@ class _NotifyState extends State<Notify> {
                   itemCount: notificationlist.length,
                   itemBuilder: (BuildContext context, index) {
                     final post =notificationlist[index];
-                    return Container(
-                      margin: const EdgeInsets.all(10.0),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.blueAccent),
-                        borderRadius: BorderRadius.all(Radius.circular(
-                            5.0) //                 <--- border radius here
+                    return GestureDetector(
+                      onTap: (){
+                        Navigator.push(context,MaterialPageRoute(
+                          builder: (context)=>Viewnotification(title:"${post['Title']}",description: "${post['Description']}",date:"${post['DateAndTime']}")
+                        ));
+                      },
+                      child:   Container(
+                        margin: const EdgeInsets.all(10.0),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.blueAccent),
+                          borderRadius: BorderRadius.all(Radius.circular(
+                              5.0) //                 <--- border radius here
+                          ),
                         ),
-                      ),
-                      child: ListTile(
-                        title: Text("${post['Title']}",   style: TextStyle(
-                            fontFamily: 'Varela',
-                            fontSize: 15.0,
-                            color: Colors.black)),
-                        trailing:Text("${post['DateAndTime']}"),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
+                        child: ListTile(
+                          title: Text("${post['Title']}",   style: TextStyle(
+                              fontFamily: 'Varela',
+                              fontSize: 15.0,
+                              color: Colors.black)),
+                          trailing:Text("${post['DateAndTime']}"),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
 
-                            Text("${post['Description']}"),
-                          //  Text("${post['user']}"),
-
+                              Text("${post['Description']}"),
+                              //  Text("${post['user']}"),
 
 
-                          ],
+
+                            ],
+                          ),
+
                         ),
-
-                      ),
+                      )
                     );
+
                   }),
             ),
           )

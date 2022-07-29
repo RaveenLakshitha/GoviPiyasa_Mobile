@@ -1,10 +1,12 @@
 import 'dart:convert';
 
+import 'package:blogapp/Architectureprofile/Architectureview.dart';
+import 'package:blogapp/Architectureprofile/screens/product/products_screen.dart';
 import 'package:blogapp/architecture/architect_profile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-
+import 'package:animated_text_kit/animated_text_kit.dart';
 class expert extends StatefulWidget {
   @override
   _expertState createState() => _expertState();
@@ -82,7 +84,7 @@ class _expertState extends State<expert> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => Architect(name: '${item['profileName']}',description: '${item['description']}',city: '${item['city']}',email: '${item['email']}',),
+                        builder: (context) => Architectureview(id:"${item['_id']}",businessName:"${item['businessName']}",description:"${item['description']}",contactNumber:"${item['contactNumber']}",motto:"${item['motto']}",email:"${item['email']}",rating:"${item['rating']}",image:"https://source.unsplash.com/random?sig=$index"),
                       ));
                 },
               ),
@@ -93,22 +95,44 @@ class _expertState extends State<expert> {
                 child:Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                     Text(
-                      "${item['profileName']}",
-                      style: TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
+                    AnimatedTextKit(
+                      animatedTexts: [
+                        TypewriterAnimatedText(
+                          '${item['businessName']}',
+                          textStyle: const TextStyle(
+                            fontSize: 32.0,
+                            fontWeight: FontWeight.bold,
+                            color:Colors.white
+                          ),
+                          speed: const Duration(milliseconds: 500),
+                        ),
+                      ],
+
+                      totalRepeatCount: 4,
+                      pause: const Duration(milliseconds: 1000),
+                      displayFullTextOnTap: true,
+                      stopPauseOnTap: true,
                     ),
-                    Text(
-                      "${item['description']}",
+                    AnimatedTextKit(
+                      animatedTexts: [
+                        FadeAnimatedText(
+                          'Fade First',
+                          textStyle: TextStyle(color:Colors.blue,fontSize: 32.0, fontWeight: FontWeight.bold),
+                        ),
+                     /*   ScaleAnimatedText(
+                          'Then Scale',
+                          textStyle: TextStyle(fontSize: 70.0, fontFamily: 'Canterbury'),
+                        ),*/
+                      ],
+                    ),
+                /*    Text(
+                      "${item['businessName']}",
                       style: TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                       ),
-                    ),
+                    ),*/
                   ],
                 ),
 
@@ -126,14 +150,32 @@ class _expertState extends State<expert> {
                 backgroundImage: NetworkImage(
                     'https://source.unsplash.com/random?sig=$index'),
               ),
-              title: Text("Name ${item['name']}"),
-              subtitle: Text("About ${item['about']}"),
+              title: AnimatedTextKit(
+                animatedTexts: [
+                  TypewriterAnimatedText(
+                    '${item['businessName']}',
+                    textStyle: const TextStyle(
+                      fontSize: 32.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    speed: const Duration(milliseconds: 1000),
+                  ),
+                ],
+
+                totalRepeatCount: 4,
+                pause: const Duration(milliseconds: 1000),
+                displayFullTextOnTap: true,
+                stopPauseOnTap: true,
+              ),
+              subtitle: Text("${item['motto']}"),
               onTap: (){
+
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => Architect(name: '${item['profileName']}',description: '${item['description']}',city: '${item['city']}',email: '${item['email']}',),
+                      builder: (context) => Architectureview(id:"${item['_id']}",businessName:"${item['businessName']}",description:"${item['description']}",contactNumber:"${item['contactNumber']}",motto:"${item['motto']}",email:"${item['email']}",rating:"${item['rating']}",image:"https://source.unsplash.com/random?sig=$index"),
                     ));
+
               },
             );
           });

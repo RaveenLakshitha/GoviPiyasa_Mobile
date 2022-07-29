@@ -47,9 +47,9 @@ class _ChartState extends State<Chart> {
     ];
 
     var piedata = [
-      new Task('Work', 35.8, Color(0xff3366cc)),
-      new Task('Eat', 8.3, Color(0xff990099)),
-      new Task('Commute', 10.8, Color(0xff109618)),
+      new Task('Plants', 35.8, Color(0xff3366cc)),
+      new Task('Seeds', 8.3, Color(0xff990099)),
+      new Task('Equipments', 10.8, Color(0xff109618)),
       new Task('TV', 15.6, Color(0xfffdbe19)),
       new Task('Sleep', 19.2, Color(0xffff9900)),
       new Task('Other', 10.3, Color(0xffdc3912)),

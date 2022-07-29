@@ -1,56 +1,102 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
+
+import 'infoui.dart';
 
 
 class Infordescription extends StatefulWidget {
   //final String id;
-  final String Title;
- /* final String Descriptions;
-  final String SubTitles;
-  final String ScientificName;
-  final String Family;*/
+  final String id;
+  final List list;
 
-
-
-  // receive data from the FirstScreen as a parameter
   Infordescription (
       {
-
-        @required this.Title,
+        @required this.id,
+        @required this.list,
        });
   @override
-  State<Infordescription> createState() => _InfordescriptionState(Title
+  State<Infordescription> createState() => _InfordescriptionState(id,list
   );
 }
 
 class _InfordescriptionState extends State<Infordescription> {
   List<Node> data = [];
-//  final String id;
-  final String Title;
-/*  final String Descriptions;
-  final String SubTitles;
-  final String ScientificName;
-  final String Family;*/
-  _InfordescriptionState(this.Title);
+  Categorylist _inforJson = Categorylist();
+  final String id;
+  final List list;
+
+  _InfordescriptionState(this.id,this.list);
+  var _infordetails = [];
+  String category;
+
+
+  void infocategory(String id) async {
+    print(id);
+    try {
+      final response = await get(Uri.parse('https://govi-piyasa-v-0-1.herokuapp.com/api/v1/information/getInfoByCategory/$id'));
+      final jsonData = jsonDecode(response.body)['data'];
+      setState(() {
+        _infordetails = jsonData;
+      });
+      print("infodetails");
+      print(_infordetails);
+
+
+    } catch (err) {}
+  }
+
+
 
   @override
   void initState() {
-    for (var element in dataList) {
+    infocategory(id);
+    for (var element in list) {
       data.add(Node.fromJson(element));
     }
+print(data);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+   print(widget.list);
     return Scaffold(
       appBar: AppBar(
-        title: Text("Information"),
+        title: Text(""),
       ),
-      body:  ListView.separated(
-        itemCount: data.length,
-        itemBuilder: (BuildContext context, int index) => _buildList(data[index]),
-        separatorBuilder: (BuildContext context, int index) => const Divider( height: 1, thickness: 2,),
-      ),
+      body:Center(
+        child:       ListView.builder(
+          itemCount: _infordetails.length,
+          itemBuilder: (context, index){
+
+            return ExpansionTile(
+              title: Center(child:Text(_infordetails[index]['Title'],style: TextStyle(   fontFamily: 'Roboto',fontWeight: FontWeight.bold, fontSize: 24.0)),),
+              children: <Widget>[
+                ListTile(
+                  title: Text(
+                    _infordetails[index]['Family'],
+                    style: TextStyle(fontWeight: FontWeight.w700),
+                  ),
+                    subtitle:Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(_infordetails[index]['Family']),
+                        Text(_infordetails[index]['SubTitles'][index]),
+                        Text(_infordetails[index]['ScientificName'],  style: TextStyle(
+                          color: Colors.red,
+                        )),
+                        Text(_infordetails[index]['Descriptions'][index])
+                      ],
+                    )
+                )
+              ],
+
+            );
+          },
+        ),
+    )
     );
   }
 
@@ -60,7 +106,7 @@ class _InfordescriptionState extends State<Infordescription> {
           builder: (context) {
             return ListTile(
                 leading: const SizedBox(),
-                title: Text(node.title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18), )
+                title: Text(node.Title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18), )
             );
           }
       );
@@ -76,7 +122,11 @@ class _InfordescriptionState extends State<Infordescription> {
       child: ExpansionTile(
         leading: Icon(Icons.star,color: Colors.yellow,),
         title: Text(
-          node.title,
+          node.Title,
+          style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold),
+        ),
+        subtitle: Text(
+          node.Descrptions,
           style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold),
         ),
         children: node.children.map(_buildList).toList(),
@@ -89,15 +139,17 @@ class _InfordescriptionState extends State<Infordescription> {
 //The Node Model
 class Node {
   int level =0;
-  String title ="";
+  String Title ="";
+  String Descrptions;
   List<Node> children = [];
   //default constructor
-  Node(this.level, this.title, this.children);
+  Node(this.level, this.Title, this.children,this.Descrptions);
 
   //one method for  Json data
   Node.fromJson(Map<String, dynamic> json) {
     if(json["level"] != null){level = json["level"];}
-    title = json['title'];
+    Title = json['Title'];
+    Descrptions = json['Descrptions'];
     //children
     if (json['children'] != null) {
       children.clear();

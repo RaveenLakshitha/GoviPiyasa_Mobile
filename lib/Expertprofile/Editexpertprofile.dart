@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:blogapp/CustumWidget/shopservice.dart';
 import 'package:blogapp/Profile/map.dart';
-import 'package:blogapp/shop/shoprofile.dart';
+import 'package:blogapp/shop/ShopProfile/shoprofile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -31,16 +31,7 @@ class _EditexpertState extends State<Editexpert> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.lightGreen,
-          elevation: 0.0,
-          centerTitle: true,
-          title: Text('Edit Expert Profile',
-              style: TextStyle(
-                  fontFamily: 'Varela',
-                  fontSize: 20.0,
-                  color: Color(0xFF545D68))),
-        ),
+
         body: SingleChildScrollView(
 
           child: Container(
@@ -161,50 +152,6 @@ class _EditexpertState extends State<Editexpert> {
                             border: Border.all(color: Colors.lightGreen,width: 1),
                             borderRadius: BorderRadius.all(Radius.circular(5.0)),
                           ),
-                        ),
-                        SizedBox(height:5.0),
-                        Container(
-                            margin: const EdgeInsets.only(left: 10.0, right: 10.0),
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.lightGreen,width: 1),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Container(
-                                  padding: EdgeInsets.only(left:16,right:16),
-                                  child: _image!=null
-                                      ?Container(
-                                    height: 50,
-                                    width:50,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.blueAccent,width: 3),
-                                      image:DecorationImage(
-                                        image:FileImage(_image),
-                                      ),
-                                    ),
-                                  ):Container(
-                                    padding: EdgeInsets.only(left:16,right:16),
-                                    height: 50,
-                                    width:50,
-                                    decoration: BoxDecoration(
-                                      color:Colors.grey,
-                                    ),
-                                  ),
-
-
-                                ),
-                                SizedBox(height: 10.0,),
-                                Container(child:Row(
-                                  children: [
-                                    IconButton(
-                                        onPressed:(){
-                                          chooseImage(ImageSource.gallery);
-                                        }, icon: Icon(Icons.camera_alt_sharp) )
-                                  ],
-                                )),
-                              ],
-                            )
                         ),
                         SizedBox(height:5.0),
                         Container(

@@ -2,6 +2,9 @@ import 'dart:convert';
 import 'dart:io';
 
 
+import 'package:blogapp/wishlist/wish_screen.dart';
+import 'package:blogapp/wishlist/wishmain.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -46,6 +49,7 @@ class MapScreenState extends State<ProfilePage>
     with SingleTickerProviderStateMixin {
   bool _status = true;
   var id;
+
   Future<User> updateUser(String id,String userName,String email, String contactNumber ,String city,String password) async {
     print(id);
     final response = await http.put(
@@ -120,21 +124,18 @@ class MapScreenState extends State<ProfilePage>
   void writeuser() async{
     await storage.write(key: "id", value:id);
     print("hello");
-
-
   }
   void initState() {
-
     name= myController1.text;
     fetchPosts();
     loadImage();
     writeuser();
-    // TODO: implement initState
     super.initState();
   }
  final picker=ImagePicker();
   File _image;
   String _imagepath;
+
 /*
   Future pickImage() async {
     final pickedFile = await picker.getImage(source: ImageSource.camera);
@@ -241,8 +242,9 @@ class MapScreenState extends State<ProfilePage>
                             padding: EdgeInsets.only(left: 20.0, top: 20.0),
                             child: new Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              mainAxisAlignment: MainAxisAlignment.end,
                               children: <Widget>[
+                                SizedBox(width: 10,),
                                 Padding(
                                   padding: EdgeInsets.only(left: 5.0),
                                   child: new Text('PROFILE',
@@ -252,9 +254,9 @@ class MapScreenState extends State<ProfilePage>
                                           fontFamily: 'sans-serif-light',
                                           color: Colors.black)),
                                 ),
-
+                                SizedBox(width: 50,),
                                 Padding(
-                                  padding: EdgeInsets.only(right: 3.0),
+                                  padding: EdgeInsets.only(right: 2.0),
                                   child:Material(
                                     type: MaterialType.transparency,
                                     child: Ink(
@@ -264,7 +266,37 @@ class MapScreenState extends State<ProfilePage>
                                         shape: BoxShape.circle,
                                       ),
                                       child: InkWell(
-                                        borderRadius: BorderRadius.circular(500.0),
+                                        borderRadius: BorderRadius.circular(400.0),
+                                        onTap: () {   Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => WishNew(),
+                                            ));},
+                                        child: Padding(
+                                          padding: EdgeInsets.all(10.0),
+                                          child: Icon(
+                                            Icons.all_inbox ,
+                                            size: 25.0,
+                                            color: Colors.blue,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(width: 10,),
+                                Padding(
+                                  padding: EdgeInsets.only(right: 2.0),
+                                  child:Material(
+                                    type: MaterialType.transparency,
+                                    child: Ink(
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: Colors.green, width: 2.0),
+                                        color: Colors.lightGreen,
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: InkWell(
+                                        borderRadius: BorderRadius.circular(400.0),
                                         onTap: () {   Navigator.push(
                                             context,
                                             MaterialPageRoute(
@@ -272,7 +304,7 @@ class MapScreenState extends State<ProfilePage>
                                                   Orderhistory(),
                                             ));},
                                         child: Padding(
-                                          padding: EdgeInsets.all(20.0),
+                                          padding: EdgeInsets.all(10.0),
                                           child: Icon(
                                             Icons.article_sharp,
                                             size: 25.0,
@@ -283,7 +315,7 @@ class MapScreenState extends State<ProfilePage>
                                     ),
                                   ),
                                 ),
-
+                                SizedBox(width: 10,),
                               ],
                             )),
                         Padding(
@@ -299,8 +331,8 @@ class MapScreenState extends State<ProfilePage>
                                     decoration: new BoxDecoration(
                                       shape: BoxShape.circle,
                                       image: new DecorationImage(
-                                        image: _image!=null?FileImage(_image): ExactAssetImage(
-                                            'assets/about.jpg'),
+                                        image: _image!=null?FileImage(_image): AssetImage(
+                                            'assets/profile.png'),
                                         fit: BoxFit.cover,
                                       ),
                                     )),

@@ -2,8 +2,8 @@ import 'package:blogapp/Notification/local_notifications.dart';
 import 'package:blogapp/Pages/HomePage.dart';
 import 'package:blogapp/Screen/HomeScreen.dart';
 import 'package:blogapp/shop/services.dart';
-import 'package:blogapp/shop/shoprofile.dart';
-import 'package:blogapp/shop/updateitem.dart';
+import 'package:blogapp/shop/ShopProfile/shoprofile.dart';
+import 'package:blogapp/shop/ShopProfile/updateitem.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -13,8 +13,8 @@ import 'Chart.dart';
 
 import 'ReaqustAds.dart';
 import 'additem.dart';
-import 'item.dart';
-import 'itemservice.dart';
+import '../item.dart';
+import '../itemservice.dart';
 
 class Shopdashboard extends StatefulWidget {
 //  final Album cases;

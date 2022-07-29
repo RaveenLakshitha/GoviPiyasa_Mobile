@@ -1,8 +1,9 @@
 
 import 'package:blogapp/Pages/HomePage.dart';
-import 'package:blogapp/shop/Chart.dart';
-import 'package:blogapp/shop/Editshop.dart';
+import 'package:blogapp/shop/ShopProfile/Chart.dart';
+import 'package:blogapp/shop/ShopProfile/Editshop.dart';
 import 'package:blogapp/shop/itemservice.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -51,9 +52,23 @@ class _ExpertdashboardState extends State<Expertdashboard> {
   void initState() {
     super.initState();
   }
+  final screens=[
+
+    expertprofile(),
+    expertprofile(),
+    Editexpert(),
+  ];
+  int index=1;
+  final navigationKey=GlobalKey<CurvedNavigationBarState>();
 
   @override
   Widget build(BuildContext context) {
+    final items=<Widget>[
+      Icon(Icons.search,size:30),
+      Icon(Icons.home,size:30),
+      Icon(Icons.person,size:30),
+
+    ];
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -73,27 +88,25 @@ class _ExpertdashboardState extends State<Expertdashboard> {
         backgroundColor: Colors.lightGreen,
         centerTitle: true,
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Dashboard',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.business),
-            label: 'Answerd Question',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.lightGreen,
-        onTap: _onItemTapped,
-      ),
+      bottomNavigationBar:Theme(
+        data:Theme.of(context).copyWith(
+          iconTheme:IconThemeData(color:Colors.white),
+
+      ) ,
+      child:CurvedNavigationBar(
+        key:navigationKey,
+        height: 60,
+        color:Colors.lightGreen,
+        buttonBackgroundColor: Colors.purple,
+        backgroundColor: Colors.transparent,
+        items:items,
+        index:index,
+        onTap: (index)=>setState(()=>this.index=index),
+
+
+      ),),
       //AssetImage("assets/architect.jpg")
-      body: widgets[_selectedIndex],
+      body: screens[index],
     );
   }
 }

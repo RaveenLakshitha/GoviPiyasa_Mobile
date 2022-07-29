@@ -7,7 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:http/http.dart' as http;
 
-import 'loadingpage.dart';
+import '../loadingpage.dart';
 class Updateitem extends StatefulWidget {
   final String id;
   final String productName;

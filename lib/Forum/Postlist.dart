@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:blogapp/assets/my_flutter_app_icons.dart';
 import 'package:like_button/like_button.dart';
 import 'package:blogapp/Forum/updateqty.dart';
 import 'package:flutter/cupertino.dart';
@@ -31,9 +32,52 @@ class _State extends State<Postlist> {
   String ID;
   String answer;
   final String categoryName;
-
   _State(this.categoryName);
 
+
+  downvote(id)async{
+    String token = await storage.read(key: "token");
+    print(token);
+    var headers = {
+      'Content-Type':'application/json',
+      'authorization':'Basic $token'
+    };
+    http.post(
+      "https://govi-piyasa-v-0-1.herokuapp.com/api/v1/forum/Questions/DownVoteFromQuest/$id",
+      headers: {
+        "Content-Type": "application/json",
+        'Authorization': 'Bearer $token',
+      },
+
+    ).then((response) {
+      if (response.statusCode == 200) {
+        print(json.decode(response.body));
+        // Do the rest of job here
+      }
+    });
+  }
+
+  addvote(id)async{
+    String token = await storage.read(key: "token");
+    print(token);
+    var headers = {
+      'Content-Type':'application/json',
+      'authorization':'Basic $token'
+    };
+    http.post(
+      "https://govi-piyasa-v-0-1.herokuapp.com/api/v1/forum/Questions/AddVoteToQuest/$id",
+      headers: {
+        "Content-Type": "application/json",
+        'Authorization': 'Bearer $token',
+      },
+
+    ).then((response) {
+      if (response.statusCode == 200) {
+        print(json.decode(response.body));
+        // Do the rest of job here
+      }
+    });
+  }
   addAnswer(answerbody,Qid)async{
 
     String token = await storage.read(key: "token");
@@ -226,7 +270,23 @@ class _State extends State<Postlist> {
                                           fontSize: 16.0,
                                         );
                                       }),
-                                  LikeButton(
+                                  IconButton(
+                                      icon: Icon(
+                                        MyFlutterApp.thumbs_up,
+                                      ),
+                                      onPressed: () {
+                                        //downvote(post['_id']);
+                                        addvote(post['_id']);
+                                        Fluttertoast.showToast(
+                                          msg: "like",
+                                          toastLength: Toast.LENGTH_SHORT,
+                                          gravity: ToastGravity.BOTTOM,
+                                          backgroundColor: Colors.red,
+                                          textColor: Colors.white,
+                                          fontSize: 16.0,
+                                        );
+                                      }),
+                             /*     LikeButton(
                                     size: 20,
                                     circleColor:
                                     CircleColor(start: Color(0xff00ddff), end: Color(0xff0099cc)),
@@ -241,8 +301,10 @@ class _State extends State<Postlist> {
                                         size: 20,
                                       );
                                     },
-                                    likeCount: 5,
+                                    likeCount: post['Vote'],
+
                                     countBuilder: (int count, bool isLiked, String text) {
+                                     // addvote(post['_id']);
                                       var color = isLiked ? Colors.deepPurpleAccent : Colors.grey;
                                       Widget result;
                                       if (count == 0) {
@@ -257,12 +319,14 @@ class _State extends State<Postlist> {
                                         );
                                       return result;
                                     },
-                                  ),
+                                  ),*/
                                   IconButton(
                                       icon: Icon(
-                                        Icons.block,
+                                        MyFlutterApp.thumbs_down,
                                       ),
                                       onPressed: () {
+                                        downvote(post['_id']);
+                                       // addvote(post['_id']);
                                         Fluttertoast.showToast(
                                           msg: "Dislike",
                                           toastLength: Toast.LENGTH_SHORT,

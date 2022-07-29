@@ -1,7 +1,7 @@
 import 'package:blogapp/Search/search.dart';
 import 'package:blogapp/Search/user_model.dart';
 import 'package:blogapp/checkout/widgets/itemdetails.dart';
-import 'package:blogapp/shop/shopview.dart';
+import 'package:blogapp/shop/ShopProfile/shopview.dart';
 import 'package:flutter/material.dart';
 
 import 'Api_service.dart';
@@ -123,7 +123,7 @@ class _SearchitemsState extends State<Searchitems> {
                                         ),
                                       ),
                                       Text(
-                                        '${data[index].price}',
+                                        '${data[index].name}',
                                         style: TextStyle(
                                           color: Colors.black,
                                           fontSize: 14,

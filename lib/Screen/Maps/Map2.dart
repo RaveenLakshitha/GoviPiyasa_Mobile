@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class Map2 extends StatefulWidget {
@@ -66,6 +67,21 @@ class _Map2State extends State<Map2> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+       // floatingActionButtonLocation: CustomFabLoc(),
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed:() async{
+            Fluttertoast.showToast(
+              msg: "Unsuccessfull",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              backgroundColor: Colors.red,
+              textColor: Colors.white,
+              fontSize: 16.0,
+            );
+          },
+          label: Text('lo'),
+          icon: Icon(Icons.location_on),
+        ),
       drawer: Drawer(
         child: mapDrawer(),
       ),
@@ -93,20 +109,32 @@ class _Map2State extends State<Map2> {
           ),
         ],
       ),
-      body: GoogleMap(
-        initialCameraPosition: _options,
-        onMapCreated: onMapCreated,
-        mapType: _type,
-        circles: Set<Circle>.of(circles.values),
-        myLocationEnabled: true,
-        polylines: Set<Polyline>.of(polyLines.values),
-        markers: Set<Marker>.of(markers.values),
-      ),
+      body: Stack(
+        children: [
+          GoogleMap(
+          initialCameraPosition: _options,
+          onMapCreated: onMapCreated,
+          mapType: _type,
+          circles: Set<Circle>.of(circles.values),
+          myLocationEnabled: true,
+          polylines: Set<Polyline>.of(polyLines.values),
+          markers: Set<Marker>.of(markers.values),
+        ),
+        ],
+      )
     );
   }
 
   ///Toggles to night mode and back to day mode
   void _nightModeToggle() {
+    Fluttertoast.showToast(
+      msg: "Unsuccessfull",
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      backgroundColor: Colors.red,
+      textColor: Colors.white,
+      fontSize: 16.0,
+    );
     if (_nightMode) {
       setState(() {
         _nightMode = false;

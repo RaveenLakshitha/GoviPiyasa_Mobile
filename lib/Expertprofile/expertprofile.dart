@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:blogapp/shop/Chart.dart';
+import 'package:blogapp/shop/ShopProfile/Chart.dart';
 import 'package:blogapp/shop/DataModel.dart';
 import 'package:blogapp/shop/itemservice.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
@@ -28,59 +29,39 @@ class _expertprofileState extends State<expertprofile> {
   final storage = FlutterSecureStorage();
   File _image;
   final picker = ImagePicker();
-  String shopName;
+  List expertReviews;
   String email;
-  String shopid;
-  var _shopjson;
+  String expertVisibility;
+  var _expertjson;
   String _imagepath1;
+  String expertid;
+  String shopid;
   List<Widget> widgets = [expertprofile(), AnsweredQuestion()];
-  void fetchshop() async {
-    print('Shop');
+  void fetchexpert() async {
+    print('expert details');
     String token = await storage.read(key: "token");
     try {
       final response = await get(
           Uri.parse(
-              'https://govi-piyasa-v-0-1.herokuapp.com/api/v1/shops/getUsersShop'),
+              'https://govi-piyasa-v-0-1.herokuapp.com/api/v1/experts/getUsersExpertProfile'),
           headers: {
             'Accept': 'application/json',
             'Authorization': 'Bearer $token',
           });
       print('Token : ${token}');
 
-      print('ERROR FOR SHOW : ${response.body}');
+      print('Expert : ${response.body}');
       final jsonData = jsonDecode(response.body)['data'];
       setState(() {
-        _shopjson = jsonData;
-        shopName = _shopjson['shopName'].toString();
-        email = _shopjson['email'].toString();
-        shopid = _shopjson['_id'].toString();
+        _expertjson = jsonData;
+        expertReviews = _expertjson['expertReviews'];
+        email = _expertjson['email'].toString();
+        expertid = _expertjson['_id'].toString();
 
       });
     } catch (err) {}
   }
-  var _itemsJson = [];
-  void fetchitems() async {
-    print('item');
-    String token = await storage.read(key: "token");
-    try {
-      final response = await get(
-          Uri.parse(
-              'https://govi-piyasa-v-0-1.herokuapp.com/api/v1/shops/getUsersShop'),
-          headers: {
-            'Accept': 'application/json',
-            'Authorization': 'Bearer $token',
-          });
-      print('Token : ${token}');
 
-      print('ERROR FOR SHOW : ${response.body}');
-      final jsonData = jsonDecode(response.body)['data']['shopItems'];
-      setState(() {
-        _itemsJson = jsonData;
-
-
-      });
-    } catch (err) {}
-  }
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
   TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
@@ -131,12 +112,12 @@ class _expertprofileState extends State<expertprofile> {
   Future<String> deleteWithBodyExample(String id) async {
     print(id);
     print(shopid);
-    final url = Uri.parse("https://govi-piyasa-v-0-1.herokuapp.com/api/v1/items/$id");
+    final url = Uri.parse("https://govi-piyasa-v-0-1.herokuapp.com/api/v1/reviews//$id");
     final request = http.Request("DELETE", url);
     request.headers.addAll(<String, String>{
       "Accept": "application/json",
     });
-    request.body = jsonEncode({"shopId": shopid});
+    request.body = jsonEncode({"expertId": id});
     final response = await request.send();
     if (response.statusCode != 200)
       return Future.error("error: status code ${response.statusCode}");
@@ -167,9 +148,8 @@ class _expertprofileState extends State<expertprofile> {
 
 
   void initState() {
-    fetchitems();
     loadImage();
-    fetchshop();
+    fetchexpert();
     super.initState();
   }
 
@@ -195,7 +175,7 @@ class _expertprofileState extends State<expertprofile> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Text(
-                                    "ProfileName :${shopName.toString()}",
+                                    "ProfileName :${expertVisibility.toString()}",
                                     style: TextStyle(
                                       color: Colors.red,
                                       fontWeight: FontWeight.bold,
@@ -287,7 +267,70 @@ class _expertprofileState extends State<expertprofile> {
                 ),
               ),
               Divider(),
+              Container(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children:[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Text(
+                          "${shopid.toString()}",
+                          style: TextStyle(
+                            color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20.0,
+                              fontFamily: 'sans-serif-light'
+                          ),
+                        ),
+                        Text(
+                          "${shopid.toString()}",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20.0,
+                              fontFamily: 'sans-serif-light'
+                          ),
+                        ),
+                      ],
+                    )
+                  ]
+                ),
+              ),
+              Center(
+                child:Text("User Riviews",    style: TextStyle(
+                  fontFamily: 'Indies',
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 30.0,
+                ),),
+              ),
+              Container(
+                height: 250,
+                width: 350,
+                child: ListView.builder(
+                    itemCount: 3,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Card(
+                        child: ListTile(
 
+                            leading: Icon(Icons.star,color: Colors.yellow,),
+                            trailing:         GestureDetector(
+                              child: Icon(
+                                FontAwesomeIcons.trash,
+                                size: 22.0,
+                                color: Colors.red,
+                              ),
+                              onTap: () {
+                                showAlertDialog(context);
+
+
+                              },
+                            ),
+                            title: Text("ti")),
+
+                      );
+                    }),),
 
             ],
           ),
@@ -296,7 +339,47 @@ class _expertprofileState extends State<expertprofile> {
 
     );
   }
+  showAlertDialog(BuildContext context) {
 
+    // set up the buttons
+    Widget cancelButton = FlatButton(
+      child: Text("Cancel"),
+      onPressed:  () {},
+    );
+    Widget continueButton = FlatButton(
+      child: Text("Delete"),
+      onPressed:  () {
+        //   DeleteData(item['_id']);
+
+                                      Fluttertoast.showToast(
+                                        msg: "Deleted",
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.BOTTOM,
+                                        backgroundColor: Colors.red,
+                                        textColor: Colors.white,
+                                        fontSize: 16.0,
+                                      );
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("AlertDialog"),
+      content: Text("Would you like to delete review?"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
   Future loadImage() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     setState(() {

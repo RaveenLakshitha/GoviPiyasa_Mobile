@@ -1,11 +1,14 @@
 
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:search_map_place/search_map_place.dart';
+import 'package:http/http.dart';
+
 
 
 
@@ -24,9 +27,18 @@ class googlemap extends StatefulWidget {
 class _googlemapState extends State<googlemap> {
   Set<Marker> _markers={};
   BitmapDescriptor mapMarker;
+  GoogleMapController googleMapController;
+
+  static const CameraPosition initialCameraPosition = CameraPosition(target: LatLng(37.42796133580664, -122.085749655962), zoom: 14);
+
+  Set<Marker> markers = {};
    double lat,long;
+   double pos1,pos2;
+
   void initState(){
+    fetchPosts();
     super.initState();
+
     setCustomMarker();
     lat=widget.lat;
     long=widget.long ;
@@ -39,10 +51,24 @@ class _googlemapState extends State<googlemap> {
     mapMarker= await BitmapDescriptor.fromAssetImage(ImageConfiguration(),'assets/placeholder.png');
   }
 
+  final url = "https://govi-piyasa-v-0-1.herokuapp.com/api/v1/shops/";
+  var _shopjson = [];
+
+  void fetchPosts() async {
+    try {
+      final response = await get(Uri.parse(url));
+      final jsonData = jsonDecode(response.body)['data'] as List;
+      setState(() {
+        _shopjson = jsonData;
+      });
+     // print(_shopjson);
+      print(_shopjson[1]['location']['coordinates'][0]);
+    } catch (err) {}
+  }
 
   void _onMapCreated(GoogleMapController controller){
     setState(() {
-      _markers.add(
+      /*_markers.add(
           Marker(
             markerId: MarkerId('id-1'),
             position: LatLng(lat,long),
@@ -53,36 +79,91 @@ class _googlemapState extends State<googlemap> {
 
             ),
           )
-      );
-      _markers.add(newyork1Marker);
-      _markers.add(newyork2Marker);
-      _markers.add(newyork3Marker);
+      );*/
+    // _markers.add(newyork1Marker);
+      //_markers.add(newyork2Marker);
+    // _markers.add(newyork3Marker);
 
     });
   }
 
+  Future<Position> _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+
+    if (!serviceEnabled) {
+      return Future.error('Location services are disabled');
+    }
+
+    permission = await Geolocator.checkPermission();
+
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+
+      if (permission == LocationPermission.denied) {
+        return Future.error("Location permission denied");
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error('Location permissions are permanently denied');
+    }
+
+    Position position = await Geolocator.getCurrentPosition();
+
+    return position;
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       appBar:AppBar(
-        title: Text('${widget.lat}'),
+        title: Text('${pos1}   ${pos2}'),
+        actions: [
+       IconButton(
+              icon: Icon(FontAwesomeIcons.plus),
+              onPressed: () async {
+                print("hello");
+                Position position = await _determinePosition();
+                googleMapController
+                    .animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: LatLng(position.latitude, position.longitude), zoom: 14)));
+                _markers.clear();
+                _markers.add(Marker(markerId:  MarkerId('currentLocation'),position: LatLng(position.latitude, position.longitude)));
+
+                setState(() {});
+              }),
+
+        ],
       ),
-      body: Stack(
-        children: <Widget>[
+      body:Stack(
+        children: [
           GoogleMap(
             onMapCreated: _onMapCreated,
-            markers: _markers,
+
             initialCameraPosition:CameraPosition(
               target:LatLng(lat, 	long),
               zoom:15,
 
-            ),),
+            ),
+
+          ),
           _buildGoogleMap(context),
+
           _buildContainer(),
+
         ],
       ),
 
-
+     floatingActionButtonLocation: CustomFabLoc(),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed:() async{
+print("fdfd");
+        },
+        label: Text('lo'),
+        icon: Icon(Icons.location_on),
+      ),
 
     );
   }
@@ -91,8 +172,10 @@ class _googlemapState extends State<googlemap> {
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
       child: GoogleMap(
+          myLocationEnabled: true,
+          compassEnabled: true,
         mapType: MapType.normal,
-        initialCameraPosition:  CameraPosition(target: LatLng(lat, 	long), zoom: 12),
+        initialCameraPosition:  CameraPosition(target: LatLng(lat, 	long), zoom: 10),
         onMapCreated: (GoogleMapController controller) {
           _controller.complete(controller);
         },
@@ -106,33 +189,42 @@ class _googlemapState extends State<googlemap> {
     return Align(
       alignment: Alignment.bottomLeft,
       child: Container(
-        margin: EdgeInsets.symmetric(vertical: 20.0),
+        margin: EdgeInsets.symmetric(vertical: 10.0),
         height: 150.0,
-        child: ListView(
+        child:ListView.builder(
           scrollDirection: Axis.horizontal,
-          children: <Widget>[
-            SizedBox(width: 10.0),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: _boxes(
-                  "https://images.unsplash.com/photo-1586871608370-4adee64d1794?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2862&q=80",
-                  5.9410021,80.5638167,"Eliyakanda"),
-            ),
-            SizedBox(width: 10.0),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: _boxes(
-                  "https://lh5.googleusercontent.com/p/AF1QipMKRN-1zTYMUVPrH-CcKzfTo6Nai7wdL7D8PMkt=w340-h160-k-no",
-                  7.0766391, 79.8771548,"Ja-ela"),
-            ),
-            SizedBox(width: 10.0),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: _boxes(
-                  "https://images.unsplash.com/photo-1504940892017-d23b9053d5d4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
-                  5.9520765,80.5156422,"Matara"),
-            ),
-          ],
+          itemCount: _shopjson.length,
+          itemBuilder: (BuildContext context, int index){
+
+            final shop=_shopjson[index];
+
+            if(_shopjson[index]['location']['coordinates']!=null){
+              _markers.add(
+                  Marker(
+                    markerId: MarkerId('id-1'),
+                    position: LatLng( shop['location']['coordinates'][0],shop['location']['coordinates'][1]),
+                    icon:BitmapDescriptor.defaultMarkerWithHue(
+                      BitmapDescriptor.hueViolet,
+                    ),
+                    infoWindow: InfoWindow(
+                      title: '${shop['shopName']}',
+                      snippet: 'history',
+
+                    ),
+                  )
+              );
+              return Container(
+                padding: const EdgeInsets.all(8.0),
+                child: _boxes(
+                    "https://source.unsplash.com/random?sig=$index",
+                    shop['location']['coordinates'][0],shop['location']['coordinates'][1],"${shop['shopName']}"),
+              );
+            }else{
+              return SizedBox.shrink();
+            }
+
+          }
+
         ),
       ),
     );
@@ -232,6 +324,11 @@ class _googlemapState extends State<googlemap> {
     );
   }
   Future<void> _gotoLocation(double lat,double long) async {
+    setState(() {
+      this.pos1=lat;
+      this.pos2=long;
+    });
+
     final GoogleMapController controller = await _controller.future;
     controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: LatLng(lat, long), zoom: 10,tilt: 50.0,
       bearing: 45.0,)));
@@ -276,6 +373,15 @@ class _googlemapState extends State<googlemap> {
   }
 
 }
+class CustomFabLoc extends FloatingActionButtonLocation {
+  @override
+  Offset getOffset(ScaffoldPrelayoutGeometry scaffoldGeometry) {
+    return Offset(
+      scaffoldGeometry.scaffoldSize.width * .02, ///customize here
+      scaffoldGeometry.scaffoldSize.height - 720,
+    );
+  }
+}
 
 Marker newyork1Marker = Marker(
   markerId: MarkerId('Eliyakanda'),
@@ -296,7 +402,7 @@ Marker newyork2Marker = Marker(
 Marker newyork3Marker = Marker(
   markerId: MarkerId('Kandy'),
   position: LatLng(7.2946291,80.5907617),
-  infoWindow: InfoWindow(title: 'Kandy'),
+  infoWindow: InfoWindow(title: "Kandy", snippet: 'Kandy'),
   icon: BitmapDescriptor.defaultMarkerWithHue(
     BitmapDescriptor.hueViolet,
   ),

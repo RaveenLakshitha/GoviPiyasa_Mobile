@@ -2,21 +2,28 @@ import 'dart:convert';
 
 import 'package:blogapp/Search/user_model.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 
 class FetchUserList {
   var data = [];
   List<Userlist> results = [];
   //String urlList = 'https://jsonplaceholder.typicode.com/users/';
-  String urlList='https://govi-piyasa-v-0-1.herokuapp.com/api/v1/items';
+  //String urlList='https://govi-piyasa-v-0-1.herokuapp.com/api/v1/items';
+  String urlList='https://mongoapi3.herokuapp.com/items/';
 
   Future<List<Userlist>> getuserList({String query}) async {
-    var url = Uri.parse(urlList);
+  //  var url = Uri.parse(urlList);
     try {
-      var response = await http.get(url);
+    //  var response = await http.get(url);
+      final response = await get(Uri.parse('https://govi-piyasa-v-0-1.herokuapp.com/api/v1/items/'));
+
+      print(response.statusCode);
       if (response.statusCode == 200) {
 
-        data = json.decode(response.body)['data'];
+        data =jsonDecode(response.body)['data'] as List;
+      //  print(response.body);
         results = data.map((e) => Userlist.fromJson(e)).toList();
+        print(data);
         if (query!= null){
           results = results.where((element) => element.productName.toLowerCase().contains((query.toLowerCase()))).toList();
         }

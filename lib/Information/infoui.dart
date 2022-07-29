@@ -1,15 +1,17 @@
 import 'dart:convert';
 
 import 'package:blogapp/Information/weather.dart';
-import 'package:blogapp/shop/Chart.dart';
+import 'package:blogapp/shop/ShopProfile/Chart.dart';
 import 'package:blogapp/shop/item.dart';
 import 'package:blogapp/shop/table/main.dart';
 import 'package:blogapp/shop/vieworders.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart';
 
 import 'infocategory.dart';
+import 'infosub.dart';
 import 'news.dart';
 
 class Categorylist extends StatefulWidget {
@@ -30,8 +32,8 @@ class _CategorylistState extends State<Categorylist> {
       setState(() {
         _inforJson = jsonData;
       });
-      print(_inforJson);
-      print(_inforJson[3]['Information'].toString());
+      print(_inforJson[3]['Information']);
+      print(_inforJson[3]['Information'][0]['Title'].toString());
     } catch (err) {}
   }
 
@@ -49,6 +51,26 @@ class _CategorylistState extends State<Categorylist> {
         toolbarHeight: 100,
         backgroundColor: Colors.lightGreen,
         centerTitle: true,
+        actions: [
+          IconButton(
+              icon: Icon(Icons.aod),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => NewsScreen(),
+                    ));
+              }),
+          IconButton(
+              icon: Icon(Icons.bathroom ),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Weather(),
+                    ));
+              }),
+        ],
         flexibleSpace: Image(
           image: NetworkImage(
               'https://images.pexels.com/photos/443356/pexels-photo-443356.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940'),
@@ -71,38 +93,45 @@ class _CategorylistState extends State<Categorylist> {
             shrinkWrap: true,
             itemBuilder: (BuildContext context, int index){
               final infor = _inforJson[index];
-              return     GestureDetector(
+              if(_inforJson[index]['categoryType']== "Main"){
+                return     GestureDetector(
                   child:Card(
-                child: Container(
-                  height: 300,
-                  width: 300,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10.0),
-                      image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: NetworkImage('${infor['image']}'))),
-                  child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Text(
-                        '${infor['categoryName']}',
-                        style: TextStyle(
-                          fontFamily: 'Indies',
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 30.0,
-                        ),
-                      )),
-                ),
-                margin: EdgeInsets.only(left: 20.0, right: 20.0, top: 5.0),
-              ),
-              onTap:(){
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Infordescription(Title:"${_inforJson[index]['Information']['Title']}"),
+                    child: Container(
+                      height: 300,
+                      width: 300,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.0),
+                          image: DecorationImage(
+                              fit: BoxFit.cover,
+                              image: NetworkImage('${infor['image']}'))),
+                      child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Text(
+                            '${infor['categoryName']}',
+                            style: TextStyle(
+                              fontFamily: 'Indies',
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 30.0,
+                            ),
+                          )),
+                    ),
+                    margin: EdgeInsets.only(left: 20.0, right: 20.0, top: 5.0),
+                  ),
+                  onTap:(){
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => InfoSub(category:_inforJson[index]['_id'])));
+                /*    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Infordescription(Title:_inforJson[index]['Information'][0]['Title'],list:_inforJson[index]['Information'])));*/
+                  } ,);
+              }else{
+                return SizedBox.shrink();
+              }
 
-                    ));
-              } ,);
 
 
         }),)

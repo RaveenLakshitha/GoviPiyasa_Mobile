@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 import 'package:url_launcher/url_launcher.dart';
 
 class ReachUs extends StatefulWidget {
@@ -243,4 +244,9 @@ class _ReachUsState extends State<ReachUs> {
   }
 
 
+}
+class NetworkService {
+  static Future getData() async {
+    return await Future.delayed(Duration(seconds: 2));
+  }
 }

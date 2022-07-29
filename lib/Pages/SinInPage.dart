@@ -122,10 +122,13 @@ class _SignInPageState extends State<SignInPage> {
                     ),
                     InkWell(
                       onTap: () async {
-                        setState(() {
+                       setState(() {
                           circular = true;
                         });
-
+                       await Future.delayed(Duration(seconds: 10));
+                       setState(() {
+                         circular = false;
+                       });
                         //Login Logic start here
                         Map<String, String> data = {
                           "email": _usernameController.text,
@@ -143,6 +146,7 @@ class _SignInPageState extends State<SignInPage> {
                             validate = true;
                             circular = false;
                           });
+
                           Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(
@@ -150,17 +154,18 @@ class _SignInPageState extends State<SignInPage> {
                               ),
                                   (route) => false);
                         } else {
-                          String output = json.decode(response.body);
+                         // String output = json.decode(response.body);
+                          Fluttertoast.showToast(
+                            msg: "Error",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.BOTTOM,
+                            backgroundColor: Colors.red,
+                            textColor: Colors.white,
+                            fontSize: 16.0,
+                          );
                           setState(() {
-                            validate = false;
-                            Fluttertoast.showToast(
-                              msg: output,
-                              toastLength: Toast.LENGTH_SHORT,
-                              gravity: ToastGravity.BOTTOM,
-                              backgroundColor: Colors.red,
-                              textColor: Colors.white,
-                              fontSize: 16.0,
-                            );
+                            validate = true;
+
                             circular = false;
                           });
                         }

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:path/path.dart';
 
 import 'package:blogapp/Pages/HomePage.dart';
@@ -27,6 +28,7 @@ class Shop extends StatefulWidget {
 }
 
 class _ShopState extends State<Shop> {
+  FlutterSecureStorage storage = FlutterSecureStorage();
   final picker = ImagePicker();
   File _file;
   final GlobalKey<ScaffoldState> _scaffoldstate = new GlobalKey<ScaffoldState>();
@@ -38,29 +40,76 @@ class _ShopState extends State<Shop> {
       _file = file;
     });
   }
+  final String endPoint = 'https://govi-piyasa-v-0-1.herokuapp.com/api/v1/shops';
 
-  void _uploadFile(shopName,email,filePath) async {
+  postTest(shopName,email,address,filePath) async {
     String fileName = basename(filePath.path);
     print("file base name:$fileName");
-
-    try {
-      FormData formData = new FormData.fromMap({
-        "shopName": shopName,
-        "email": email,
-        "address":address,
-        "shopPictures": await MultipartFile.fromFile(filePath.path, filename: fileName),
-      });
-
-      Response response = await Dio().post("https://govi-piyasa-v-0-1.herokuapp.com/api/v1/shops/createShop",data: formData);
-      print("File upload response: $response");
-    //  _showSnackBarMsg(response.data['message']);
-    } catch (e) {
-      print("expectation Caugch: $e");
-    }
+    String token = await storage.read(key: "token");
+    print(token);
+    var fileContent = filePath.readAsBytesSync();
+    var fileContentBase64 = base64.encode(fileContent);
+    final uri = 'https://govi-piyasa-v-0-1.herokuapp.com/api/v1/shops';
+    var requestBody = {
+      "shopName": shopName,
+      "email": email,
+      "address":address,
+      "shopPictures":fileContentBase64,
+      "shopFiles":fileContentBase64,
+      "shopPictures":fileContentBase64,
+      "shopFiles":fileContentBase64,
 
 
+    };
 
+    http.Response response = await http.post(
+      uri,
+      body: json.encode(requestBody),
+      headers: {
+        "Content-Type": "application/json",
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+   print(response.body);
+/*    var postUri = Uri.parse("https://govi-piyasa-v-0-1.herokuapp.com/api/v1/shops");
+
+    http.MultipartRequest request = new http.MultipartRequest("POST", postUri);
+
+    http.MultipartFile multipartFile = await http.MultipartFile.fromPath(
+        'profilePic',  fileContentBase64);
+    request.headers['Authorization'] ='bearer $token';
+    request.headers['Content-Type'] ='application/json';
+    request.fields['shopName']=shopName;
+    request.fields['email']=email;
+    request.fields['address']=address;
+    request.files.add(multipartFile);
+
+    http.StreamedResponse response1 = await request.send();
+
+
+    print(response1.statusCode);*/
   }
+/*  void _upload( shopName,email,address,file) async {
+    String fileName = file.path.split('/').last;
+    print(fileName);
+
+
+    FormData data = new FormData.fromMap({
+      "shopName": shopName,
+      "email": email,
+      "address":address,
+      "profilePicture": await MultipartFile.fromFile(file.path, filename: fileName),
+    });
+    Dio dio = new Dio();
+
+    dio.post(endPoint, data: data).then((response) {
+      var jsonResponse = jsonDecode(response.toString());
+      var testData = jsonResponse['histogram_counts'].cast<double>();
+      var averageGrindSize = jsonResponse['average_particle_size'];
+    }).catchError((error) => print(error));
+  }*/
+
   void _showSnackBarMsg(String msg){
     _scaffoldstate.currentState
         .showSnackBar( new SnackBar(content: new Text(msg),));
@@ -101,6 +150,7 @@ class _ShopState extends State<Shop> {
   final myController1 = TextEditingController();
   final myController2 = TextEditingController();
   final myController7 = TextEditingController();
+  final myController8 = TextEditingController();
   var shopName, email, sellerName, phoneNo, address, city;
 
 
@@ -179,34 +229,6 @@ class _ShopState extends State<Shop> {
                               borderRadius:
                                   BorderRadius.all(Radius.circular(5.0)),
                             )),
-                        SizedBox(height: 5.0),
-                        Container(
-                          margin:
-                              const EdgeInsets.only(left: 10.0, right: 10.0),
-                          child: TextFormField(
-                            validator: (value) {
-                              if (value.isEmpty) {
-                                return 'Please enter Name';
-                              }
-                              return null;
-                            },
-                            decoration: InputDecoration(
-                                labelText: 'SellerName',
-                                prefixIcon: Icon(
-                                  Icons.attribution_outlined,
-                                  color: Colors.blue,
-                                )),
-                            onChanged: (val) {
-                              sellerName = val;
-                            },
-                          ),
-                          decoration: BoxDecoration(
-                            border:
-                                Border.all(color: Colors.lightGreen, width: 1),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(5.0)),
-                          ),
-                        ),
                         SizedBox(height: 5.0),
                         Container(
                           margin:
@@ -298,7 +320,7 @@ class _ShopState extends State<Shop> {
                           ),
                         ),
                         SizedBox(height: 5.0),
-                        Container(
+                     /*   Container(
                           margin:
                           const EdgeInsets.only(left: 10.0, right: 10.0),
                           child: TextFormField(
@@ -326,7 +348,7 @@ class _ShopState extends State<Shop> {
                             borderRadius:
                             BorderRadius.all(Radius.circular(5.0)),
                           ),
-                        ),
+                        ),*/
                         SizedBox(height: 5.0),
                         Container(
                           margin:
@@ -369,6 +391,7 @@ class _ShopState extends State<Shop> {
                           margin:
                               const EdgeInsets.only(left: 10.0, right: 10.0),
                           child: TextFormField(
+                            controller: myController8,
                             decoration: InputDecoration(
                               labelText: 'Upload Proof Document',
                               prefixIcon: GestureDetector(
@@ -397,7 +420,8 @@ class _ShopState extends State<Shop> {
                         RaisedButton(
                           padding: EdgeInsets.fromLTRB(70, 10, 70, 10),
                           onPressed: () {
-                            _uploadFile(shopName,email,_image);
+                            postTest(shopName,email,myController5.text,_image);
+                           // _uploadFile(shopName,email,myController5.text,_image);
                           /*  if(_formkey.currentState.validate())
                             {
                               // _uploadFile(_file,shopName, sellerName, phoneNo, email,

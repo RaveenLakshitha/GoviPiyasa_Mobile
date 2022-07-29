@@ -7,11 +7,13 @@ import 'dart:io';
 
 import 'package:blogapp/Notification/destination_screen.dart';
 import 'package:blogapp/Notification/local_notifications.dart';
-import 'package:blogapp/shop/shoprofile.dart';
+import 'package:blogapp/shop/ShopProfile/shoprofile.dart';
+import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:http/http.dart' as http;
@@ -19,7 +21,7 @@ import 'package:image_picker/image_picker.dart';
 
 import 'package:logger/logger.dart';
 
-import 'itemservice.dart';
+import '../itemservice.dart';
 
 class AddItem extends StatefulWidget {
 
@@ -29,7 +31,9 @@ class AddItem extends StatefulWidget {
 
 class _AddItemState extends State<AddItem> {
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-
+  final ImageLabeler imageLabeler = FirebaseVision.instance.imageLabeler();
+  var result;
+  List<String> strArr = ['choose your item'];
   @override
   void initState() {
     super.initState();
@@ -83,6 +87,7 @@ class _AddItemState extends State<AddItem> {
   File _image;
 
 final picker=ImagePicker();
+  TextEditingController _textEditingController = TextEditingController();
 
   chooseImage(ImageSource source) async{
     final image=await picker.getImage(source:source);
@@ -125,15 +130,72 @@ final picker=ImagePicker();
                     child: Column(
                       children: <Widget>[
                         Container(
-                          padding: EdgeInsets.only(left:16,right:16),
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                              labelText: 'ItemName',
-                              prefixIcon: Icon(Icons.person),
+                            decoration:BoxDecoration(
+                                border:Border.all(color:Colors.grey,width:1),
+                                borderRadius:BorderRadius.circular(15)
                             ),
-                            onChanged: (val){
-                              itemname=val;
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Container(
+                                  child: _image!=null
+                                      ?Container(
+                                    height: 50,
+                                    width:50,
+                                    decoration: BoxDecoration(
+                                      image:DecorationImage(
+                                        image:FileImage(_image),
+                                      ),
+                                    ),
+                                  ):Container(
+                                    height: 50,
+                                    width:50,
+                                    decoration: BoxDecoration(
+                                      color:Colors.grey,
+                                    ),
+                                  ),
+
+
+                                ),
+
+                                Container(child:Row(
+                                  children: [
+                                    IconButton(
+                                        onPressed:(){
+                                          getImage();
+                                          // chooseImage(ImageSource.gallery);
+                                        }, icon: Icon(Icons.camera_alt_sharp) )
+                                  ],
+                                )),
+                              ],
+                            )
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(left:16,right:16),
+                          child:TypeAheadFormField(
+
+                            suggestionsCallback: (pattern)=>strArr.where((item)=>item.toLowerCase().contains(pattern.toLowerCase())
+                            ),
+                            itemBuilder: (_, String item)=>ListTile(title:Text(item)),
+                            onSuggestionSelected: (String val){
+                              this._textEditingController.text=val;
+                              print(val);
                             },
+                            getImmediateSuggestions: true,
+                            hideSuggestionsOnKeyboardHide: false,
+                            hideOnEmpty: false,
+                            noItemsFoundBuilder: (context)=>Padding(
+                              padding:const EdgeInsets.all(8.0),
+                              child:Text('No item found'),
+                            ),
+                            textFieldConfiguration: TextFieldConfiguration(
+                              controller: this._textEditingController,
+                              decoration: InputDecoration(
+
+                                  labelText: 'Item Name',
+                                  prefixIcon: Icon(Icons.attribution_outlined)),
+                            ),
+
                           ),
                         ),
                         Container(
@@ -210,42 +272,7 @@ final picker=ImagePicker();
                         SizedBox(
                           height: 10,
                         ),
-                        Container(
-                            child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                           children: [
-                             Container(
-                               child: _image!=null
-                                   ?Container(
-                                 height: 50,
-                                 width:50,
-                                 decoration: BoxDecoration(
-                                   image:DecorationImage(
-                                     image:FileImage(_image),
-                                   ),
-                                 ),
-                               ):Container(
-                                 height: 50,
-                                 width:50,
-                                 decoration: BoxDecoration(
-                                   color:Colors.grey,
-                                 ),
-                               ),
 
-
-                             ),
-
-                             Container(child:Row(
-                               children: [
-                                 IconButton(
-                                     onPressed:(){
-                                       chooseImage(ImageSource.gallery);
-                                     }, icon: Icon(Icons.camera_alt_sharp) )
-                               ],
-                             )),
-                           ],
-                         )
-                        ),
                         Container(
                           child:Center(
                             child:Padding(
@@ -334,5 +361,43 @@ final picker=ImagePicker();
             ),
           ),
         ));
+  }
+  Future getImage() async {
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+        processImageLabels();
+      } else {
+        print('No image selected.');
+      }
+    });
+  }
+
+  processImageLabels() async {
+    FirebaseVisionImage myImage = FirebaseVisionImage.fromFile(_image);
+    ImageLabeler labeler = FirebaseVision.instance.imageLabeler();
+    var _imageLabels = await labeler.processImage(myImage);
+    result = "";
+    for (ImageLabel imageLabel in _imageLabels) {
+      setState(() {
+        result = result + imageLabel.text + ":" + imageLabel.confidence.toString() + "\n";
+        strArr.add(imageLabel.text);
+      });
+    }
+    writeimahelabel();
+  }
+  void writeimahelabel() async{
+    await storage.write(key: "label", value:strArr[1]);
+    Fluttertoast.showToast(
+      msg: "image saved",
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      backgroundColor: Colors.red,
+      textColor: Colors.white,
+      fontSize: 16.0,
+    );
+
+
   }
 }

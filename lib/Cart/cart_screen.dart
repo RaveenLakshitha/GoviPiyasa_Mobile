@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 
 import 'cart_provider.dart';
 
+import 'package:http/http.dart' as http;
 
 class CartScreen extends StatefulWidget {
   const CartScreen({Key key}) : super(key: key);
@@ -16,7 +17,16 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
-
+  Future<Cart> DeleteData(String id) async {
+    var response = await http.delete(Uri.parse(
+        'https://govi-piyasa-v-0-1.herokuapp.com/api/v1/forum/Questions/RemoveQuestion/$id'));
+    var data = response.body;
+    print(data);
+    if (response.statusCode == 201) {
+      String responseString = response.body;
+      //CartFromJson(responseString);
+    }
+  }
   DBHelper dbHelper = DBHelper();
 
   @override

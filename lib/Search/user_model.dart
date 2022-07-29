@@ -3,32 +3,28 @@ class Userlist {
   String categoryName;
   String productName;
   int quantity;
-  Address address;
   int price;
   String description;
-  Company company;
+  String name;
 
   Userlist(
       {this.id,
         this.categoryName,
         this.productName,
         this.quantity,
-        this.address,
         this.price,
         this.description,
-        this.company});
+        this.name});
 
   Userlist.fromJson(Map<String, dynamic> json) {
     id = json['_id'];
-    categoryName = json['categoryName'];
     productName = json['productName'];
-    quantity = json['quantity'];
-    address =
-    json['address'] != null ? new Address.fromJson(json['address']) : null;
     price = json['price'];
     description = json['description'];
-    company =
-    json['company'] != null ? new Company.fromJson(json['company']) : null;
+    quantity = json['quantity'];
+    categoryName = json['categoryName'];
+    name = json['name'];
+
   }
 
   Map<String, dynamic> toJson() {
@@ -37,18 +33,15 @@ class Userlist {
     data['categoryName'] = this.categoryName;
     data['productName'] = this.productName;
     data['quantity'] = this.quantity;
-    if (this.address != null) {
-      data['address'] = this.address?.toJson();
-    }
     data['price'] = this.price;
     data['description'] = this.description;
-    if (this.company != null) {
-      data['company'] = this.company?.toJson();
-    }
+    data['name'] = this.name;
+
     return data;
   }
 }
 
+/*
 class Address {
   String street;
   String suite;
@@ -118,4 +111,4 @@ class Company {
     data['bs'] = this.bs;
     return data;
   }
-}
+}*/

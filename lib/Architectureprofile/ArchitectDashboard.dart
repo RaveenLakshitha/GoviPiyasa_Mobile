@@ -1,17 +1,21 @@
+import 'package:blogapp/Architectureprofile/screens/product/products_screen.dart';
 import 'package:blogapp/Notification/local_notifications.dart';
 import 'package:blogapp/Pages/HomePage.dart';
 import 'package:blogapp/Screen/HomeScreen.dart';
-import 'package:blogapp/shop/Chart.dart';
-import 'package:blogapp/shop/ReaqustAds.dart';
-import 'package:blogapp/shop/additem.dart';
+import 'package:blogapp/shop/ShopProfile/Chart.dart';
+import 'package:blogapp/shop/ShopProfile/ReaqustAds.dart';
+import 'package:blogapp/shop/ShopProfile/additem.dart';
 import 'package:blogapp/shop/itemservice.dart';
 import 'package:blogapp/shop/services.dart';
-import 'package:blogapp/shop/shoprofile.dart';
-import 'package:blogapp/shop/updateitem.dart';
+import 'package:blogapp/shop/ShopProfile/shoprofile.dart';
+import 'package:blogapp/shop/ShopProfile/updateitem.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+import 'AppointmentSlot.dart';
+import 'Architectprofile.dart';
 
 
 class Architectdashboard extends StatefulWidget {
@@ -23,7 +27,7 @@ class _ArchitectdashboardState extends State<Architectdashboard> {
   final Itemservice api = Itemservice();
   final storage = FlutterSecureStorage();
 
-  List<Widget> widgets = [Showitem(), Chart(), Ads()];
+  List<Widget> widgets = [Architectprofile(), Appointmentslot(), ProductsScreen()];
 
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
@@ -92,11 +96,11 @@ class _ArchitectdashboardState extends State<Architectdashboard> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.business),
-            label: 'Charts',
+            label: 'Appointment slots',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.school),
-            label: 'Ads',
+            label: 'Projects',
           ),
         ],
         currentIndex: _selectedIndex,
