@@ -1,0 +1,18 @@
+[
+    {
+        "months": "July",
+        "salesCount": 230
+    },
+    {
+        "months": "August",
+        "salesCount": 200
+    },
+    {
+        "months": "September",
+        "salesCount": 150
+    },
+    {
+        "months": "October",
+        "salesCount": 250
+    }
+]
