@@ -1,8 +1,6 @@
 import 'dart:convert';
 
 import 'package:blogapp/Architectureprofile/Architectureview.dart';
-import 'package:blogapp/Architectureprofile/screens/product/products_screen.dart';
-import 'package:blogapp/architecture/architect_profile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';

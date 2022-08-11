@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:badges/badges.dart';
 import 'package:blogapp/Architectureprofile/ArchitectDashboard.dart';
+import 'package:blogapp/BankCardDetails/CardList.dart';
+
 import 'package:blogapp/Cart/cart_screen.dart';
 import 'package:blogapp/Cart/main.dart';
 import 'package:blogapp/Expertprofile/Expertdashboard.dart';
@@ -41,6 +43,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:showcaseview/showcase_widget.dart';
 
+import '../OrderPage.dart';
 import 'bg_drawer.dart';
 
 //import 'package:blogapp/onesignal_flutter/onesignal_flutter.dart';
@@ -483,8 +486,8 @@ Future<void> initPlateformState() async{
                 value: 2,
                 child: Row(
                   children: [
-                    Icon(Icons.art_track_outlined, color: Colors.blue),
-                    Text("Search Products"),
+                    Icon(Icons.credit_card , color: Colors.blue),
+                    Text("Manage Bank Cards"),
                   ],
                 ),
               ),
@@ -605,7 +608,7 @@ Future<void> initPlateformState() async{
         break;
       case 2:
         Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => CartScreen()));
+            .push(MaterialPageRoute(builder: (context) => ListScreen()));
         break;
       case 3:
         Navigator.of(context)
@@ -613,7 +616,7 @@ Future<void> initPlateformState() async{
         break;
       case 4:
         Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => CartNew()));
+            .push(MaterialPageRoute(builder: (context) => OrderPage()));
         break;
       case 5:
         Navigator.of(context)

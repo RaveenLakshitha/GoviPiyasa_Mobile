@@ -21,7 +21,7 @@ class FetchUserList {
 //print(response.body);
         data = json.decode(response.body)['data'];
         //print("working");
-        //print(data);
+        print(data);
         results = data.map((e) => Userlist.fromJson(e)).toList();
         print(results);
         if (query!= null){

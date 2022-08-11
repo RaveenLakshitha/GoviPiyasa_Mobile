@@ -71,7 +71,7 @@ class _SearchitemsState extends State<Searchitems>
       if (response.statusCode == 200) {
         print(response.body);
         print(json.decode(response.body));
-        // Do the rest of job here
+
       }
     });
   }
@@ -247,48 +247,25 @@ class _SearchitemsState extends State<Searchitems>
                                     crossAxisAlignment:
                                     CrossAxisAlignment.start,
                                     children: [
-                                      // Align(
-                                      //   alignment: Alignment.topRight,
-                                      //   child: Container(
-                                      //     child: IconButton(
-                                      //       onPressed: () {
-                                      //         Navigator.push(
-                                      //             context,
-                                      //             MaterialPageRoute(
-                                      //               builder: (context) => Itemdetails(
-                                      //                   text:
-                                      //                       "${data[index].productName}",
-                                      //                   price:
-                                      //                       "${data[index].price}",
-                                      //                   image:
-                                      //                       'https://source.unsplash.com/random?sig=$index',
-                                      //                   description:
-                                      //                       "${data[index].description}",
-                                      //                   quantity:
-                                      //                       "${data[index].quantity}",
-                                      //                   category:
-                                      //                       "${data[index].categoryName}"),
-                                      //             ));
-                                      //       },
-                                      //       icon: Icon(
-                                      //         Icons.favorite,
-                                      //         color: Colors.red,
-                                      //       ),
-                                      //     ),
-                                      //   ),
-                                      // ),
+
                                       Row(
                                         mainAxisAlignment:
                                         MainAxisAlignment.start,
                                         crossAxisAlignment:
-                                        CrossAxisAlignment.center,
+                                        CrossAxisAlignment.start,
                                         mainAxisSize: MainAxisSize.max,
                                         children: [
-                                          Image(
-                                            height: 80,
-                                            width: 80,
-                                            image: NetworkImage(
-                                                "https://source.unsplash.com/random?sig=$index"),
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                                              color: Colors.lightBlueAccent,
+                                            ),
+                                            child: Image(
+                                              height: 80,
+                                              width: 80,
+                                              image: NetworkImage(
+                                                  "https://source.unsplash.com/random?sig=$index"),
+                                            ),
                                           ),
                                           SizedBox(
                                             width: 10,
@@ -318,13 +295,9 @@ class _SearchitemsState extends State<Searchitems>
                                                       fontWeight:
                                                       FontWeight.w500),
                                                 ),
-                                                // Text(
-                                                //     "${data[index].categoryName}",
-                                                //     style: TextStyle(
-                                                //       color: Colors.blue,
-                                                //     )),
+
                                                 SizedBox(
-                                                  height: 5,
+                                                  height: 2,
                                                 ),
                                                 Container(
                                                   child: data[index].quantity ==
@@ -341,7 +314,7 @@ class _SearchitemsState extends State<Searchitems>
                                                       )),
                                                 ),
                                                 buildRating1(
-                                                    double.parse("2")),
+                                                    double.parse('${data[index].shopId.id}')),
                                                 Container(
                                                   child: IconButton(
                                                       icon: Icon(
@@ -359,50 +332,87 @@ class _SearchitemsState extends State<Searchitems>
                                                       }),
                                                 ),
 
-                                                Align(
-                                                  alignment:
-                                                  Alignment.centerRight,
-                                                  child: InkWell(
-                                                    onTap: () async{
-                                                      setState(() {
-                                                        _isLoading=true;
-                                                      });
-                                                      await Future.delayed(
-                                                          Duration(seconds: 8));
-                                                      addtocart(data[index].id,1,data[index].price);
-                                                      Scaffold.of(context).showSnackBar(new SnackBar(
-                                                          content: new Text("Item Added to Cart")
-                                                      ));
-                                                      setState(() {
-                                                        _isLoading=false;
-                                                      });
-                                                    /*  Navigator.pop(context);
-                                                      addtocart(data[index].id,
-                                                          1, data[index].price);
-                                                      Navigator.pop(context);*/
-                                                    },
-                                                    child: Container(
-                                                      height: 45,
-                                                      width: 40,
-                                                      decoration: BoxDecoration(
-                                                        color: Colors.white,
-                                                        borderRadius:
-                                                        BorderRadius
-                                                            .circular(8),
-                                                        image:
-                                                        new DecorationImage(
-                                                          image: new AssetImage(
-                                                              "assets/shopping_cart.png"),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
+
                                                 SizedBox(height: 2.0),
                                               ],
                                             ),
                                           ),
                                         ],
+                                      ),
+                                      Container(
+                                        child:Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Container(
+                                              child: IconButton(
+                                                onPressed: () {
+                                                  addtowishlist("${data[index].id}","${data[index].productName}","${data[index].productName}");
+                                             /*     Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) => Itemdetails(
+                                                            text:
+                                                            "${data[index].productName}",
+                                                            price:
+                                                            "${data[index].price}",
+                                                            image:
+                                                            'https://source.unsplash.com/random?sig=$index',
+                                                            description:
+                                                            "${data[index].description}",
+                                                            quantity:
+                                                            "${data[index].quantity}",
+                                                            category:
+                                                            "${data[index].categoryName}"),
+                                                      ));*/
+                                                },
+                                                icon: Icon(
+                                                  Icons.favorite,
+                                                  color: Colors.red,
+                                                ),
+                                              ),
+                                            ),
+
+                                            Align(
+                                              alignment:
+                                              Alignment.bottomLeft,
+                                              child: InkWell(
+                                                onTap: () async{
+                                                  setState(() {
+                                                    _isLoading=true;
+                                                  });
+                                                  await Future.delayed(
+                                                      Duration(seconds: 8));
+                                                  addtocart(data[index].id,1,data[index].price);
+                                                  Scaffold.of(context).showSnackBar(new SnackBar(
+                                                      content: new Text("Item Added to Cart")
+                                                  ));
+                                                  setState(() {
+                                                    _isLoading=false;
+                                                  });
+                                                  /*  Navigator.pop(context);
+                                                      addtocart(data[index].id,
+                                                          1, data[index].price);
+                                                      Navigator.pop(context);*/
+                                                },
+                                                child: Container(
+                                                  height: 45,
+                                                  width: 40,
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.white,
+                                                    borderRadius:
+                                                    BorderRadius
+                                                        .circular(8),
+                                                    image:
+                                                    new DecorationImage(
+                                                      image: new AssetImage(
+                                                          "assets/shopping_cart.png"),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        )
                                       )
                                     ],
                                   ),

@@ -44,6 +44,7 @@ class _ShowitemState extends State<Showitem> with TickerProviderStateMixin {
   final picker = ImagePicker();
   String shopName;
   String email;
+  String city;
   String shopid;
   String rating;
   String address;
@@ -80,6 +81,7 @@ class _ShowitemState extends State<Showitem> with TickerProviderStateMixin {
         profilepic = _shopjson['profilePic'];
         imgurl = profilepic[0]['img'];
         shopPics = _shopjson['shopPictures'];
+        city=_shopjson['googlelocation']['city'];
       });
       print(shopPics);
     } catch (err) {}
@@ -310,9 +312,7 @@ class _ShowitemState extends State<Showitem> with TickerProviderStateMixin {
                                                 ),
                                               )),
                                         ),
-                                        SizedBox(
-                                          height: 50,
-                                          child: Center(
+                                       Container(
                                             child: Column(children: [
                                               GestureDetector(
                                                 child: Row(
@@ -344,14 +344,21 @@ class _ShowitemState extends State<Showitem> with TickerProviderStateMixin {
                                                     ]),
                                               ),
                                             ]),
-                                          ),
-                                        ),
+                                       ),
                                         Text(
                                           "${shopName.toString()}",
                                           style: TextStyle(
                                             color: Colors.red,
                                             fontWeight: FontWeight.bold,
                                             fontSize: 30.0,
+                                          ),
+                                        ),
+                                        Text(
+                                          "${city.toString()}",
+                                          style: TextStyle(
+                                            color: Colors.red,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 10.0,
                                           ),
                                         ),
                                       ]),
@@ -427,9 +434,9 @@ class _ShowitemState extends State<Showitem> with TickerProviderStateMixin {
                               child: Container(
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
                                   color:
-                                      const Color(0x1A0097A7).withOpacity(0.1),
-                                  //borderRadius: BorderRadius.circular(15)
+                                  const Color(0x1A0097A7).withOpacity(0.1),
                                 ),
                                 child: Image.network(shopPics[index]["img"]),
                               ),
@@ -540,7 +547,7 @@ class _ShowitemState extends State<Showitem> with TickerProviderStateMixin {
                                                     Navigator.push(
                                                         context,
                                                         MaterialPageRoute(
-                                                          builder: (context) => Itemdetails(text: '${item['productName']}',price:'${item['price']}',image:'https://source.unsplash.com/random?sig=$index',description:'${item['description']}',quantity:'${item['quantity']}',category:'${item['categoryName']}'),
+                                                          builder: (context) => Itemdetails(text: '${item['productName']}',price:'${item['price']}',image:'${item['thumbnail'][0]['img']}',description:'${item['description']}',quantity:'${item['quantity']}',category:'${item['categoryName']}'),
                                                         ));
                                                   },
                                                 ),

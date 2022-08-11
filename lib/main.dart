@@ -139,6 +139,7 @@ class _MyAppState extends State<MyApp> {
           width: 300,),)
       ),
         nextScreen:page,
+        splashIconSize: 100,
         splashTransition: SplashTransition.scaleTransition,
         backgroundColor: Colors.white,
 

@@ -25,7 +25,7 @@ class _WelcomePageState extends State<WelcomePage>
   VideoPlayerController _controller;
   @override
   void initState() {
-    // TODO: implement initState
+
     super.initState();
 
     //animation 1
@@ -40,7 +40,6 @@ class _WelcomePageState extends State<WelcomePage>
       CurvedAnimation(parent: _controller1, curve: Curves.easeOut),
     );
 
-// animation 2
     _controller2 = AnimationController(
       duration: Duration(milliseconds: 2500),
       vsync: this,
@@ -73,7 +72,6 @@ class _WelcomePageState extends State<WelcomePage>
         decoration: BoxDecoration(
           color: const Color(0xffadc2de),
           image: DecorationImage(
-
             image: AssetImage("assets/wel.png"),
             fit: BoxFit.cover,
           ),
@@ -170,32 +168,32 @@ class _WelcomePageState extends State<WelcomePage>
     );
   }
 
-  onFBLogin() async {
-    final result = await facebookLogin.logIn(['email']);
-    switch (result.status) {
-      case FacebookLoginStatus.loggedIn:
-        final token = result.accessToken;
-        final response = await http.get(
-            "https://graph.facebook.com/v2.12/me?fields=name,picture,email&access_token=$token");
-        final data1 = json.decode(response.body);
-        print(data);
-        setState(() {
-          _isLogin = true;
-          data = data1;
-        });
-        break;
-      case FacebookLoginStatus.cancelledByUser:
-        setState(() {
-          _isLogin = false;
-        });
-        break;
-      case FacebookLoginStatus.error:
-        setState(() {
-          _isLogin = false;
-        });
-        break;
-    }
-  }
+  // onFBLogin() async {
+  //   final result = await facebookLogin.logIn(['email']);
+  //   switch (result.status) {
+  //     case FacebookLoginStatus.loggedIn:
+  //       final token = result.accessToken;
+  //       final response = await http.get(
+  //           "https://graph.facebook.com/v2.12/me?fields=name,picture,email&access_token=$token");
+  //       final data1 = json.decode(response.body);
+  //       print(data);
+  //       setState(() {
+  //         _isLogin = true;
+  //         data = data1;
+  //       });
+  //       break;
+  //     case FacebookLoginStatus.cancelledByUser:
+  //       setState(() {
+  //         _isLogin = false;
+  //       });
+  //       break;
+  //     case FacebookLoginStatus.error:
+  //       setState(() {
+  //         _isLogin = false;
+  //       });
+  //       break;
+  //   }
+  // }
 
   onEmailClick() {
     Navigator.of(context).push(MaterialPageRoute(

@@ -9,7 +9,7 @@ class Userlist {
   int quantity;
   String categoryName;
   ShopId shopId;
-  String rating;
+
 
 
 
@@ -22,7 +22,7 @@ class Userlist {
         this.quantity,
         this.categoryName,
         this.shopId,
-        this.rating,
+
 
       });
 
@@ -34,7 +34,6 @@ class Userlist {
     quantity = json['quantity'];
     categoryName = json['categoryName'];
     shopId = json['shopId'] != null ? new ShopId.fromJson(json['shopId']): null;
-    rating = json['rating'];
 
 
   }
@@ -48,7 +47,6 @@ class Userlist {
     data['quantity']=this. quantity ;
     data['categoryName']=this.categoryName;
     data['shopId']=this.shopId;
-    data['rating']=this.rating;
 
     return data;
   }
@@ -57,17 +55,20 @@ class Userlist {
 
 class ShopId {
   String id;
+  String rating;
 
 
-  ShopId({this.id});
+  ShopId({this.id,this.rating});
 
   ShopId.fromJson(Map<String, dynamic> json) {
     id = json['_id'];
+    rating = json['rating'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['_id'] = this.id;
+    data['rating'] = this.rating;
 
     return data;
   }

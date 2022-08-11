@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:blogapp/wishlist/wishmain.dart';
 import 'package:dio/dio.dart';
@@ -8,10 +7,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
-
-
-
 import 'package:image_picker/image_picker.dart';
+
+
+
+import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'orderhistory.dart';
@@ -24,8 +24,8 @@ class ProfilePage extends StatefulWidget {
 class User {
   final String id;
   final String userName;
-  final String email;
   final String contactNumber;
+  final String email;
   final String city;
 
 

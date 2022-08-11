@@ -9,13 +9,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart';
-
-
-
-
-
-
-
 class googlemap extends StatefulWidget {
 
   double lat;
@@ -67,13 +60,33 @@ class _googlemapState extends State<googlemap> {
         _shopjson = jsonData;
       });
       print(_shopjson);
-      print(_shopjson[1]['location']['coordinates'][0]);
+     // print(_shopjson[1]['location']['coordinates'][0]);
     } catch (err) {}
   }
 
   void _onMapCreated(GoogleMapController controller){
     setState(() {
-      /*_markers.add(
+
+ /*     for(int i=0;i<_shopjson.length;i++){
+        _markers.add(
+            Marker(
+              markerId: MarkerId('id-1'),
+              position: LatLng( _shopjson[i]['location']['coordinates'][0],_shopjson[i]['location']['coordinates'][1]),
+              icon:BitmapDescriptor.defaultMarkerWithHue(
+                BitmapDescriptor.hueViolet,
+              ),
+
+              infoWindow: InfoWindow(
+                title: '${_shopjson[i]['shopName']}',
+                snippet: 'history',
+
+              ),
+            )
+        );
+      }*/
+
+
+      _markers.add(
           Marker(
             markerId: MarkerId('id-1'),
             position: LatLng(lat,long),
@@ -84,7 +97,7 @@ class _googlemapState extends State<googlemap> {
 
             ),
           )
-      );*/
+      );
     // _markers.add(newyork1Marker);
       //_markers.add(newyork2Marker);
     // _markers.add(newyork3Marker);
@@ -123,7 +136,6 @@ class _googlemapState extends State<googlemap> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       appBar:AppBar(
         title: Text('${pos1}   ${pos2}'),
         actions: [
@@ -146,14 +158,9 @@ class _googlemapState extends State<googlemap> {
         children: [
           GoogleMap(
             onMapCreated: _onMapCreated,
-
             initialCameraPosition:CameraPosition(
-              target:LatLng(lat, 	long),
-              zoom:15,
-
-            ),
-
-          ),
+              target:LatLng(lat,long),
+              zoom:15,),),
           _buildGoogleMap(context),
 
           _buildContainer(),
@@ -197,10 +204,9 @@ class _googlemapState extends State<googlemap> {
             final shop=_shopjson[index];
 
             if(_shopjson[index]['location']['coordinates']!=null){
-              for (var i = 0; i < _shopjson.length; i++){
-                _markers.add(
+              //for (var i = 0; i < _shopjson.length; i++){
+               _markers.add(
                     Marker(
-
                       markerId: MarkerId('id-1'),
                       position: LatLng( shop['location']['coordinates'][0],shop['location']['coordinates'][1]),
                        icon:BitmapDescriptor.defaultMarkerWithHue(
@@ -214,7 +220,7 @@ class _googlemapState extends State<googlemap> {
                       ),
                     )
                 );
-              }
+             // }
 
               return Container(
                 padding: const EdgeInsets.all(8.0),

@@ -1,9 +1,8 @@
-
 import 'package:flutter/material.dart';
-import 'Add.dart';
-
+import 'Model.dart';
+import 'add.dart';
 import 'dbCard.dart';
-import 'model.dart';
+
 
 class ListScreen extends StatefulWidget {
   @override
@@ -12,7 +11,7 @@ class ListScreen extends StatefulWidget {
 
 class _ListScreenState extends State<ListScreen> {
    DatabaseHandler handler;
-   Future<List<Bank>> _todo;
+   Future<List<todo>> _todo;
 
   @override
   void initState() {
@@ -25,7 +24,7 @@ class _ListScreenState extends State<ListScreen> {
     });
   }
 
-  Future<List<Bank>> getList() async {
+  Future<List<todo>> getList() async {
     return await handler.todos();
   }
 
@@ -39,7 +38,7 @@ class _ListScreenState extends State<ListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('My Bank Cards'),
+        title: Text('Manage Bank Cards'),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -49,11 +48,11 @@ class _ListScreenState extends State<ListScreen> {
           );
         },
         child: Icon(Icons.add),
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.lightGreen,
       ),
-      body: FutureBuilder<List<Bank>>(
+      body: FutureBuilder<List<todo>>(
         future: _todo,
-        builder: (BuildContext context, AsyncSnapshot<List<Bank>> snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<List<todo>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return new Center(
               child: new CircularProgressIndicator(),
@@ -61,7 +60,7 @@ class _ListScreenState extends State<ListScreen> {
           } else if (snapshot.hasError) {
             return new Text('Error: ${snapshot.error}');
           } else {
-            final items = snapshot.data ?? <Bank>[];
+            final items = snapshot.data ?? <todo>[];
             return new Scrollbar(
               child: RefreshIndicator(
                 onRefresh: _onRefresh,
@@ -71,13 +70,8 @@ class _ListScreenState extends State<ListScreen> {
                     return Dismissible(
                       direction: DismissDirection.startToEnd,
                       background: Container(
-                        height: 199,
-                        width: 344,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color:Colors.blue,
-                        ),
-                        color: Colors.lightGreen,
+                        margin: EdgeInsets.all(10),
+                        color: Colors.red,
                         alignment: Alignment.centerRight,
                         padding: const EdgeInsets.symmetric(horizontal: 10.0),
                         child: const Icon(Icons.delete_forever),
@@ -89,20 +83,27 @@ class _ListScreenState extends State<ListScreen> {
                           items.remove(items[index]);
                         });
                       },
-                      child: Card(
-                          child:Stack(
-                            children: [
-                              Positioned(
-                                child:Image.asset("assets/about.jpg"),
-                              ),
-
-                              ListTile(
-                                contentPadding: const EdgeInsets.all(8.0),
-                                title: Text(items[index].id.toString()),
-                                subtitle: Text(items[index].cardNo.toString()),
-                              )
-                            ],
-                          ) ),
+                      child: Container(
+                        height: 200,
+                        margin: EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            image: DecorationImage(
+                                image: NetworkImage("https://images.unsplash.com/photo-1579202673506-ca3ce28943ef"),
+                                fit:BoxFit.cover
+                            ),
+                          ),
+                        child: Card(
+                            color: Colors.transparent,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15.0),
+                            ),
+                            child: ListTile(
+                              contentPadding: const EdgeInsets.all(8.0),
+                              title: Text(items[index].title),
+                              subtitle: Text(items[index].description.toString()),
+                            )),
+                      ),
                     );
                   },
                 ),

@@ -207,7 +207,7 @@ class _UpdateitemState extends State<Updateitem> {
                           borderRadius: BorderRadius.all(Radius.circular(5.0)),
                         ),
                       ),
-                      Container(
+               /*       Container(
                         margin: const EdgeInsets.all(15.0),
                         child: TextField(
 
@@ -221,9 +221,9 @@ class _UpdateitemState extends State<Updateitem> {
                           border: Border.all(color: Colors.lightGreen,width: 1),
                           borderRadius: BorderRadius.all(Radius.circular(5.0)),
                         ),
-                      ),
+                      ),*/
 
-                      Container(
+              /*        Container(
                         margin: const EdgeInsets.all(15.0),
                         child: TextField(
                           controller: _image,
@@ -237,7 +237,7 @@ class _UpdateitemState extends State<Updateitem> {
                           border: Border.all(color: Colors.lightGreen,width: 1),
                           borderRadius: BorderRadius.all(Radius.circular(5.0)),
                         ),
-                      ),
+                      ),*/
                       SizedBox(height: 5.0,),
                       RaisedButton(
                         padding: EdgeInsets.fromLTRB(70, 10, 70, 10),

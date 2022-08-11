@@ -369,12 +369,12 @@ class _HomeScreenState extends State<HomeScreen>
                         ),
 
                         SizedBox(
-                          width: 50.0,
+                          width: 5.0,
                         ),
                         Container(
-                          child: Text('Experts',
+                          child: Text('Get quality help now',
                               style:
-                                  TextStyle(color: Colors.green, fontSize: 30)),
+                                  TextStyle(color: Colors.green, fontSize: 22)),
                         ),
                       ],
                     ),
@@ -385,7 +385,7 @@ class _HomeScreenState extends State<HomeScreen>
                       MaterialPageRoute(builder: (context) => LocalNotifications()));
                 }),
             SizedBox(
-              height: 10.0,
+              height: 5.0,
             ),
             GestureDetector(
               child: Container(
