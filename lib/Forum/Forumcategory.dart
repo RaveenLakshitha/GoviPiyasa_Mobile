@@ -1,6 +1,8 @@
 import 'package:blogapp/Forum/searchquestion/MyQuestions.dart';
+import 'package:blogapp/Pages/HomePage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'Postlist.dart';
 import 'constants.dart';
 import 'package:badges/badges.dart';
@@ -97,6 +99,15 @@ class _ForumCategoryState extends State<ForumCategory> {
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
+          leading: IconButton(
+              icon: Icon(FontAwesomeIcons.arrowLeft,color:Colors.black),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => HomePage(),
+                    ));
+              }),
           elevation: 2,
           actions: <Widget>[
             SizedBox.fromSize(

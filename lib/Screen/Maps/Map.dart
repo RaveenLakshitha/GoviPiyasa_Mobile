@@ -26,8 +26,8 @@ class _googlemapState extends State<googlemap> {
   static const CameraPosition initialCameraPosition = CameraPosition(target: LatLng(37.42796133580664, -122.085749655962), zoom: 14);
 
   Set<Marker> markers = {};
-   double lat,long;
-   double pos1,pos2;
+  double lat,long;
+  double pos1,pos2;
 
   void initState(){
     fetchPosts();
@@ -45,6 +45,7 @@ class _googlemapState extends State<googlemap> {
     mapMarker= await BitmapDescriptor.fromAssetImage(ImageConfiguration(),'assets/placeholder.png');
   }
 
+
   final url = "https://govi-piyasa-v-0-1.herokuapp.com/api/v1/shops/";
   var _shopjson = [];
   FlutterSecureStorage storage = FlutterSecureStorage();
@@ -60,14 +61,14 @@ class _googlemapState extends State<googlemap> {
         _shopjson = jsonData;
       });
       print(_shopjson);
-     // print(_shopjson[1]['location']['coordinates'][0]);
+       print(_shopjson[1]['location']['coordinates'][0]);
     } catch (err) {}
   }
 
   void _onMapCreated(GoogleMapController controller){
     setState(() {
 
- /*     for(int i=0;i<_shopjson.length;i++){
+      for(int i=0;i<_shopjson.length;i++){
         _markers.add(
             Marker(
               markerId: MarkerId('id-1'),
@@ -83,7 +84,7 @@ class _googlemapState extends State<googlemap> {
               ),
             )
         );
-      }*/
+      }
 
 
       _markers.add(
@@ -98,9 +99,9 @@ class _googlemapState extends State<googlemap> {
             ),
           )
       );
-    // _markers.add(newyork1Marker);
+      // _markers.add(newyork1Marker);
       //_markers.add(newyork2Marker);
-    // _markers.add(newyork3Marker);
+      // _markers.add(newyork3Marker);
 
     });
   }
@@ -137,9 +138,9 @@ class _googlemapState extends State<googlemap> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar:AppBar(
-        title: Text('${pos1}   ${pos2}'),
+        // title: Text('${pos1}   ${pos2}'),
         actions: [
-     /*  IconButton(
+          /*  IconButton(
               icon: Icon(FontAwesomeIcons.plus),
               onPressed: () async {
                 print("hello");
@@ -160,7 +161,11 @@ class _googlemapState extends State<googlemap> {
             onMapCreated: _onMapCreated,
             initialCameraPosition:CameraPosition(
               target:LatLng(lat,long),
-              zoom:15,),),
+              zoom:15,),
+          /*  markers:
+            _markers,*/
+          ),
+
           _buildGoogleMap(context),
 
           _buildContainer(),
@@ -179,12 +184,12 @@ class _googlemapState extends State<googlemap> {
       child: GoogleMap(
           myLocationEnabled: true,
           compassEnabled: true,
-        mapType: MapType.normal,
-        initialCameraPosition:  CameraPosition(target: LatLng(lat, 	long), zoom: 10),
-        onMapCreated: (GoogleMapController controller) {
-          _controller.complete(controller);
-        },
-        markers:
+          mapType: MapType.normal,
+          initialCameraPosition:  CameraPosition(target: LatLng(lat, 	long), zoom: 10),
+          onMapCreated: (GoogleMapController controller) {
+            _controller.complete(controller);
+          },
+          markers:
           _markers
 
       ),
@@ -197,49 +202,52 @@ class _googlemapState extends State<googlemap> {
         margin: EdgeInsets.symmetric(vertical: 10.0),
         height: 150.0,
         child:ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: _shopjson.length,
-          itemBuilder: (BuildContext context, int index){
+            scrollDirection: Axis.horizontal,
+            itemCount: _shopjson.length,
+            itemBuilder: (BuildContext context, int index){
 
-            final shop=_shopjson[index];
+              final shop=_shopjson[index];
 
-            if(_shopjson[index]['location']['coordinates']!=null){
-              //for (var i = 0; i < _shopjson.length; i++){
-               _markers.add(
-                    Marker(
-                      markerId: MarkerId('id-1'),
-                      position: LatLng( shop['location']['coordinates'][0],shop['location']['coordinates'][1]),
-                       icon:BitmapDescriptor.defaultMarkerWithHue(
-                      BitmapDescriptor.hueViolet,
-                    ),
+              if(_shopjson[index]['location']['coordinates']!=null){
+                for (var i = 0; i < _shopjson.length; i++){
+                  /*  setState(() {
 
-                      infoWindow: InfoWindow(
-                        title: '${shop['shopName']}',
-                        snippet: 'history',
+              });*/
+                  _markers.add(
+                      Marker(
+                        markerId: MarkerId('id-1'),
+                        position: LatLng( shop['location']['coordinates'][1],shop['location']['coordinates'][0]),
+                        icon:BitmapDescriptor.defaultMarkerWithHue(
+                          BitmapDescriptor.hueViolet,
+                        ),
 
-                      ),
-                    )
+                        infoWindow: InfoWindow(
+                          title: '${shop['shopName']}',
+                          snippet: 'history',
+
+                        ),
+                      )
+                  );
+                }
+
+                return Container(
+                  padding: const EdgeInsets.all(8.0),
+                  child: _boxes(
+                      "https://source.unsplash.com/random?sig=$index",
+                      shop['location']['coordinates'][0],shop['location']['coordinates'][1],"${shop['shopName']}","${shop['email']}","${shop['address']}"),
                 );
-             // }
+              }else{
+                return SizedBox.shrink();
+              }
 
-              return Container(
-                padding: const EdgeInsets.all(8.0),
-                child: _boxes(
-                    "https://source.unsplash.com/random?sig=$index",
-                    shop['location']['coordinates'][0],shop['location']['coordinates'][1],"${shop['shopName']}"),
-              );
-            }else{
-              return SizedBox.shrink();
             }
-
-          }
 
         ),
       ),
     );
   }
 
-  Widget myDetailsContainer1(String restaurantName) {
+  Widget myDetailsContainer1(String restaurantName,String email,String address) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
@@ -303,7 +311,7 @@ class _googlemapState extends State<googlemap> {
                 ),
                 Container(
                     child: Text(
-                      "(946)",
+                      email,
                       style: TextStyle(
                         color: Colors.black54,
                         fontSize: 18.0,
@@ -314,7 +322,7 @@ class _googlemapState extends State<googlemap> {
         SizedBox(height:5.0),
         Container(
             child: Text(
-              "American \u00B7 \u0024\u0024 \u00B7 1.6 mi",
+              address,
               style: TextStyle(
                 color: Colors.black54,
                 fontSize: 18.0,
@@ -342,7 +350,7 @@ class _googlemapState extends State<googlemap> {
     controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: LatLng(lat, long), zoom: 10,tilt: 50.0,
       bearing: 45.0,)));
   }
-  Widget _boxes(String _image, double lat,double long,String restaurantName) {
+  Widget _boxes(String _image, double lat,double long,String restaurantName,String email,String address) {
     return  GestureDetector(
       onTap: () {
         _gotoLocation(lat,long);
@@ -370,7 +378,7 @@ class _googlemapState extends State<googlemap> {
                   Container(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: myDetailsContainer1(restaurantName),
+                      child: myDetailsContainer1(restaurantName,email,address),
                     ),
                   ),
 

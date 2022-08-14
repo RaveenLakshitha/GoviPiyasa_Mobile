@@ -31,9 +31,9 @@ class _OrderPageState extends State<OrderPage> with WidgetsBindingObserver {
   DatabaseHandler handler;
   Future<List<todo>> _todo;
   TextEditingController _address = TextEditingController();
-  TextEditingController firstNameController = TextEditingController();
+  TextEditingController _contact1 = TextEditingController();
   TextEditingController _contact = TextEditingController();
-  sendtoOrder(String contact,String address)async{
+  sendtoOrder(String address,String contact,String contact1)async{
 
     String token = await storage.read(key: "token");
     print(token);
@@ -41,7 +41,9 @@ class _OrderPageState extends State<OrderPage> with WidgetsBindingObserver {
     print(contact);
     final body = {
       "contactNumber": contact,
-      "address":address
+      "address":address,
+      "additionalPhoneNumber":contact1,
+
     };
     http.post("https://govi-piyasa-v-0-1.herokuapp.com/api/v1/cartItems/sendCartitemsToShopOrders",body:jsonEncode(body),
       headers: {
@@ -151,19 +153,19 @@ class _OrderPageState extends State<OrderPage> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title:Text("Order Details"),
-        actions: [
-          IconButton(
-              icon: Icon(Icons.credit_card, color: Colors.blue),
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => AddScreen(),
-                    ));
-              }),
-        /*  IconButton(
+        appBar: AppBar(
+          title:Text("Order Details"),
+          actions: [
+            IconButton(
+                icon: Icon(Icons.credit_card, color: Colors.blue),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AddScreen(),
+                      ));
+                }),
+            /*  IconButton(
               icon: Icon(Icons.credit_card, color: Colors.blue),
               onPressed: () {
                 Navigator.push(
@@ -172,115 +174,118 @@ class _OrderPageState extends State<OrderPage> with WidgetsBindingObserver {
                       builder: (context) => ListScreen(),
                     ));
               }),*/
-        ],
-      ),
-      body:  new Builder(
-          builder: (BuildContext context) {
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                Expanded(
-                  flex: 1,
-                  child: FutureBuilder<List<todo>>(
-                    future: _todo,
-                    builder: (BuildContext context, AsyncSnapshot<List<todo>> snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return new Center(
-                          child: new CircularProgressIndicator(),
-                        );
-                      } else if (snapshot.hasError) {
-                        return new Text('Error: ${snapshot.error}');
-                      } else {
-                        final items = snapshot.data ?? <todo>[];
-                        return new Scrollbar(
-                          child: RefreshIndicator(
-                            onRefresh: _onRefresh,
-                            child: ListView.builder(
-                              itemCount: items.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                return Dismissible(
-                                  direction: DismissDirection.startToEnd,
-                                  background: Container(
-                                    margin: EdgeInsets.all(10),
-                                    color: Colors.red,
-                                    alignment: Alignment.centerRight,
-                                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                                    child: const Icon(Icons.delete_forever),
-                                  ),
-                                  key: ValueKey<int>(items[index].id),
-                                  onDismissed: (DismissDirection direction) async {
-                                    await handler.deletetodo(items[index].id);
-                                    setState(() {
-                                      items.remove(items[index]);
-                                    });
-                                  },
-                                  child: Container(
-                                    height: 200,
-                                    margin: EdgeInsets.all(10),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(15),
-                                      image: DecorationImage(
-                                          image: NetworkImage("https://source.unsplash.com/random?sig=$index"),
-                                          fit:BoxFit.cover
-                                      ),
+          ],
+        ),
+        body:  new Builder(
+            builder: (BuildContext context) {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  Expanded(
+                    flex: 1,
+                    child: FutureBuilder<List<todo>>(
+                      future: _todo,
+                      builder: (BuildContext context, AsyncSnapshot<List<todo>> snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return new Center(
+                            child: new CircularProgressIndicator(),
+                          );
+                        } else if (snapshot.hasError) {
+                          return new Text('Error: ${snapshot.error}');
+                        } else {
+                          final items = snapshot.data ?? <todo>[];
+                          return new Scrollbar(
+                            child: RefreshIndicator(
+                              onRefresh: _onRefresh,
+                              child: ListView.builder(
+                                itemCount: items.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return Dismissible(
+                                    direction: DismissDirection.startToEnd,
+                                    background: Container(
+                                      margin: EdgeInsets.all(10),
+                                      color: Colors.red,
+                                      alignment: Alignment.centerRight,
+                                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                                      child: const Icon(Icons.delete_forever),
                                     ),
-                                    child: Card(
-                                        color: Colors.transparent,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(15.0),
+                                    key: ValueKey<int>(items[index].id),
+                                    onDismissed: (DismissDirection direction) async {
+                                      await handler.deletetodo(items[index].id);
+                                      setState(() {
+                                        items.remove(items[index]);
+                                      });
+                                    },
+                                    child: Container(
+                                      height: 200,
+                                      margin: EdgeInsets.all(10),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(15),
+                                        image: DecorationImage(
+                                            image: NetworkImage("https://source.unsplash.com/random?sig=$index"),
+                                            fit:BoxFit.cover
                                         ),
-                                        child: ListTile(
-                                          contentPadding: const EdgeInsets.all(8.0),
-                                          title: Text(items[index].title,style: TextStyle(color:Colors.white),),
-                                          subtitle: Text(items[index].description.toString(),style: TextStyle(color:Colors.white)),
-                                        )),
-                                  ),
-                                );
-                              },
+                                      ),
+                                      child: Card(
+                                          color: Colors.transparent,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(15.0),
+                                          ),
+                                          child: ListTile(
+                                            contentPadding: const EdgeInsets.all(8.0),
+                                            title: Text(items[index].title,style: TextStyle(color:Colors.white),),
+                                            subtitle: Text(items[index].description.toString(),style: TextStyle(color:Colors.white)),
+                                          )),
+                                    ),
+                                  );
+                                },
+                              ),
                             ),
-                          ),
-                        );
-                      }
-                    },
-                  ),
-                ),
-                Expanded(
-                  flex: 2,
-                  child:   Stepper(
-
-                    steps: _mySteps(),
-                    currentStep: this._currentStep,
-                    onStepTapped: (step){
-                      setState(() {
-                        this._currentStep = step;
-                      });},
-                    onStepContinue: (){
-                      setState(() {
-                        if(this._currentStep < this._mySteps().length - 1){
-                          this._currentStep = this._currentStep + 1;
-                        }else{
-                          sendtoOrder(_contact.text,_address.text);
-                          //Logic to check if everything is completed
-                          print('Completed, check fields.');
+                          );
                         }
-                      });
-                    },
-                    onStepCancel: () {
-                      setState(() {
-                        if(this._currentStep > 0){
-                          this._currentStep = this._currentStep - 1;
-                        }else{
-                          this._currentStep = 0;
-                        }
-                      });
-                    },
+                      },
+                    ),
                   ),
-                ),
+                  Expanded(
+                    flex: 2,
+                    child:   Stepper(
 
-              ],
-            );
-          }
-      )
+                      steps: _mySteps(),
+                      currentStep: this._currentStep,
+                      onStepTapped: (step){
+                        setState(() {
+                          this._currentStep = step;
+                        });},
+                      onStepContinue: (){
+                        setState(() {
+                          if(this._currentStep < this._mySteps().length - 1){
+                            this._currentStep = this._currentStep + 1;
+                          }else{
+                            sendtoOrder(_address.text,_contact.text,_contact1.text);
+                            //Logic to check if everything is completed
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => Payment(),
+                            ));
+                            print('Completed, check fields.');
+                          }
+                        });
+                      },
+                      onStepCancel: () {
+                        setState(() {
+                          if(this._currentStep > 0){
+                            this._currentStep = this._currentStep - 1;
+                          }else{
+                            this._currentStep = 0;
+                          }
+                        });
+                      },
+                    ),
+                  ),
+
+                ],
+              );
+            }
+        )
     );
 
 
@@ -299,7 +304,7 @@ class _OrderPageState extends State<OrderPage> with WidgetsBindingObserver {
         content: TextField(
           controller: _address,
           decoration: InputDecoration(
-            hintText: "e.g. Let's eat cheeseburgers!",
+            hintText: "Address",
           ),
         ),
         isActive: _currentStep >= 0,
@@ -309,7 +314,7 @@ class _OrderPageState extends State<OrderPage> with WidgetsBindingObserver {
         content: TextField(
           controller: _contact,
           decoration: InputDecoration(
-            hintText: "e.g. Let's eat cheeseburgers!",
+            hintText: "ContactNo",
           ),
         ),
         isActive: _currentStep >= 1,
@@ -317,10 +322,11 @@ class _OrderPageState extends State<OrderPage> with WidgetsBindingObserver {
       Step(
         title: Text('Step 3'),
         content: TextField(
+
           decoration: InputDecoration(
-            hintText: "e.g. Let's eat cheeseburgers!",
+            hintText: "Addtional Contact No",
           ),
-          controller: _contact,
+          controller: _contact1,
         ),
         isActive: _currentStep >= 2,
       )

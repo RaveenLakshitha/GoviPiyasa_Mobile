@@ -1,9 +1,11 @@
 import 'dart:convert';
 
 import 'package:blogapp/Architectureprofile/Architectureview.dart';
+import 'package:blogapp/Pages/HomePage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 class expert extends StatefulWidget {
@@ -17,6 +19,7 @@ class _expertState extends State<expert> {
   final url = "https://govi-piyasa-v-0-1.herokuapp.com/api/v1/architects";
   var _itemsJson = [];
   void fetchPosts() async {
+    print("architect");
     String token = await storage.read(key: "token");
     try {
       final response = await get(Uri.parse(url),headers: {
@@ -27,6 +30,7 @@ class _expertState extends State<expert> {
       setState(() {
         _itemsJson = jsonData;
       });
+      print(_itemsJson);
     } catch (err) {}
   }
 
@@ -42,6 +46,15 @@ class _expertState extends State<expert> {
         appBar: AppBar(
           title: Text('Architectures'),
           centerTitle: true,
+            leading: IconButton(
+                icon: Icon(FontAwesomeIcons.arrowLeft,color:Colors.black),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => HomePage(),
+                      ));
+                }),
           //  backgroundColor: Colors.lightGreen,
           actions: [
             Switch(
@@ -80,14 +93,14 @@ class _expertState extends State<expert> {
               child:InkWell(
                 child: Ink.image(
                   image: NetworkImage(
-                      'https://source.unsplash.com/random?sig=$index'),
+                      '${item['profilePicture'][0]['img']}'),
                   fit: BoxFit.cover,
                 ),
                 onTap: (){
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => Architectureview(id:"${item['_id']}",businessName:"${item['businessName']}",description:"${item['description']}",contactNumber:"${item['contactNumber']}",motto:"${item['motto']}",email:"${item['email']}",rating:"${item['rating']}",image:"https://source.unsplash.com/random?sig=$index"),
+                        builder: (context) => Architectureview(id:"${item['_id']}",businessName:"${item['businessName']}",description:"${item['description']}",contactNumber:"${item['contactNumber']}",motto:"${item['motto']}",email:"${item['email']}",rating:"${item['rating']}",image:"${item['profilePicture'][0]['img']}"),
                       ));
                 },
               ),
@@ -103,7 +116,7 @@ class _expertState extends State<expert> {
                         TypewriterAnimatedText(
                           '${item['businessName']}',
                           textStyle: const TextStyle(
-                            fontSize: 32.0,
+                            fontSize: 20.0,
                             fontWeight: FontWeight.bold,
                             color:Colors.white
                           ),
@@ -120,7 +133,7 @@ class _expertState extends State<expert> {
                       animatedTexts: [
                         FadeAnimatedText(
                           'Fade First',
-                          textStyle: TextStyle(color:Colors.blue,fontSize: 32.0, fontWeight: FontWeight.bold),
+                          textStyle: TextStyle(color:Colors.blue,fontSize: 25.0, fontWeight: FontWeight.bold),
                         ),
                      /*   ScaleAnimatedText(
                           'Then Scale',

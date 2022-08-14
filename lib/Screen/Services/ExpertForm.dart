@@ -278,18 +278,19 @@ class _ExpertFormState extends State<ExpertForm> {
                             controller: myController5,
                             decoration: InputDecoration(
                               labelText: 'City',
-                              prefixIcon: GestureDetector(
+                              suffixIcon: GestureDetector(
                                 child: Icon(
+                                  Icons.add_location_alt,
+                                  color: Colors.red,
+                                ),
+                                onTap:(){      Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => expertmap()));} ,
+                              ),
+                              prefixIcon:Icon(
                                   Icons.add_location,
                                   color: Colors.blue,
                                 ),
-                                onTap: () {
-                                  // _showToast(context);
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) => expertmap()));
-//                                    uploadImage();
-                                },
-                              ),
+
                             ),
                             onChanged: (val) {
                               city = val;
@@ -366,7 +367,7 @@ class _ExpertFormState extends State<ExpertForm> {
                           ),
                         ),
                         SizedBox(height: 5.0),
-                        Container(
+                       /* Container(
                           margin:
                           const EdgeInsets.only(left: 10.0, right: 10.0),
                           child: TextFormField(
@@ -410,7 +411,7 @@ class _ExpertFormState extends State<ExpertForm> {
                             borderRadius:
                             BorderRadius.all(Radius.circular(5.0)),
                           ),
-                        ),
+                        ),*/
                         SizedBox(height: 5.0),
                         Container(
                             margin:

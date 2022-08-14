@@ -9,8 +9,9 @@ class Userlist {
   int quantity;
   String categoryName;
   ShopId shopId;
-
-
+  int rating;
+  Thumbnail thumbnail;
+  productPictures1 productPictures;
 
 
   Userlist(
@@ -22,6 +23,9 @@ class Userlist {
         this.quantity,
         this.categoryName,
         this.shopId,
+       this.rating,
+        this.thumbnail,
+        this.productPictures,
 
 
       });
@@ -33,7 +37,12 @@ class Userlist {
     description = json['description'];
     quantity = json['quantity'];
     categoryName = json['categoryName'];
+
     shopId = json['shopId'] != null ? new ShopId.fromJson(json['shopId']): null;
+    rating = json['rating'];
+    thumbnail = json['thumbnail'][0] != null ? new Thumbnail.fromJson(json['thumbnail'][0]): null;
+    productPictures = json['productPictures'] != null ? new productPictures1.fromJson(json['productPictures']): null;
+
 
 
   }
@@ -47,32 +56,75 @@ class Userlist {
     data['quantity']=this. quantity ;
     data['categoryName']=this.categoryName;
     data['shopId']=this.shopId;
+    data['rating']=this.rating;
+    data['thumbnail']=this.thumbnail;
+    data['productPictures']=this.productPictures;
 
     return data;
   }
 }
-
-
 class ShopId {
   String id;
-  String rating;
 
 
-  ShopId({this.id,this.rating});
+
+  ShopId({this.id});
 
   ShopId.fromJson(Map<String, dynamic> json) {
     id = json['_id'];
-    rating = json['rating'];
+    //rating = json['rating'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['_id'] = this.id;
-    data['rating'] = this.rating;
+    // data['rating'] = this.rating;
 
     return data;
   }
 }
+
+class Thumbnail {
+  String img;
+
+
+
+  Thumbnail({this.img});
+
+  Thumbnail.fromJson(Map<String, dynamic> json) {
+    img = json['img'];
+    //rating = json['rating'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['img'] = this.img;
+    // data['rating'] = this.rating;
+
+    return data;
+  }
+}
+class productPictures1{
+  String img;
+
+
+
+  productPictures1({this.img});
+
+  productPictures1.fromJson(Map<String, dynamic> json) {
+    img = json['img'];
+    //rating = json['rating'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['img'] = this.img;
+    // data['rating'] = this.rating;
+
+    return data;
+  }
+}
+
 /*
 
 class Geo {

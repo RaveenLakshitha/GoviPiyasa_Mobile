@@ -1,10 +1,6 @@
 import 'dart:convert';
-
-import 'package:blogapp/Architectureprofile/constants.dart';
 import 'package:blogapp/LoadingScreen/loading.dart';
 import 'package:blogapp/LoadingScreen/loading2.dart';
-import 'package:blogapp/LoadingScreen/loading3.dart';
-import 'package:blogapp/Notification/local_notifications.dart';
 import 'package:blogapp/Search/HomeScreen.dart';
 
 import 'package:translator/translator.dart';
@@ -41,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   GoogleTranslator translator =
-      new GoogleTranslator(); //using google translator
+  new GoogleTranslator(); //using google translator
 
   Translation out;
   var index=0;
@@ -60,16 +56,17 @@ class _HomeScreenState extends State<HomeScreen>
     });
   }
 
-  final url = "https://mongoapi3.herokuapp.com/delivery";
+  final url = "https://govi-piyasa-v-0-1.herokuapp.com/api/v1/advertisements";
   var _imagesJson = [];
 
   void fetchPosts() async {
     try {
       final response = await get(Uri.parse(url));
-      final jsonData = jsonDecode(response.body) as List;
+      final jsonData = jsonDecode(response.body)['data'] as List;
       setState(() {
         _imagesJson = jsonData;
       });
+      print(_imagesJson);
     } catch (err) {}
   }
 
@@ -106,55 +103,55 @@ class _HomeScreenState extends State<HomeScreen>
                 ),
                 itemBuilder: (context, index, realIdx) {
 
-                 if(_imagesJson != null &&_imagesJson.length > index){
-                   final post = _imagesJson[index];
-                   return Container(
-                     width: 300.0,
-                     decoration: BoxDecoration(
-                       borderRadius: BorderRadius.circular(10.0),
-                       image: DecorationImage(
-                         image: post!=null?NetworkImage("${post['name']}"):Image.asset('assets/31.png'),
-                         fit: BoxFit.cover,
-                       ),
-                     ),
-                     child: Column(
-                       mainAxisAlignment: MainAxisAlignment.center,
-                       crossAxisAlignment: CrossAxisAlignment.center,
-                       children: <Widget>[
-                         Expanded(
-                           child: Text(
-                             '${post['type']}',
-                             style: TextStyle(
-                               color: Colors.white,
-                               fontFamily: 'Indies',
-                               fontWeight: FontWeight.bold,
-                               fontSize: 30.0,
-                             ),
-                           ),
-                         ),
-                         Padding(
-                           padding: const EdgeInsets.all(15.0),
-                           child: Text(
-                             '${post['contact']}',
-                             style: TextStyle(
-                               fontFamily: 'Indies',
-                               color: Colors.blue,
-                               fontSize: 15.0,
-                             ),
-                             textAlign: TextAlign.center,
-                           ),
-                         ),
-                       ],
-                     ),
-                   );
-                 } else{
-                   return SizedBox.shrink();
-                 }},),),
+                  if(_imagesJson != null &&_imagesJson.length > index){
+                    final post = _imagesJson[index];
+                    return Container(
+                      width: 300.0,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10.0),
+                        image: DecorationImage(
+                          image: post!=null?NetworkImage("${post['image']}"):Image.asset('assets/31.png'),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Expanded(
+                            child: Text(
+                              '',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: 'Indies',
+                                fontWeight: FontWeight.bold,
+                                fontSize: 30.0,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Text(
+                              '',
+                              style: TextStyle(
+                                fontFamily: 'Indies',
+                                color: Colors.blue,
+                                fontSize: 15.0,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  } else{
+                    return SizedBox.shrink();
+                  }},),),
             SizedBox(height: 10.0),
             GestureDetector(
               child: Container(
                 height: 120.0,
-        /*        decoration: BoxDecoration(
+                /*        decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15.0),
                   gradient: LinearGradient(
                     colors: [
@@ -192,12 +189,12 @@ class _HomeScreenState extends State<HomeScreen>
                         ),
                       ),
                       SizedBox(
-                        width: 70.0,
+                        width: 10.0,
                       ),
                       Container(
                         child: Text("Products",
                             style:
-                                TextStyle(color: Colors.black, fontSize: 30)),
+                            TextStyle(color: Colors.lightGreen, fontSize: 22)),
                       ),
                     ],
                   ),
@@ -212,7 +209,7 @@ class _HomeScreenState extends State<HomeScreen>
             GestureDetector(
               child: Container(
                 height: 120.0,
-               /* decoration: BoxDecoration(
+                /* decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15.0),
                   gradient: LinearGradient(
                     colors: [
@@ -251,12 +248,12 @@ class _HomeScreenState extends State<HomeScreen>
                       ),
 
                       SizedBox(
-                        width: 70.0,
+                        width: 10.0,
                       ),
                       Container(
-                        child: Text('Garden',
+                        child: Text('Design your Garden',
                             style:
-                                TextStyle(color: Colors.black, fontSize: 30)),),
+                            TextStyle(color: Colors.lightGreen, fontSize: 22)),),
                     ],
                   ),
                 ),
@@ -265,7 +262,7 @@ class _HomeScreenState extends State<HomeScreen>
                 try{
                   Navigator.push(context, MaterialPageRoute(builder: (context) => Loading ()));
                 }catch(exception){
-                      print("error");
+                  print("error");
                 }
 
               },
@@ -276,7 +273,7 @@ class _HomeScreenState extends State<HomeScreen>
             GestureDetector(
               child: Container(
                 height: 120.0,
-              /*  decoration: BoxDecoration(
+                /*  decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(22),
                   color: index.isEven ? kBlueColor : kSecondaryColor,
                   boxShadow: [kDefaultShadow],
@@ -308,12 +305,12 @@ class _HomeScreenState extends State<HomeScreen>
                       ),
 
                       SizedBox(
-                        width: 70.0,
+                        width: 10.0,
                       ),
                       Container(
                         child: Text('Forum',
                             style:
-                                TextStyle(color: Colors.green, fontSize: 30)),
+                            TextStyle(color: Colors.lightGreen, fontSize: 22)),
                       ),
                     ],
                   ),
@@ -330,7 +327,7 @@ class _HomeScreenState extends State<HomeScreen>
             GestureDetector(
                 child: Container(
                   height: 120.0,
-              /*    decoration: BoxDecoration(
+                  /*    decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15.0),
                     gradient: LinearGradient(
                       colors: [
@@ -374,7 +371,7 @@ class _HomeScreenState extends State<HomeScreen>
                         Container(
                           child: Text('Get quality help now',
                               style:
-                                  TextStyle(color: Colors.green, fontSize: 22)),
+                              TextStyle(color: Colors.lightGreen, fontSize: 22)),
                         ),
                       ],
                     ),
@@ -382,7 +379,7 @@ class _HomeScreenState extends State<HomeScreen>
                 ),
                 onTap: () {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => LocalNotifications()));
+                      MaterialPageRoute(builder: (context) => SellerList()));
                 }),
             SizedBox(
               height: 5.0,
@@ -410,7 +407,7 @@ class _HomeScreenState extends State<HomeScreen>
                   elevation: 5,
                   child: Container(
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         ShaderMask(
@@ -429,12 +426,12 @@ class _HomeScreenState extends State<HomeScreen>
                           ),
                         ),
                         SizedBox(
-                          width: 50.0,
+                          width: 10.0,
                         ),
                         Container(
                           child: Text('Information',
                               style:
-                                  TextStyle(color: Colors.green, fontSize: 30)),
+                              TextStyle(color: Colors.lightGreen, fontSize: 22)),
                         ),
                       ],
                     ),

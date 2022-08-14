@@ -8,11 +8,10 @@ import 'package:blogapp/checkout/widgets/itemdetails.dart';
 import 'package:blogapp/shop/ShopProfile/shopview.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:http/http.dart' as http;
-import 'package:blogapp/wishlist/Db_helper1.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:provider/provider.dart';
+import 'package:http/http.dart';
 import 'Api_service.dart';
 
 class Searchitems extends StatefulWidget {
@@ -26,6 +25,7 @@ class _SearchitemsState extends State<Searchitems>
 
   @override
   void initState() {
+    itemCategory();
     tabController = TabController(length: 4, vsync: this);
     super.initState();
   }
@@ -35,15 +35,7 @@ class _SearchitemsState extends State<Searchitems>
 
   FetchUserList _userList = FetchUserList();
 
-  List<String> productUnit = [
-    'KG',
-    'Dozen',
-    'KG',
-    'Dozen',
-    'KG',
-    'KG',
-    'KG',
-  ];
+
   FlutterSecureStorage storage = FlutterSecureStorage();
   List<String> productImage = [
     'https://image.shutterstock.com/image-photo/mango-isolated-on-white-background-600w-610892249.jpg',
@@ -55,13 +47,13 @@ class _SearchitemsState extends State<Searchitems>
     'https://media.istockphoto.com/photos/fruit-background-picture-id529664572?s=612x612',
     'https://media.istockphoto.com/photos/fruit-background-picture-id529664572?s=612x612',
   ];
-  addtowishlist(id, amount, unitPrice) async {
+  addtowishlist(id) async {
     String token = await storage.read(key: "token");
     print(token);
     print(id);
-    final body = {"item": id, "amount": amount, "unitPrice": unitPrice};
+    final body = {"item": id};
     http.post(
-      "https://govi-piyasa-v-0-1.herokuapp.com/api/v1/cartItems",
+      "https://govi-piyasa-v-0-1.herokuapp.com/api/v1/listItems",
       body: jsonEncode(body),
       headers: {
         "Content-Type": "application/json",
@@ -97,7 +89,19 @@ class _SearchitemsState extends State<Searchitems>
     });
   }
   bool _isLoading = false;
+  var _itemCategory = [];
 
+  void itemCategory() async {
+    try {
+      final response = await get(Uri.parse("https://govi-piyasa-v-0-1.herokuapp.com/api/v1/itemCategories"));
+      final jsonData = jsonDecode(response.body)['data'] as List;
+      setState(() {
+        _itemCategory = jsonData;
+      });
+      print(_itemCategory[0]['categoryType']);
+      //print(_itemCategory[3]['Information'][0]['Title'].toString());
+    } catch (err) {}
+  }
   @override
   Widget build(BuildContext context) {
     //final cart1 = Provider.of<providerCart >(context);
@@ -150,6 +154,7 @@ class _SearchitemsState extends State<Searchitems>
                 unselectedLabelColor: Colors.grey.withOpacity(0.5),
                 isScrollable: true,
                 tabs: <Widget>[
+
                   Tab(
                     child: Text(
                       'flowers',
@@ -217,12 +222,15 @@ class _SearchitemsState extends State<Searchitems>
                                         text: "${data[index].productName}",
                                         price: "${data[index].price}",
                                         image:
-                                        'https://source.unsplash.com/random?sig=$index',
+                                        '${data[index].thumbnail.img}',
                                         description:
                                         "${data[index].description}",
                                         quantity: "${data[index].quantity}",
                                         category:
-                                        "${data[index].categoryName}"),
+                                        "${data[index].categoryName}",
+                                        shopPic1:"${data[index].productPictures.img}",
+                                    ),
+
                                   ));
                             },
                             child: Container(
@@ -264,7 +272,7 @@ class _SearchitemsState extends State<Searchitems>
                                               height: 80,
                                               width: 80,
                                               image: NetworkImage(
-                                                  "https://source.unsplash.com/random?sig=$index"),
+                                                  "${data[index].thumbnail.img}"),
                                             ),
                                           ),
                                           SizedBox(
@@ -314,23 +322,8 @@ class _SearchitemsState extends State<Searchitems>
                                                       )),
                                                 ),
                                                 buildRating1(
-                                                    double.parse('${data[index].shopId.id}')),
-                                                Container(
-                                                  child: IconButton(
-                                                      icon: Icon(
-                                                        Icons.store,
-                                                        size: 25,
-                                                      ),
-                                                      onPressed: () {
-                                                        Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                              builder: (context) => Shopview(
-                                                                  id: "${data[index].shopId.id}",),
-                                                            ));
-                                                        print(data[index].shopId.id);
-                                                      }),
-                                                ),
+                                                    double.parse("${data[index].rating}")),
+
 
 
                                                 SizedBox(height: 2.0),
@@ -340,14 +333,17 @@ class _SearchitemsState extends State<Searchitems>
                                         ],
                                       ),
                                       Container(
-                                        child:Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Container(
-                                              child: IconButton(
-                                                onPressed: () {
-                                                  addtowishlist("${data[index].id}","${data[index].productName}","${data[index].productName}");
-                                             /*     Navigator.push(
+                                          child:Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Container(
+                                                child: IconButton(
+                                                  onPressed: () {
+                                                    addtowishlist("${data[index].id}");
+                                                    Scaffold.of(context).showSnackBar(new SnackBar(
+                                                        content: new Text("Item Added to wishlist")
+                                                    ));
+                                                    /*     Navigator.push(
                                                       context,
                                                       MaterialPageRoute(
                                                         builder: (context) => Itemdetails(
@@ -364,55 +360,73 @@ class _SearchitemsState extends State<Searchitems>
                                                             category:
                                                             "${data[index].categoryName}"),
                                                       ));*/
-                                                },
-                                                icon: Icon(
-                                                  Icons.favorite,
-                                                  color: Colors.red,
+                                                  },
+                                                  icon: Icon(
+                                                    Icons.favorite,
+                                                    color: Colors.red,
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-
-                                            Align(
-                                              alignment:
-                                              Alignment.bottomLeft,
-                                              child: InkWell(
-                                                onTap: () async{
-                                                  setState(() {
+                                              Container(
+                                                child: IconButton(
+                                                    icon: Icon(
+                                                      Icons.store,
+                                                      size: 25,
+                                                    ),
+                                                    onPressed: () {
+                                                      Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                            builder: (context) => Shopview(
+                                                              id: "${data[index].shopId.id}",),
+                                                          ));
+                                                      print(data[index].shopId.id);
+                                                    }),
+                                              ),
+                                              Align(
+                                                alignment:
+                                                Alignment.bottomLeft,
+                                                child: InkWell(
+                                                  onTap: () async{
+                                                    /*  setState(() {
                                                     _isLoading=true;
-                                                  });
-                                                  await Future.delayed(
-                                                      Duration(seconds: 8));
-                                                  addtocart(data[index].id,1,data[index].price);
-                                                  Scaffold.of(context).showSnackBar(new SnackBar(
-                                                      content: new Text("Item Added to Cart")
-                                                  ));
-                                                  setState(() {
+                                                  });*/
+                                                    setState(()async {
+                                                      await Future.delayed(
+                                                          Duration(seconds: 2));
+                                                      addtocart(data[index].id,1,data[index].price);
+                                                      Scaffold.of(context).showSnackBar(new SnackBar(
+                                                          content: new Text("Item Added to Cart")
+                                                      ));
+                                                    });
+
+                                                    /*     setState(() {
                                                     _isLoading=false;
-                                                  });
-                                                  /*  Navigator.pop(context);
+                                                  });*/
+                                                    /*  Navigator.pop(context);
                                                       addtocart(data[index].id,
                                                           1, data[index].price);
                                                       Navigator.pop(context);*/
-                                                },
-                                                child: Container(
-                                                  height: 45,
-                                                  width: 40,
-                                                  decoration: BoxDecoration(
-                                                    color: Colors.white,
-                                                    borderRadius:
-                                                    BorderRadius
-                                                        .circular(8),
-                                                    image:
-                                                    new DecorationImage(
-                                                      image: new AssetImage(
-                                                          "assets/shopping_cart.png"),
+                                                  },
+                                                  child: Container(
+                                                    height: 45,
+                                                    width: 40,
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.white,
+                                                      borderRadius:
+                                                      BorderRadius
+                                                          .circular(8),
+                                                      image:
+                                                      new DecorationImage(
+                                                        image: new AssetImage(
+                                                            "assets/shopping_cart.png"),
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                          ],
-                                        )
+                                            ],
+                                          )
                                       )
                                     ],
                                   ),

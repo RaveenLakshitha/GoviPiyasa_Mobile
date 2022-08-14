@@ -4,8 +4,6 @@ import 'package:badges/badges.dart';
 import 'package:blogapp/Architectureprofile/ArchitectDashboard.dart';
 import 'package:blogapp/BankCardDetails/CardList.dart';
 
-import 'package:blogapp/Cart/cart_screen.dart';
-import 'package:blogapp/Cart/main.dart';
 import 'package:blogapp/Expertprofile/Expertdashboard.dart';
 import 'package:blogapp/Language/translator.dart';
 import 'package:blogapp/NewCart/CartScreenNew.dart';
@@ -28,6 +26,7 @@ import 'package:blogapp/Screen/Navbar/feedback.dart';
 import 'package:blogapp/Screen/Navbar/expertlist.dart';
 import 'package:blogapp/Screen/Services/shop.dart';
 import 'package:blogapp/Screen/Services/architecture.dart';
+import 'package:blogapp/Wishlist/wishlist.dart';
 
 import 'package:blogapp/architecture/widget_screen.dart';
 import 'package:blogapp/checkout/mainpage.dart';
@@ -215,7 +214,7 @@ Future<void> initPlateformState() async{
   }
 
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
+  FlutterLocalNotificationsPlugin();
 
   @override
   void initState() {
@@ -224,7 +223,7 @@ Future<void> initPlateformState() async{
     fetchexpert();
     requestPermissions();
     FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-        FlutterLocalNotificationsPlugin();
+    FlutterLocalNotificationsPlugin();
     var initializationSettingsAndroid = AndroidInitializationSettings(
         'app_icon'); // <- default icon name is @mipmap/ic_launcher
     //var initializationSettingsIOS = IOSInitializationSettings(onDidReceiveLocalNotification: onDidReceiveLocalNotification);
@@ -234,7 +233,7 @@ Future<void> initPlateformState() async{
       requestAlertPermission: false,
     );
     var initializationSettings =
-        InitializationSettings(initializationSettingsAndroid, iOSSettings);
+    InitializationSettings(initializationSettingsAndroid, iOSSettings);
     flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onSelectNotification: onClickNotification);
     fetchShop();
@@ -256,12 +255,12 @@ Future<void> initPlateformState() async{
   void requestPermissions() {
     flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
-            IOSFlutterLocalNotificationsPlugin>()
+        IOSFlutterLocalNotificationsPlugin>()
         ?.requestPermissions(
-          alert: true,
-          badge: true,
-          sound: true,
-        );
+      alert: true,
+      badge: true,
+      sound: true,
+    );
   }
 
   Future onClickNotification(String payload) {
@@ -322,7 +321,7 @@ Future<void> initPlateformState() async{
     int hour = int.parse(_currentHour);
 
     setState(
-      () {
+          () {
         if (hour >= 5 && hour < 12) {
           _message = 'Good Morning';
         } else if (hour >= 12 && hour <= 17) {
@@ -335,82 +334,82 @@ Future<void> initPlateformState() async{
     return Scaffold(
       drawer: Drawer(
           child: CustomPaint(
-        painter: BackgroundDrawer(),
-        child: ListView(
-          children: <Widget>[
-            DrawerHeader(
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    height: 120,
-                    width: 120,
-                    decoration: BoxDecoration(
-                      image: new DecorationImage(
-                        image: new AssetImage("assets/3.png"),
-                        fit: BoxFit.cover,
+            painter: BackgroundDrawer(),
+            child: ListView(
+              children: <Widget>[
+                DrawerHeader(
+                  child: Column(
+                    children: <Widget>[
+                      Container(
+                        height: 120,
+                        width: 120,
+                        decoration: BoxDecoration(
+                          image: new DecorationImage(
+                            image: new AssetImage("assets/3.png"),
+                            fit: BoxFit.cover,
+                          ),
+                          borderRadius: BorderRadius.circular(40),
+                        ),
                       ),
-                      borderRadius: BorderRadius.circular(40),
-                    ),
+                      Text(
+                        "Govipiyasa",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 15,
+                        ),
+                      ),
+                    ],
                   ),
-                  Text(
-                    "Govipiyasa",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 15,
-                    ),
-                  ),
-                ],
-              ),
+                ),
+                ListTile(
+                  title: Text("Feedback"),
+                  trailing: Icon(Icons.feedback, color: Colors.green),
+                  onTap: () {
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (context) => FeedBack()));
+                  },
+                ),
+                ListTile(
+                  title: Text("Designers"),
+                  trailing: Icon(Icons.assistant_rounded, color: Colors.green),
+                  onTap: () {
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (context) => expert()));
+                  },
+                ),
+                ListTile(
+                  title: Text("Expertlist"),
+                  trailing: Icon(Icons.lightbulb_rounded, color: Colors.green),
+                  onTap: () {
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => SellerList()));
+                  },
+                ),
+                ListTile(
+                  title: Text("Bot"),
+                  trailing: Icon(Icons.assignment_sharp, color: Colors.green),
+                  onTap: () {
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (context) => Chatbot()));
+                  },
+                ),
+                ListTile(
+                  title: Text("About"),
+                  trailing: Icon(Icons.assignment_sharp, color: Colors.green),
+                  onTap: () {
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (context) => About()));
+                  },
+                ),
+                Divider(),
+                ListTile(
+                  title: Text("Logout"),
+                  trailing: Icon(Icons.power_settings_new, color: Colors.green),
+                  onTap: logout,
+                ),
+              ],
             ),
-            ListTile(
-              title: Text("Feedback"),
-              trailing: Icon(Icons.feedback, color: Colors.green),
-              onTap: () {
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) => FeedBack()));
-              },
-            ),
-            ListTile(
-              title: Text("Designers"),
-              trailing: Icon(Icons.assistant_rounded, color: Colors.green),
-              onTap: () {
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) => expert()));
-              },
-            ),
-            ListTile(
-              title: Text("Expertlist"),
-              trailing: Icon(Icons.lightbulb_rounded, color: Colors.green),
-              onTap: () {
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => SellerList()));
-              },
-            ),
-            ListTile(
-              title: Text("Bot"),
-              trailing: Icon(Icons.assignment_sharp, color: Colors.green),
-              onTap: () {
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) => Chatbot()));
-              },
-            ),
-            ListTile(
-              title: Text("About"),
-              trailing: Icon(Icons.assignment_sharp, color: Colors.green),
-              onTap: () {
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) => About()));
-              },
-            ),
-            Divider(),
-            ListTile(
-              title: Text("Logout"),
-              trailing: Icon(Icons.power_settings_new, color: Colors.green),
-              onTap: logout,
-            ),
-          ],
-        ),
-      )),
+          )),
       appBar: AppBar(
         //backgroundColor: Colors.white,
         elevation: 5,
@@ -451,7 +450,7 @@ Future<void> initPlateformState() async{
             },),
              description:'Tap to see menu options',),*/
           _NotificationBadge(),
-             IconButton(
+          IconButton(
               icon: Icon(Icons.shopping_bag_outlined),
               onPressed: () {
                 Navigator.push(
@@ -482,6 +481,7 @@ Future<void> initPlateformState() async{
                   ],
                 ),
               ),
+
               PopupMenuItem<int>(
                 value: 2,
                 child: Row(
@@ -515,6 +515,15 @@ Future<void> initPlateformState() async{
                   children: [
                     Icon(Icons.add_location_rounded, color: Colors.blue),
                     Text("My Location"),
+                  ],
+                ),
+              ),
+              PopupMenuItem<int>(
+                value: 6,
+                child: Row(
+                  children: [
+                    Icon(Icons.favorite, color: Colors.blue),
+                    Text("Wish List"),
                   ],
                 ),
               ),
@@ -599,7 +608,7 @@ Future<void> initPlateformState() async{
     switch (item) {
       case 0:
         Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => ProfilePage()));
+            .push(MaterialPageRoute(builder: (context) => Wishlist()));
 
         break;
       case 1:
@@ -622,6 +631,10 @@ Future<void> initPlateformState() async{
         Navigator.of(context)
             .push(MaterialPageRoute(builder: (context) =>  googlemap(lat: 6.0559758, long: 80.1769773)));
         break;
+      case 6:
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) =>  Wishlist()));
+        break;
 
     }
   }
@@ -631,7 +644,7 @@ Future<void> initPlateformState() async{
     Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => WelcomePage()),
-        (route) => false);
+            (route) => false);
   }
 
   showPopUp(context) {
@@ -652,9 +665,9 @@ Future<void> initPlateformState() async{
                 title: Text('Architecture Profile'),
                 leading: CircleAvatar(
                     child: Image.network(
-                  "https://protocoderspoint.com/wp-content/uploads/2020/10/PROTO-CODERS-POINT-LOGO-water-mark-.png",
-                  fit: BoxFit.scaleDown,
-                )),
+                      "https://protocoderspoint.com/wp-content/uploads/2020/10/PROTO-CODERS-POINT-LOGO-water-mark-.png",
+                      fit: BoxFit.scaleDown,
+                    )),
               ),
               visible: approval2,
             ),
@@ -669,9 +682,9 @@ Future<void> initPlateformState() async{
                   title: Text('Shop Profile'),
                   leading: CircleAvatar(
                       child: Image.network(
-                    "https://protocoderspoint.com/wp-content/uploads/2020/10/PROTO-CODERS-POINT-LOGO-water-mark-.png",
-                    fit: BoxFit.scaleDown,
-                  )),
+                        "https://protocoderspoint.com/wp-content/uploads/2020/10/PROTO-CODERS-POINT-LOGO-water-mark-.png",
+                        fit: BoxFit.scaleDown,
+                      )),
                 ),
                 //visible: approval,
               )),
@@ -685,9 +698,9 @@ Future<void> initPlateformState() async{
                 title: Text('Expert Profile'),
                 leading: CircleAvatar(
                     child: Image.network(
-                  "https://protocoderspoint.com/wp-content/uploads/2020/10/PROTO-CODERS-POINT-LOGO-water-mark-.png",
-                  fit: BoxFit.scaleDown,
-                )),
+                      "https://protocoderspoint.com/wp-content/uploads/2020/10/PROTO-CODERS-POINT-LOGO-water-mark-.png",
+                      fit: BoxFit.scaleDown,
+                    )),
               ),
               visible: approval3,
             ),

@@ -17,6 +17,7 @@ class Itemdetails extends StatefulWidget {
   final String quantity;
   final String description;
   final String category;
+  final String shopPic1;
 
   Itemdetails(
       {Key key,
@@ -25,12 +26,13 @@ class Itemdetails extends StatefulWidget {
       @required this.image,
       @required this.quantity,
       @required this.description,
-      @required this.category})
+      @required this.category,
+        @required this.shopPic1})
       : super(key: key);
 
   @override
   State<Itemdetails> createState() =>
-      _ItemdetailsState(text, price, image, quantity, description, category);
+      _ItemdetailsState(text, price, image, quantity, description, category,shopPic1);
 }
 
 class _ItemdetailsState extends State<Itemdetails> {
@@ -41,6 +43,7 @@ class _ItemdetailsState extends State<Itemdetails> {
   String quantity;
   String category;
   String description;
+  String shopPic1;
 
   FlutterSecureStorage storage = FlutterSecureStorage();
   addrate(String rate,String id)async{
@@ -68,7 +71,7 @@ class _ItemdetailsState extends State<Itemdetails> {
     });
   }
   _ItemdetailsState(this.text, this.price, this.image, this.quantity,
-      this.description, this.category);
+      this.description, this.category,this.shopPic1);
 
   void showRating(id) => showDialog(
         context: context,
@@ -245,7 +248,7 @@ class _ItemdetailsState extends State<Itemdetails> {
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(8.0),
                                   child: Image.network(
-                                      'https://images.unsplash.com/photo-1586882829491-b81178aa622e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2850&q=80'),
+                                      '${shopPic1}'),
                                 ),
                               ),
                             ),

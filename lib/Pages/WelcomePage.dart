@@ -69,18 +69,18 @@ class _WelcomePageState extends State<WelcomePage>
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        decoration: BoxDecoration(
+        /* decoration: BoxDecoration(
           color: const Color(0xffadc2de),
           image: DecorationImage(
-            image: AssetImage("assets/wel.png"),
+            image: AssetImage("assets/main.png"),
             fit: BoxFit.cover,
           ),
-        ),
+        ),*/
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 40),
           child: Column(
             children: [
-           /*   SizedBox.expand(
+              /*   SizedBox.expand(
                 child: FittedBox(
                   fit: BoxFit.cover,
                   child: SizedBox(
@@ -108,7 +108,7 @@ class _WelcomePageState extends State<WelcomePage>
               SlideTransition(
                 position: animation1,
                 child: Text(
-                  "Great Life for great people",
+                  "Welcome To Govipiyasa..",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontWeight: FontWeight.w600,

@@ -179,7 +179,7 @@ class _CartScreenNewState extends State<CartScreenNew> {
           SizedBox(width: 20.0),
         ],
       ),
-      body:_isLoading==true?Center(child:CircularProgressIndicator()): RefreshIndicator(
+      body:_cartdata==null?Center(child:CircularProgressIndicator()): RefreshIndicator(
         onRefresh: refreshList2,
         child: Padding(
           padding: const EdgeInsets.all(10.0),

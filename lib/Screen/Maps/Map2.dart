@@ -6,7 +6,9 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class Map2 extends StatefulWidget {
 
-
+  double lat;
+  double long;
+  Map2({Key key,this.lat,this.long}) : super(key: key);
   @override
   State<Map2> createState() => _Map2State();
 }
@@ -23,19 +25,22 @@ class _Map2State extends State<Map2> {
   Map<CircleId, Circle> circles = <CircleId, Circle>{};
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
   Map<PolylineId, Polyline> polyLines = <PolylineId, Polyline>{};
-
+  double lat,long;
+  double pos1,pos2;
   bool _nightMode = false;
-
+  @override
+  void initState() {
+    lat=widget.lat;
+    long=widget.long ;
+    super.initState();
+  }
   @override
   void dispose() {
     super.dispose();
   }
 
-  static final _options = CameraPosition(
-    target: LatLng(23.0225, 72.5714),
-    zoom: 11,
-  );
-
+  Set<Marker> _markers={};
+  BitmapDescriptor mapMarker;
   ///Change the Type of the map on selection
   void _select(MapTypes types) {
     // Causes the app to rebuild with the selected choice.
@@ -58,7 +63,26 @@ class _Map2State extends State<Map2> {
       _mapController = controller;
     });
   }
+  void _onMapCreated(GoogleMapController controller){
+    setState(() {
+      _markers.add(
+          Marker(
+            markerId: MarkerId('id-1'),
+            position: LatLng(lat,long),
+            icon:mapMarker,
+            infoWindow: InfoWindow(
+              title: 'colombo',
+              snippet: 'history',
 
+            ),
+          )
+      );
+      // _markers.add(newyork1Marker);
+      //_markers.add(newyork2Marker);
+      // _markers.add(newyork3Marker);
+
+    });
+  }
   ///Get the night view json data for the night view.
   Future<String> _getFileData(String path) async {
     return await rootBundle.loadString(path);
@@ -67,7 +91,7 @@ class _Map2State extends State<Map2> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-       // floatingActionButtonLocation: CustomFabLoc(),
+      // floatingActionButtonLocation: CustomFabLoc(),
         floatingActionButton: FloatingActionButton.extended(
           onPressed:() async{
             Fluttertoast.showToast(
@@ -82,46 +106,49 @@ class _Map2State extends State<Map2> {
           label: Text('lo'),
           icon: Icon(Icons.location_on),
         ),
-      drawer: Drawer(
-        child: mapDrawer(),
-      ),
-      appBar: AppBar(
-        title: const Text('Google Maps'),
-        backgroundColor: Colors.lightGreen,
-        centerTitle: true,
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              _nightMode ? Icons.brightness_3 : Icons.brightness_5,
-            ),
-            onPressed: () => _nightModeToggle(),
-          ),
-          PopupMenuButton<MapTypes>(
-            onSelected: _select,
-            itemBuilder: (BuildContext context) {
-              return types.map((MapTypes types) {
-                return PopupMenuItem<MapTypes>(
-                  value: types,
-                  child: Text(types.title),
-                );
-              }).toList();
-            },
-          ),
-        ],
-      ),
-      body: Stack(
-        children: [
-          GoogleMap(
-          initialCameraPosition: _options,
-          onMapCreated: onMapCreated,
-          mapType: _type,
-          circles: Set<Circle>.of(circles.values),
-          myLocationEnabled: true,
-          polylines: Set<Polyline>.of(polyLines.values),
-          markers: Set<Marker>.of(markers.values),
+        drawer: Drawer(
+          child: mapDrawer(),
         ),
-        ],
-      )
+        appBar: AppBar(
+          title: const Text('Google Maps'),
+          backgroundColor: Colors.lightGreen,
+          centerTitle: true,
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(
+                _nightMode ? Icons.brightness_3 : Icons.brightness_5,
+              ),
+              onPressed: () => _nightModeToggle(),
+            ),
+            PopupMenuButton<MapTypes>(
+              onSelected: _select,
+              itemBuilder: (BuildContext context) {
+                return types.map((MapTypes types) {
+                  return PopupMenuItem<MapTypes>(
+                    value: types,
+                    child: Text(types.title),
+                  );
+                }).toList();
+              },
+            ),
+          ],
+        ),
+        body: Stack(
+          children: [
+            GoogleMap(
+                initialCameraPosition:CameraPosition(
+                  target:LatLng(lat,long),
+                  zoom:15,),
+                onMapCreated: _onMapCreated,
+                mapType: _type,
+                circles: Set<Circle>.of(circles.values),
+                myLocationEnabled: true,
+                polylines: Set<Polyline>.of(polyLines.values),
+                markers:
+                _markers
+            ),
+          ],
+        )
     );
   }
 

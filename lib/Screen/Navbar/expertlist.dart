@@ -134,8 +134,8 @@ class _SellerListState extends State<SellerList> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.lightGreen,
-          elevation: 0.0,
+          backgroundColor: Colors.white,
+          elevation: 0.9,
           centerTitle: true,
           leading: IconButton(
               icon: Icon(FontAwesomeIcons.arrowLeft,color:Colors.black),
@@ -150,7 +150,7 @@ class _SellerListState extends State<SellerList> {
               style: TextStyle(
                   fontFamily: 'Varela',
                   fontSize: 20.0,
-                  color: Color(0xFF545D68))),
+                  color: Colors.blue)),
         ),
         body: RefreshIndicator(
           onRefresh: refreshList2,
@@ -172,7 +172,7 @@ class _SellerListState extends State<SellerList> {
                         ),
                       ),
                       child: ListTile(
-                        leading: Image.network("https://source.unsplash.com/random?sig=$index"),
+                        leading: post['user']['profilePicture']!=null?Image.network("${post['user']['profilePicture']}"):Image.network('https://source.unsplash.com/random?sig=$index'),
                         title: Text("${post['email']}",style: TextStyle(
                             fontSize: 15,
                             color:Colors.black,
@@ -186,7 +186,8 @@ class _SellerListState extends State<SellerList> {
                             Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text("Contact:+94${post['contactNumber']}"),]),
+                                 // Text("Contact:+94${post['contactNumber']}"),
+                                ]),
 
                             Row(
                                 children: [
