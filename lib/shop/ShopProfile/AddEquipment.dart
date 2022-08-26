@@ -41,7 +41,7 @@ class _AddequipmentState extends State<Addequipment> {
         "RentFee":rentfee,
         "NoofDays":noofDays,
         "AvailableTime":availableTime,
-        "thumbnail": await MultipartFile.fromFile(pic.path, filename:picName),
+        //"thumbnail": await MultipartFile.fromFile(pic.path, filename:picName),
         "productPictures": await MultipartFile.fromFile(pic.path, filename:picName),
       });
       final response=await dio.post('https://govi-piyasa-v-0-1.herokuapp.com/api/v1/items/', data: formData);

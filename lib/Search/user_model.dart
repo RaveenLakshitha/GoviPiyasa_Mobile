@@ -7,7 +7,7 @@ class Userlist {
   int price;
   String description;
   int quantity;
-  String categoryName;
+  String parentCategoryName;
   ShopId shopId;
   int rating;
   Thumbnail thumbnail;
@@ -21,11 +21,11 @@ class Userlist {
         this.price,
         this.description,
         this.quantity,
-        this.categoryName,
+        this.parentCategoryName,
         this.shopId,
        this.rating,
         this.thumbnail,
-        this.productPictures,
+      //  this.productPictures,
 
 
       });
@@ -36,12 +36,12 @@ class Userlist {
     price = json['price'];
     description = json['description'];
     quantity = json['quantity'];
-    categoryName = json['categoryName'];
+    parentCategoryName = json['parentCategoryName'];
 
     shopId = json['shopId'] != null ? new ShopId.fromJson(json['shopId']): null;
     rating = json['rating'];
     thumbnail = json['thumbnail'][0] != null ? new Thumbnail.fromJson(json['thumbnail'][0]): null;
-    productPictures = json['productPictures'] != null ? new productPictures1.fromJson(json['productPictures']): null;
+   // productPictures = json['productPictures'] != null ? new productPictures1.fromJson(json['productPictures']): null;
 
 
 
@@ -54,11 +54,11 @@ class Userlist {
     data['price'] = this.price;
     data['description'] = this.description;
     data['quantity']=this. quantity ;
-    data['categoryName']=this.categoryName;
+    data['parentCategoryName']=this.parentCategoryName;
     data['shopId']=this.shopId;
     data['rating']=this.rating;
     data['thumbnail']=this.thumbnail;
-    data['productPictures']=this.productPictures;
+   // data['productPictures']=this.productPictures;
 
     return data;
   }

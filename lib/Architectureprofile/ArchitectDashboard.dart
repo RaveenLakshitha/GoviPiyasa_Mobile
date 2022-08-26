@@ -1,16 +1,9 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:blogapp/Architectureprofile/screens/ArchitectureProjects.dart';
-import 'package:blogapp/Architectureprofile/screens/product/products_screen.dart';
-import 'package:blogapp/Notification/local_notifications.dart';
-import 'package:blogapp/Pages/HomePage.dart';
-import 'package:blogapp/Screen/HomeScreen.dart';
-import 'package:blogapp/shop/ShopProfile/Chart.dart';
-import 'package:blogapp/shop/ShopProfile/ReaqustAds.dart';
-import 'package:blogapp/shop/ShopProfile/additem.dart';
+import 'package:blogapp/Architectureprofile/services.dart';
+
 import 'package:blogapp/shop/itemservice.dart';
-import 'package:blogapp/shop/services.dart';
-import 'package:blogapp/shop/ShopProfile/shoprofile.dart';
-import 'package:blogapp/shop/ShopProfile/updateitem.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -70,23 +63,45 @@ class _ArchitectdashboardState extends State<Architectdashboard> {
         title: Text(
           "My Architecture Profile",
           style: TextStyle(
-              color: Colors.white, fontSize: 30.0, fontFamily: 'Indies'),
+              color: Colors.white, fontSize: 25.0, fontFamily: 'Indies'),
         ),
         backgroundColor: Colors.lightGreen,
         centerTitle: true,
         actions: [
           IconButton(
-              icon: Icon(FontAwesomeIcons.plus),
+              icon: Icon(FontAwesomeIcons.plus,size: 20,),
               onPressed: () {
                 showPopUp(context);
               }),
 
           IconButton(
-              icon: Icon(Icons.integration_instructions),
+              icon: Icon(Icons.integration_instructions,size: 20,),
               onPressed: () {
                 getData();
                 showPolicy(context);
               }),
+          SizedBox.fromSize(
+            size: Size(60, 60), // button width and height
+            child: ClipRect(
+              child: Material(
+                color: Colors.orange, // button color
+                child: InkWell(
+                  splashColor: Colors.green, // splash color
+                  onTap: () {
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (context) => Service()));
+                  }, // button pressed
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Icon(Icons.ac_unit_rounded), // icon
+                      Text("Services"), // text
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          )
 
         ],
       ),

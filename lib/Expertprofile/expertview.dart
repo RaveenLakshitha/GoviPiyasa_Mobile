@@ -12,15 +12,17 @@ class expertView extends StatefulWidget {
   final city;
   final contact;
   final name;
+
   final qualification;
   final String rating;
   final List list;
   final image;
   final List slots;
   final List docs;
+  final email;
 
 
-  expertView({this.designation,this.description,this.city , this.contact,this.name,this.qualification,this.rating,this.list,this.slots,this.docs,this.image});
+  expertView({this.designation,this.description,this.city , this.contact,this.name,this.qualification,this.rating,this.list,this.slots,this.docs,this.image,this.email});
 
   @override
   _expertViewState createState() => _expertViewState();
@@ -51,7 +53,7 @@ class _expertViewState extends State<expertView> {
           title: Text('${widget.name}',
               style: TextStyle(
                   fontFamily: 'Montserrat',
-                  fontSize: 18.0,
+                  fontSize: 28.0,
                   color: Colors.white)),
           centerTitle: true,
           actions: <Widget>[
@@ -101,7 +103,7 @@ class _expertViewState extends State<expertView> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        Text(widget.description,
+                        Text(widget.email,
                             style: TextStyle(
                                 fontFamily: 'Montserrat',
                                 fontSize: 22.0,
@@ -225,14 +227,19 @@ class _expertViewState extends State<expertView> {
                           child: ListView.builder(
                               itemCount: widget.list.length,
                               itemBuilder: (BuildContext context, int index) {
-                                return Card(
-                                  child: ListTile(
-                                      subtitle:Text(widget.list[index]['createdAt'].toString()),
-                                      leading: const Icon(Icons.list),
+                                if(widget.list.length==0){
+                                  return Container(child:Center(child:Text("No Reviews ")));
+                                }else{
+                                  return Card(
+                                    child: ListTile(
+                                        subtitle:Text(widget.list[index]['createdAt'].toString()),
+                                        leading: const Icon(Icons.list),
 
 
-                                      title: Text(widget.list[index]['review'].toString())),
-                                );
+                                        title: Text(widget.list[index]['review'].toString())),
+                                  );
+                                }
+
                               }),),
                         Center(
                           child:Text("Proof Documents",    style: TextStyle(

@@ -164,6 +164,14 @@ class _NotifyState extends State<Notify> {
                     return Container(
                       margin: const EdgeInsets.all(10.0),
                       decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 5,
+                            blurRadius: 7,
+                            offset: Offset(0, 3), // changes position of shadow
+                          ),
+                        ],
                         border: Border.all(color: Colors.blueAccent,width: 3),
                         borderRadius: BorderRadius.all(Radius.circular(
                             5.0) //                 <--- border radius here

@@ -26,6 +26,7 @@ class OrderPage extends StatefulWidget {
 }
 
 class _OrderPageState extends State<OrderPage> with WidgetsBindingObserver {
+  String _value;
   List<Product> _products = [];
   FlutterSecureStorage storage = FlutterSecureStorage();
   DatabaseHandler handler;
@@ -198,6 +199,7 @@ class _OrderPageState extends State<OrderPage> with WidgetsBindingObserver {
                             child: RefreshIndicator(
                               onRefresh: _onRefresh,
                               child: ListView.builder(
+
                                 itemCount: items.length,
                                 itemBuilder: (BuildContext context, int index) {
                                   return Dismissible(
@@ -232,6 +234,17 @@ class _OrderPageState extends State<OrderPage> with WidgetsBindingObserver {
                                             borderRadius: BorderRadius.circular(15.0),
                                           ),
                                           child: ListTile(
+                                            trailing:Radio(
+                                                value:"${items[index].title}\n${items[index].description.toString()}",
+                                                groupValue: _value,
+                                                onChanged: (value){
+                                                  setState(() {
+                                                    _value=value;
+                                                   // changePayment(_cartitems[index]['_id'],"Takeway");
+                                                  });
+                                                  print(value); //selected value
+                                                }
+                                            ),
                                             contentPadding: const EdgeInsets.all(8.0),
                                             title: Text(items[index].title,style: TextStyle(color:Colors.white),),
                                             subtitle: Text(items[index].description.toString(),style: TextStyle(color:Colors.white)),

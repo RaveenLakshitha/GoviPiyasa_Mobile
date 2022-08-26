@@ -93,6 +93,12 @@ dependencies:
   flutter_credit_card: ^3.0.2
   invoiceninja:
   auto_size_text: ^3.0.0
+  syncfusion_flutter_charts:
+  json_table: ^2.0.1
+
+  extended_image:
+  oktoast: ^3.1.5
+  image_size_getter: ^2.1.2
 
 
 
@@ -190,6 +196,10 @@ flutter:
     - assets/shopping_cart.png
     - assets/policy/policy.txt
     - assets/bankcard.jpg
+    - assets/board1.jpg
+    - assets/board2.jpg
+    - assets/board3.jpg
+
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -152,19 +152,19 @@ class _ForumCategoryState extends State<ForumCategory> {
                   ),
                 ],
               ),
-              const SizedBox(
-                height: 10,
-              ),
-            AnimatedOpacity(
-                  duration: const Duration(milliseconds: 200),
-                  opacity: closeTopContainer ? 0 : 1,
-                  child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 200),
-                      width: size.width,
-                      alignment: Alignment.topCenter,
-                      height: closeTopContainer ? 0 : categoryHeight,
-                      child: categoriesScroller),
-                ),
+
+            Expanded(
+              child: AnimatedOpacity(
+                    duration: const Duration(milliseconds: 200),
+                    opacity: closeTopContainer ? 0 : 1,
+                    child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 200),
+                        width: 200,
+                        alignment: Alignment.topCenter,
+                        height: closeTopContainer ? 0 : categoryHeight,
+                        child: categoriesScroller),
+                  ),
+            ),
 
               Expanded(
                   child: ListView.builder(

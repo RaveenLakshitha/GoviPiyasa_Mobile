@@ -281,6 +281,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.0.1+2"
+  extended_image:
+    dependency: "direct main"
+    description:
+      name: extended_image
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
+  extended_image_library:
+    dependency: transitive
+    description:
+      name: extended_image_library
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.1"
   fake_async:
     dependency: transitive
     description:
@@ -618,6 +632,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.0"
+  hashcodes:
+    dependency: transitive
+    description:
+      name: hashcodes
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
   html:
     dependency: transitive
     description:
@@ -632,6 +653,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.12.2"
+  http_client_helper:
+    dependency: transitive
+    description:
+      name: http_client_helper
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0"
   http_multi_server:
     dependency: transitive
     description:
@@ -660,6 +688,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.0"
+  image_size_getter:
+    dependency: "direct main"
+    description:
+      name: image_size_getter
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.1.2"
   intl:
     dependency: "direct main"
     description:
@@ -709,6 +744,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.5.1"
+  json_table:
+    dependency: "direct main"
+    description:
+      name: json_table
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.1"
   like_button:
     dependency: "direct main"
     description:
@@ -793,6 +835,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.1"
+  oktoast:
+    dependency: "direct main"
+    description:
+      name: oktoast
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.1.5"
   open_file:
     dependency: "direct main"
     description:
@@ -1117,6 +1166,13 @@ packages:
     dependency: "direct main"
     description:
       name: syncfusion_flutter_calendar
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "18.4.49"
+  syncfusion_flutter_charts:
+    dependency: "direct main"
+    description:
+      name: syncfusion_flutter_charts
       url: "https://pub.dartlang.org"
     source: hosted
     version: "18.4.49"

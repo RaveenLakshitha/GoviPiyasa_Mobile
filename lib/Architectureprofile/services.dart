@@ -1,13 +1,12 @@
+import 'package:blogapp/Architectureprofile/architectCharts.dart';
 import 'package:blogapp/shop/ShopProfile/Chart.dart';
+import 'package:blogapp/shop/ShopProfile/ShopCharts.dart';
 import 'package:blogapp/shop/table/main.dart';
 import 'package:blogapp/shop/vieworders.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 
-import 'DataGrid/newJsonTable.dart';
-import 'ShopProfile/ReaqustAds.dart';
-import 'ShopProfile/ShopCharts.dart';
 
 class Service extends StatefulWidget {
   const Service({Key key}) : super(key: key);
@@ -66,11 +65,11 @@ class _ServiceState extends State<Service> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text("Tables"),
-                Icon(Icons.dvr_rounded , color: Colors.pink,
-                  size: 50.0,),
-              ],),
+                children: [
+                  Text("Tables"),
+                  Icon(Icons.dvr_rounded , color: Colors.pink,
+                    size: 50.0,),
+                ],),
 
             ),
             onTap: () {
@@ -80,28 +79,6 @@ class _ServiceState extends State<Service> {
                     builder: (context) => MainPage(),
                   ));
             },
-          ),
-          GestureDetector(
-            child: Container(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text("view Order"),
-                  Icon(Icons.developer_board_rounded , color: Colors.pink,
-                    size: 50.0,),
-                ],),
-
-              padding: const EdgeInsets.all(8),
-              color: Colors.teal[300],
-
-            ), onTap: () {
-            /*Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => DataTableDemo(),
-                ));*/
-          },
           ),
           GestureDetector(
             child: Container(
@@ -125,7 +102,7 @@ class _ServiceState extends State<Service> {
                   ));
             },
           ),
-          GestureDetector(
+          /*  GestureDetector(
             child: Container(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -143,10 +120,10 @@ class _ServiceState extends State<Service> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => SimpleTable(),
+                    builder: (context) => FormPage(),
                   ));
             },
-          ),
+          ),*/
 
           GestureDetector(
             child: Container(
@@ -169,7 +146,7 @@ class _ServiceState extends State<Service> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ShopCharts(),
+                    builder: (context) => ArchitectCharts(),
                   ));
 
             },

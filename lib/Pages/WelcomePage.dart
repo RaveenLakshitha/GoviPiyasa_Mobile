@@ -69,13 +69,7 @@ class _WelcomePageState extends State<WelcomePage>
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        /* decoration: BoxDecoration(
-          color: const Color(0xffadc2de),
-          image: DecorationImage(
-            image: AssetImage("assets/main.png"),
-            fit: BoxFit.cover,
-          ),
-        ),*/
+
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 40),
           child: Column(
@@ -90,20 +84,32 @@ class _WelcomePageState extends State<WelcomePage>
                   ),
                 ),
               ),*/
-              SizedBox(height: 20.0,),
+
+
+              SizedBox(height: 50.0,),
               SlideTransition(
                 position: animation1,
                 child: Text(
                   "Govi Piyasa",
                   style: TextStyle(
-                    fontSize: 38,
-                    fontWeight: FontWeight.w600,
+                    fontSize: 40,
+                    fontWeight: FontWeight.bold,
                     letterSpacing: 2,
+                    color: Colors.lightGreen
                   ),
                 ),
               ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height / 6,
+
+              Container(
+                height: 250,
+                width: 250,
+                decoration: BoxDecoration(
+
+                  image: DecorationImage(
+                    image: AssetImage("assets/3.png"),
+                    fit: BoxFit.fill,
+                  ),
+                ),
               ),
               SlideTransition(
                 position: animation1,
@@ -112,7 +118,8 @@ class _WelcomePageState extends State<WelcomePage>
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
-                    fontSize: 38,
+                    fontSize: 30,
+                    color: Colors.lightGreen,
                     letterSpacing: 2,
                   ),
                 ),

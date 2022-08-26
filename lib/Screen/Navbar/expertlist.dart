@@ -172,8 +172,14 @@ class _SellerListState extends State<SellerList> {
                         ),
                       ),
                       child: ListTile(
-                        leading: post['user']['profilePicture']!=null?Image.network("${post['user']['profilePicture']}"):Image.network('https://source.unsplash.com/random?sig=$index'),
-                        title: Text("${post['email']}",style: TextStyle(
+                        leading: post['user']['profilePicture']!=null?Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.blue,
+
+                            ),
+                            child: Image.network("${post['user']['profilePicture']}")):Image.network('https://source.unsplash.com/random?sig=$index'),
+                        title: Text("${post['userName']}",style: TextStyle(
                             fontSize: 15,
                             color:Colors.black,
                             fontFamily: 'Varela',
@@ -247,13 +253,14 @@ class _SellerListState extends State<SellerList> {
                                 description:"${post['description']}",
                                 city:"${post['city']}",
                                 contact:"${post['contactNumber']}",
-                                name:"${post['city']}",
+                                name:"${post['userName']}",
                                 qualification:"${post['Qualification']}",
                                 rating:"${post['rating']}",
                                 list:_postsJson[index]['expertReviews'],
                                 slots:_postsJson[index]['appointmentSlots'],
                                 docs:_postsJson[index]['proofDocuments'],
                                 image:"https://source.unsplash.com/random?sig=$index",
+                                email:"${post['email']}",
                               )));
                     },
                   );

@@ -79,9 +79,9 @@ class _ExpertdashboardState extends State<Expertdashboard> {
       child:CurvedNavigationBar(
         key:navigationKey,
         height: 60,
-        color:Colors.blue,
+        color:Colors.white70,
         buttonBackgroundColor: Colors.purple,
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.white,
         items:items,
         index:index,
         onTap: (index)=>setState(()=>this.index=index),

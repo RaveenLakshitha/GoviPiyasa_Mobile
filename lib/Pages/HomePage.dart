@@ -69,9 +69,9 @@ Future<void> initPlateformState() async{
   int currentState = 0;
   List<Widget> widgets = [HomeScreen(),Chatbot(),Shop(),ProfilePage()];
   List<String> titleString = ["Home Page", "Profile Page"];
-  bool approval = true;
-  bool approval2 = true;
-  bool approval3 = true;
+  bool approval ;
+  bool approval2 ;
+  bool approval3 ;
   var username1 = "";
   int _counter;
   int _counter2;
@@ -111,13 +111,13 @@ Future<void> initPlateformState() async{
     try {
       final response = await get(
           Uri.parse(
-              'https://govi-piyasa-v-0-1.herokuapp.com/api/v1/architects/getUsersArchitect'),
+              'https://govi-piyasa-v-0-1.herokuapp.com/api/v1/experts/getUsersExpertProfile'),
           headers: {
             'Accept': 'application/json',
             'Authorization': 'Bearer $token',
           });
       print('Token : ${token}');
-      print(' SHOW : ${response.body}');
+      print(' Expert : ${response.body}');
       final jsonData = jsonDecode(response.body)['data'];
       setState(() {
         _expert = jsonData;
@@ -129,9 +129,15 @@ Future<void> initPlateformState() async{
           showSimpleNotification(
               "Activated expert", "Not Activated expert profile");
         }
-        approval = true;
+        setState(() {
+          approval = true;
+        });
+
       } else {
-        approval = false;
+        setState(() {
+          approval = false;
+        });
+
         print("not active");
       }
     } catch (err) {}
@@ -161,9 +167,15 @@ Future<void> initPlateformState() async{
           showSimpleNotification(
               "Activated Architect", "Not Activated Architect profile");
         }
-        approval = true;
+        setState(() {
+          approval2 = true;
+        });
+
       } else {
-        approval = false;
+        setState(() {
+          approval2 = false;
+        });
+
         print("not active");
       }
     } catch (err) {}
@@ -192,9 +204,15 @@ Future<void> initPlateformState() async{
         if (_counter < 3) {
           showSimpleNotification("Activated shop", "Not Activated yet");
         }
-        approval = true;
+        setState(() {
+          approval3 = true;
+        });
+
       } else {
-        approval = false;
+        setState(() {
+          approval3 = false;
+        });
+
         print("not active");
       }
     } catch (err) {}
@@ -219,6 +237,7 @@ Future<void> initPlateformState() async{
   @override
   void initState() {
     loadCounter();
+    fetchShop();
     fetchArchitect();
     fetchexpert();
     requestPermissions();
@@ -236,7 +255,7 @@ Future<void> initPlateformState() async{
     InitializationSettings(initializationSettingsAndroid, iOSSettings);
     flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onSelectNotification: onClickNotification);
-    fetchShop();
+
     readNotify1();
     readuser();
     super.initState();
@@ -467,8 +486,8 @@ Future<void> initPlateformState() async{
                 value: 0,
                 child: Row(
                   children: [
-                    Icon(Icons.account_circle_rounded , color: Colors.blue),
-                    Text("Profile"),
+                    Icon(Icons.apps_rounded , color: Colors.blue),
+                    Text("Services"),
                   ],
                 ),
               ),
@@ -495,22 +514,13 @@ Future<void> initPlateformState() async{
                 value: 3,
                 child: Row(
                   children: [
-                    Icon(Icons.apps_rounded, color: Colors.blue),
-                    Text("Services"),
-                  ],
-                ),
-              ),
-              PopupMenuItem<int>(
-                value: 4,
-                child: Row(
-                  children: [
                     Icon(Icons.app_registration_sharp, color: Colors.blue),
                     Text("Language"),
                   ],
                 ),
               ),
               PopupMenuItem<int>(
-                value: 5,
+                value: 4,
                 child: Row(
                   children: [
                     Icon(Icons.add_location_rounded, color: Colors.blue),
@@ -519,7 +529,7 @@ Future<void> initPlateformState() async{
                 ),
               ),
               PopupMenuItem<int>(
-                value: 6,
+                value: 5,
                 child: Row(
                   children: [
                     Icon(Icons.favorite, color: Colors.blue),
@@ -608,7 +618,7 @@ Future<void> initPlateformState() async{
     switch (item) {
       case 0:
         Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => Wishlist()));
+            .push(MaterialPageRoute(builder: (context) => WidgetScreen()));
 
         break;
       case 1:
@@ -621,17 +631,13 @@ Future<void> initPlateformState() async{
         break;
       case 3:
         Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => WidgetScreen()));
+            .push(MaterialPageRoute(builder: (context) => OrderPage()));
         break;
       case 4:
         Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => OrderPage()));
-        break;
-      case 5:
-        Navigator.of(context)
             .push(MaterialPageRoute(builder: (context) =>  googlemap(lat: 6.0559758, long: 80.1769773)));
         break;
-      case 6:
+      case 5:
         Navigator.of(context)
             .push(MaterialPageRoute(builder: (context) =>  Wishlist()));
         break;
@@ -653,14 +659,30 @@ Future<void> initPlateformState() async{
       builder: (BuildContext context) => AlertDialog(
         title: const Text('Select Your Account'),
         actions: <Widget>[
-          GestureDetector(
+          approval2==true?GestureDetector(
+            onTap: () async {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => Architect()));
+            },
+              child: ListTile(
+                title: Text('Create Architecture Profile'),
+                leading: CircleAvatar(
+                    child: Image.network(
+                      "https://protocoderspoint.com/wp-content/uploads/2020/10/PROTO-CODERS-POINT-LOGO-water-mark-.png",
+                      fit: BoxFit.scaleDown,
+                    )),
+              ),
+
+          ):GestureDetector(
             onTap: () async {
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => Architectdashboard()));
             },
-            child: Visibility(
+
               child: ListTile(
                 title: Text('Architecture Profile'),
                 leading: CircleAvatar(
@@ -669,15 +691,27 @@ Future<void> initPlateformState() async{
                       fit: BoxFit.scaleDown,
                     )),
               ),
-              visible: approval2,
-            ),
+
           ),
-          GestureDetector(
+          approval3==true?GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => Shop()));
+              },
+                child: ListTile(
+                  title: Text('Create Shop'),
+                  leading: CircleAvatar(
+                      child: Image.network(
+                        "https://protocoderspoint.com/wp-content/uploads/2020/10/PROTO-CODERS-POINT-LOGO-water-mark-.png",
+                        fit: BoxFit.scaleDown,
+                      )),
+                ),
+                //visible: approval,
+              ):GestureDetector(
               onTap: () {
                 Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) => Shopdashboard()));
               },
-              child: Visibility(
                 child: ListTile(
                   title: Text('Shop Profile'),
                   leading: CircleAvatar(
@@ -686,14 +720,29 @@ Future<void> initPlateformState() async{
                         fit: BoxFit.scaleDown,
                       )),
                 ),
-                //visible: approval,
-              )),
-          GestureDetector(
+
+              ),
+          approval!=true?GestureDetector(
+            onTap: () async {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => ExpertForm()));
+            },
+            child: ListTile(
+                title: Text('Create Expert'),
+                leading: CircleAvatar(
+                    child: Image.network(
+                      "https://protocoderspoint.com/wp-content/uploads/2020/10/PROTO-CODERS-POINT-LOGO-water-mark-.png",
+                      fit: BoxFit.scaleDown,
+                    )),
+              ),
+             // visible: approval3,
+
+          ):GestureDetector(
             onTap: () async {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => Expertdashboard()));
             },
-            child: Visibility(
+
               child: ListTile(
                 title: Text('Expert Profile'),
                 leading: CircleAvatar(
@@ -702,8 +751,7 @@ Future<void> initPlateformState() async{
                       fit: BoxFit.scaleDown,
                     )),
               ),
-              visible: approval3,
-            ),
+
           ),
         ],
       ),

@@ -21,4 +21,5 @@ final allUsers = <User>[
   User(firstName: 'Samuel', lastName: 'Testa', age: 58),
   User(firstName: 'Sam', lastName: 'Schug', age: 44),
   User(firstName: 'Alise', lastName: 'Bryden', age: 41),
+
 ];

@@ -341,7 +341,7 @@ class _CartScreenNewState extends State<CartScreenNew> {
                                             )),
                                         Radio(
                                             value:paymentOption.Takeway,
-                                            groupValue: 1,
+                                            groupValue: _value,
                                             onChanged: (value){
                                               setState(() {
                                                 _value=value;
@@ -359,7 +359,7 @@ class _CartScreenNewState extends State<CartScreenNew> {
 
                                         Radio(
                                             value:paymentOption.CashOnDelivery,
-                                            groupValue:1,
+                                            groupValue:_value,
                                             onChanged: (value){
                                               setState(() {
                                               _value=value;
@@ -374,7 +374,7 @@ class _CartScreenNewState extends State<CartScreenNew> {
                                             )),
                                         Radio(
                                             value:paymentOption.Online,
-                                            groupValue: 1,
+                                            groupValue: _value,
                                             onChanged: (value){
                                               setState(() {
                                                 _value=value;

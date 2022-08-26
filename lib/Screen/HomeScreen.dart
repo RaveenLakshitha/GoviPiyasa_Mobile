@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:blogapp/LoadingScreen/loading.dart';
 import 'package:blogapp/LoadingScreen/loading2.dart';
 import 'package:blogapp/Search/HomeScreen.dart';
+import 'package:blogapp/shop/ShopProfile/shopview.dart';
 
 import 'package:translator/translator.dart';
 import 'package:blogapp/Forum/Forumcategory.dart';
@@ -9,10 +10,9 @@ import 'package:blogapp/Information/infoui.dart';
 import 'package:blogapp/Screen/Navbar/expertlist.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:blogapp/checkout/mainpage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
-import 'Navbar/Architectlist.dart';
+
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key key}) : super(key: key);
@@ -105,43 +105,53 @@ class _HomeScreenState extends State<HomeScreen>
 
                   if(_imagesJson != null &&_imagesJson.length > index){
                     final post = _imagesJson[index];
-                    return Container(
-                      width: 300.0,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10.0),
-                        image: DecorationImage(
-                          image: post!=null?NetworkImage("${post['image']}"):Image.asset('assets/31.png'),
-                          fit: BoxFit.cover,
+                    return GestureDetector(
+                      onTap: (){
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Shopview(
+                                id: "${post['_id']}",),
+                            ));
+                      },
+                      child: Container(
+                        width: 300.0,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.0),
+                          image: DecorationImage(
+                            image: post!=null?NetworkImage("${post['image']}"):Image.asset('assets/31.png'),
+                            fit: BoxFit.cover,
+                          ),
                         ),
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          Expanded(
-                            child: Text(
-                              '',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontFamily: 'Indies',
-                                fontWeight: FontWeight.bold,
-                                fontSize: 30.0,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Expanded(
+                              child: Text(
+                                '',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'Indies',
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 30.0,
+                                ),
                               ),
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: Text(
-                              '',
-                              style: TextStyle(
-                                fontFamily: 'Indies',
-                                color: Colors.blue,
-                                fontSize: 15.0,
+                            Padding(
+                              padding: const EdgeInsets.all(15.0),
+                              child: Text(
+                                '',
+                                style: TextStyle(
+                                  fontFamily: 'Indies',
+                                  color: Colors.blue,
+                                  fontSize: 15.0,
+                                ),
+                                textAlign: TextAlign.center,
                               ),
-                              textAlign: TextAlign.center,
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     );
                   } else{
@@ -192,7 +202,7 @@ class _HomeScreenState extends State<HomeScreen>
                         width: 10.0,
                       ),
                       Container(
-                        child: Text("Products",
+                        child: Text("Explore Products",
                             style:
                             TextStyle(color: Colors.lightGreen, fontSize: 22)),
                       ),
@@ -282,7 +292,7 @@ class _HomeScreenState extends State<HomeScreen>
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15.0),
                   ),
-                  color: Colors.white,
+                  color: Colors.white.withOpacity(0.9),
                   elevation: 5,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -308,7 +318,7 @@ class _HomeScreenState extends State<HomeScreen>
                         width: 10.0,
                       ),
                       Container(
-                        child: Text('Forum',
+                        child: Text('Ask From Us',
                             style:
                             TextStyle(color: Colors.lightGreen, fontSize: 22)),
                       ),

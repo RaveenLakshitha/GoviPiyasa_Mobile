@@ -1,8 +1,11 @@
 
+import 'dart:convert';
+
 import 'package:blogapp/shop/table/data/users.dart';
 import 'package:blogapp/shop/table/model/user.dart';
 import 'package:blogapp/shop/table/widget/scrollable_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 
 class SortablePage extends StatefulWidget {
   @override
@@ -13,11 +16,23 @@ class _SortablePageState extends State<SortablePage> {
   List<User> users;
   int sortColumnIndex;
   bool isAscending = false;
+  final url = "https://govi-piyasa-v-0-1.herokuapp.com/api/v1/experts/";
+  var _postsJson = [];
+
+  void fetchPosts() async {
+    try {
+      final response = await get(Uri.parse(url));
+      final jsonData = jsonDecode(response.body)['data'] as List;
+      print(jsonData);
+      setState(() {
+        _postsJson = jsonData;
+      });
+    } catch (err) {}
+  }
 
   @override
   void initState() {
     super.initState();
-
     this.users = List.of(allUsers);
   }
 
@@ -41,8 +56,7 @@ class _SortablePageState extends State<SortablePage> {
       .map((String column) => DataColumn(
             label: Text(column),
             onSort: onSort,
-          ))
-      .toList();
+          )).toList();
 
   List<DataRow> getRows(List<User> users) => users.map((User user) {
         final cells = [user.firstName, user.lastName, user.age];
