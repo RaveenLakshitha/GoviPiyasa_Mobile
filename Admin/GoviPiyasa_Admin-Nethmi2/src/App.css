@@ -1,0 +1,61 @@
+.App{
+  display: grid;
+  grid-template-rows: auto auto;
+  /* min-height: 90vh;
+  max-height: 100vh; */
+  /* border : red 2px solid; */
+}
+
+body{
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+input{
+  margin-top: 20px;
+  margin-left: 20px;
+  width: 350px;
+  height: 35px;
+  font-size: 14px;
+  padding-left: 15px;
+  border-radius: 8px;
+  border-width: thin;
+}
+
+/* body of the website */
+.content{
+  flex: 4;
+  padding: 1.5em;
+  width: 100%;
+  height: 100%;
+  background-color: #F8F8FB;
+  /* overflow: scroll; */
+  /* border: black 2px solid; */
+}
+
+h3{
+  text-align: center;
+}
+
+@media screen and (min-width: 280px) and (max-width:1080px){
+  .HomeMain{
+   grid-template-columns: 1fr;
+   height: max-content;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .content {
+     width:100%;
+     height: 100%;
+  }
+
+}
+
+@media only screen and (max-width: 480px) {
+  .content {
+     width:100%;
+     height: auto;
+  }
+}

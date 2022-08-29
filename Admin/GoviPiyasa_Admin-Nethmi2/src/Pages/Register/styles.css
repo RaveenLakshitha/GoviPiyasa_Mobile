@@ -1,0 +1,19 @@
+.container{
+     flex:4;
+}
+
+.spacestyle{
+     border: solid 1px black;
+     border-radius: 10px;
+     margin: 20px;
+     padding: 30px;
+     width: 450px;
+     height: 500px;
+     margin-left: 300px;
+     display:"flex" ;
+     /* align-items: center;
+     justify-content: center; */
+}
+h4{
+     text-align: center;
+}
