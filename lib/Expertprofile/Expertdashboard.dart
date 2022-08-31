@@ -27,15 +27,7 @@ class _ExpertdashboardState extends State<Expertdashboard> {
   List<Widget> widgets = [expertprofile(), Chart(),Editshop()];
 
   int _selectedIndex = 0;
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-    print(_selectedIndex);
-  }
 
   void initState() {
     super.initState();

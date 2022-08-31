@@ -118,7 +118,7 @@ class _SearchitemsState extends State<Searchitems>
               onPressed: () {
                 Navigator.pop(context);
               }),
-          backgroundColor: Colors.green[400],
+          backgroundColor: Colors.white,
           actions: [
             IconButton(
               onPressed: () {
@@ -304,11 +304,12 @@ class _SearchitemsState extends State<Searchitems>
                                                 borderRadius: BorderRadius.all(Radius.circular(8.0)),
                                                 color: Colors.lightBlueAccent,
                                               ),
-                                              child: Image(
+                                              child:Image(
                                                 height: 80,
                                                 width: 80,
-                                                image: NetworkImage(
-                                                    "${data[index].thumbnail.img}"),
+                                                image:data[index].thumbnail.img!=''?NetworkImage(
+                                                    "${data[index].thumbnail.img}"):NetworkImage(
+                                                    "https://images.unsplash.com/photo-1586882829491-b81178aa622e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2850&q=80"),
                                               ),
                                             ),
                                             SizedBox(

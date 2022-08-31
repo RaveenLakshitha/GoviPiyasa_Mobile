@@ -242,7 +242,7 @@ class _OrderPageState extends State<OrderPage> with WidgetsBindingObserver {
                                                     _value=value;
                                                    // changePayment(_cartitems[index]['_id'],"Takeway");
                                                   });
-                                                  print(value); //selected value
+                                                  print(_value); //selected value
                                                 }
                                             ),
                                             contentPadding: const EdgeInsets.all(8.0),
@@ -262,7 +262,6 @@ class _OrderPageState extends State<OrderPage> with WidgetsBindingObserver {
                   Expanded(
                     flex: 2,
                     child:   Stepper(
-
                       steps: _mySteps(),
                       currentStep: this._currentStep,
                       onStepTapped: (step){
@@ -274,10 +273,13 @@ class _OrderPageState extends State<OrderPage> with WidgetsBindingObserver {
                           if(this._currentStep < this._mySteps().length - 1){
                             this._currentStep = this._currentStep + 1;
                           }else{
-                            sendtoOrder(_address.text,_contact.text,_contact1.text);
+                            setState(() {
+                            //  sendtoOrder(_address.text,_contact.text,_contact1.text);
+                            });
+
                             //Logic to check if everything is completed
-                            Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => Payment(),
+                           Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => Payment(amount:"100",cardNo:"343354544646",expiredate:""),
                             ));
                             print('Completed, check fields.');
                           }

@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
-import 'package:video_player/video_player.dart';
+
 import 'SignUpPage.dart';
 import 'package:http/http.dart' as http;
 
@@ -22,7 +22,7 @@ class _WelcomePageState extends State<WelcomePage>
   bool _isLogin = false;
   Map data;
   final facebookLogin = FacebookLogin();
-  VideoPlayerController _controller;
+
   @override
   void initState() {
 

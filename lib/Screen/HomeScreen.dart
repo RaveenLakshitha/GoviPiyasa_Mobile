@@ -3,16 +3,15 @@ import 'package:blogapp/LoadingScreen/loading.dart';
 import 'package:blogapp/LoadingScreen/loading2.dart';
 import 'package:blogapp/Search/HomeScreen.dart';
 import 'package:blogapp/shop/ShopProfile/shopview.dart';
-
+import 'package:hexcolor/hexcolor.dart';
 import 'package:translator/translator.dart';
-import 'package:blogapp/Forum/Forumcategory.dart';
+
 import 'package:blogapp/Information/infoui.dart';
 import 'package:blogapp/Screen/Navbar/expertlist.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
-
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key key}) : super(key: key);
@@ -24,6 +23,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
+
   @override
   void initState() {
     fetchPosts();
@@ -37,10 +37,10 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   GoogleTranslator translator =
-  new GoogleTranslator(); //using google translator
+      new GoogleTranslator(); //using google translator
 
   Translation out;
-  var index=0;
+  var index = 0;
   String txt = "Product";
 
   //getting text
@@ -87,7 +87,7 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // drawer: MainDrawer(),
+      backgroundColor: HexColor("#e9fce4"),
       body: RefreshIndicator(
         onRefresh: refreshList,
         child: ListView(
@@ -102,16 +102,16 @@ class _HomeScreenState extends State<HomeScreen>
                   enlargeCenterPage: true,
                 ),
                 itemBuilder: (context, index, realIdx) {
-
-                  if(_imagesJson != null &&_imagesJson.length > index){
+                  if (_imagesJson != null && _imagesJson.length > index) {
                     final post = _imagesJson[index];
                     return GestureDetector(
-                      onTap: (){
+                      onTap: () {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => Shopview(
-                                id: "${post['_id']}",),
+                                id: "${post['_id']}",
+                              ),
                             ));
                       },
                       child: Container(
@@ -119,7 +119,9 @@ class _HomeScreenState extends State<HomeScreen>
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10.0),
                           image: DecorationImage(
-                            image: post!=null?NetworkImage("${post['image']}"):Image.asset('assets/31.png'),
+                            image: post != null
+                                ? NetworkImage("${post['image']}")
+                                : Image.asset('assets/31.png'),
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -154,190 +156,29 @@ class _HomeScreenState extends State<HomeScreen>
                         ),
                       ),
                     );
-                  } else{
+                  } else {
                     return SizedBox.shrink();
-                  }},),),
-            SizedBox(height: 10.0),
-            GestureDetector(
-              child: Container(
-                height: 120.0,
-                /*        decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15.0),
-                  gradient: LinearGradient(
-                    colors: [
-                      Colors.green,
-                      Colors.lightGreenAccent,
-                      Colors.lightGreen,
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                ),*/
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15.0),
-                  ),
-                  color: Colors.white,
-                  elevation: 5,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      ShaderMask(
-                        shaderCallback: (rect) {
-                          return LinearGradient(
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
-                            colors: [Colors.black, Colors.transparent],
-                          ).createShader(Rect.fromLTRB(0, 0, rect.width, rect.height));
-                        },
-                        blendMode: BlendMode.dstIn,
-                        child:ClipRRect(
-                          borderRadius: BorderRadius.circular(15.0),
-                          child: Image.asset('assets/about.jpg',
-                              fit: BoxFit.fill, width: 150.0, height: 150.0),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 10.0,
-                      ),
-                      Container(
-                        child: Text("Explore Products",
-                            style:
-                            TextStyle(color: Colors.lightGreen, fontSize: 22)),
-                      ),
-                    ],
-                  ),
-                ),
+                  }
+                },
               ),
-              onTap: () {
-                Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => Searchitems()));
-              },
             ),
             SizedBox(height: 10.0),
-            GestureDetector(
-              child: Container(
-                height: 120.0,
-                /* decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15.0),
-                  gradient: LinearGradient(
-                    colors: [
-                      Colors.green,
-                      Colors.lightGreenAccent,
-                      Colors.lightGreen,
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                ),*/
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15.0),
-                  ),
-                  color: Colors.white,
-                  elevation: 5,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      ShaderMask(
-                        shaderCallback: (rect) {
-                          return LinearGradient(
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
-                            colors: [Colors.black, Colors.transparent],
-                          ).createShader(Rect.fromLTRB(0, 0, rect.width, rect.height));
-                        },
-                        blendMode: BlendMode.dstIn,
-                        child:ClipRRect(
-                          borderRadius: BorderRadius.circular(15.0),
-                          child: Image.asset('assets/Garden1.jpg',
-                              fit: BoxFit.fill, width: 150.0, height: 150.0),
-                        ),
-                      ),
-
-                      SizedBox(
-                        width: 10.0,
-                      ),
-                      Container(
-                        child: Text('Design your Garden',
-                            style:
-                            TextStyle(color: Colors.lightGreen, fontSize: 22)),),
-                    ],
-                  ),
-                ),
+            Card(
+              elevation: 0,
+                color: Colors.white.withOpacity(0.7),
+              shape: RoundedRectangleBorder(
+                side: BorderSide(color: Colors.lightBlue[200], width: 1),
+                borderRadius: BorderRadius.circular(15.0),
               ),
-              onTap: () {
-                try{
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => Loading ()));
-                }catch(exception){
-                  print("error");
-                }
-
-              },
-            ),
-            SizedBox(
-              height: 10.0,
-            ),
-            GestureDetector(
-              child: Container(
-                height: 120.0,
-                /*  decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(22),
-                  color: index.isEven ? kBlueColor : kSecondaryColor,
-                  boxShadow: [kDefaultShadow],
-                ),*/
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15.0),
-                  ),
-                  color: Colors.white.withOpacity(0.9),
-                  elevation: 5,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      ShaderMask(
-                        shaderCallback: (rect) {
-                          return LinearGradient(
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
-                            colors: [Colors.black, Colors.transparent],
-                          ).createShader(Rect.fromLTRB(0, 0, rect.width, rect.height));
-                        },
-                        blendMode: BlendMode.dstIn,
-                        child:ClipRRect(
-                          borderRadius: BorderRadius.circular(15.0),
-                          child: Image.asset('assets/QnA.jpg',
-                              fit: BoxFit.fill, width: 150.0, height: 150.0),
-                        ),
-                      ),
-
-                      SizedBox(
-                        width: 10.0,
-                      ),
-                      Container(
-                        child: Text('Ask From Us',
-                            style:
-                            TextStyle(color: Colors.lightGreen, fontSize: 22)),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Loading2()));
-              },
-            ),
-            SizedBox(
-              height: 10.0,
-            ),
-            GestureDetector(
-                child: Container(
-                  height: 120.0,
-                  /*    decoration: BoxDecoration(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    GestureDetector(
+                      child: Container(
+                        height: 120.0,
+                        width: double.infinity,
+                        /*        decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15.0),
                     gradient: LinearGradient(
                       colors: [
@@ -349,115 +190,338 @@ class _HomeScreenState extends State<HomeScreen>
                       end: Alignment.bottomRight,
                     ),
                   ),*/
-                  child: Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
-                    color: Colors.white,
-                    elevation: 5,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        ShaderMask(
-                          shaderCallback: (rect) {
-                            return LinearGradient(
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
-                              colors: [Colors.black, Colors.transparent],
-                            ).createShader(Rect.fromLTRB(0, 0, rect.width, rect.height));
-                          },
-                          blendMode: BlendMode.dstIn,
-                          child:ClipRRect(
+                        child: Card(
+                          shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15.0),
-                            child: Image.asset('assets/expert.jpg',
-                                fit: BoxFit.fill, width: 150.0, height: 150.0),
+                          ),
+                          color: Colors.white,
+                          elevation: 5,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              ShaderMask(
+                                shaderCallback: (rect) {
+                                  return LinearGradient(
+                                    begin: Alignment.centerLeft,
+                                    end: Alignment.centerRight,
+                                    colors: [Colors.black, Colors.transparent],
+                                  ).createShader(Rect.fromLTRB(
+                                      10, 10, rect.width, rect.height));
+                                },
+                                blendMode: BlendMode.dstIn,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(15.0),
+                                  child: Image.asset('assets/about.jpg',
+                                      fit: BoxFit.fill,
+                                      width: 150.0,
+                                      height: 150.0),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 10.0,
+                              ),
+                              Expanded(
+                                child: Text("Explore Products",
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 22)),
+                              ),
+                            ],
                           ),
                         ),
-
-                        SizedBox(
-                          width: 5.0,
-                        ),
-                        Container(
-                          child: Text('Get quality help now',
-                              style:
-                              TextStyle(color: Colors.lightGreen, fontSize: 22)),
-                        ),
-                      ],
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Searchitems()));
+                      },
                     ),
-                  ),
-                ),
-                onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => SellerList()));
-                }),
-            SizedBox(
-              height: 5.0,
-            ),
-            GestureDetector(
-              child: Container(
-                height: 120.0,/*
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15.0),
-                  gradient: LinearGradient(
-                    colors: [
-                      Colors.green,
-                      Colors.lightGreenAccent,
-                      Colors.lightGreen,
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                ),*/
-                child: Card(
-                  shape: RoundedRectangleBorder(
+                    SizedBox(height: 10.0),
+                    GestureDetector(
+                      child: Container(
+                        height: 120.0,
+                        width: double.infinity,
+                        /* decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15.0),
-                  ),
-                  color: Colors.white,
-                  elevation: 5,
-                  child: Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        ShaderMask(
-                          shaderCallback: (rect) {
-                            return LinearGradient(
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
-                              colors: [Colors.black, Colors.transparent],
-                            ).createShader(Rect.fromLTRB(0, 0, rect.width, rect.height));
-                          },
-                          blendMode: BlendMode.dstIn,
-                          child:ClipRRect(
+                    gradient: LinearGradient(
+                      colors: [
+                        Colors.green,
+                        Colors.blackAccent,
+                        Colors.black,
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                  ),*/
+                        child: Card(
+                          shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15.0),
-                            child: Image.asset('assets/item5.jpg',
-                                fit: BoxFit.fill, width: 150.0, height: 150.0),
+                          ),
+                          color: Colors.white,
+                          elevation: 5,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              ShaderMask(
+                                shaderCallback: (rect) {
+                                  return LinearGradient(
+                                    begin: Alignment.centerLeft,
+                                    end: Alignment.centerRight,
+                                    colors: [Colors.black, Colors.transparent],
+                                  ).createShader(Rect.fromLTRB(
+                                      0, 0, rect.width, rect.height));
+                                },
+                                blendMode: BlendMode.dstIn,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(15.0),
+                                  child: Image.asset('assets/Garden1.jpg',
+                                      fit: BoxFit.fill,
+                                      width: 150.0,
+                                      height: 150.0),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 10.0,
+                              ),
+                              Container(
+                                child: Text('Design your Garden',
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+
+                                        color: Colors.black,
+                                        fontSize: 22)),
+                              ),
+                            ],
                           ),
                         ),
-                        SizedBox(
-                          width: 10.0,
-                        ),
-                        Container(
-                          child: Text('Information',
-                              style:
-                              TextStyle(color: Colors.lightGreen, fontSize: 22)),
-                        ),
-                      ],
+                      ),
+                      onTap: () {
+                        try {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Loading()));
+                        } catch (exception) {
+                          print("error");
+                        }
+                      },
                     ),
-                  ),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    GestureDetector(
+                      child: Container(
+                        height: 120.0,
+                        width: double.infinity,
+                        /*  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(22),
+                    color: index.isEven ? kBlueColor : kSecondaryColor,
+                    boxShadow: [kDefaultShadow],
+                  ),*/
+                        child: Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0),
+                          ),
+                          color: Colors.white.withOpacity(0.9),
+                          elevation: 5,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              ShaderMask(
+                                shaderCallback: (rect) {
+                                  return LinearGradient(
+                                    begin: Alignment.centerLeft,
+                                    end: Alignment.centerRight,
+                                    colors: [Colors.black, Colors.transparent],
+                                  ).createShader(Rect.fromLTRB(
+                                      0, 0, rect.width, rect.height));
+                                },
+                                blendMode: BlendMode.dstIn,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(15.0),
+                                  child: Image.asset('assets/QnA.jpg',
+                                      fit: BoxFit.fill,
+                                      width: 150.0,
+                                      height: 150.0),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 10.0,
+                              ),
+                              Container(
+                                child: Text('Ask From Us',
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 22)),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Loading2()));
+                      },
+                    ),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    GestureDetector(
+                        child: Container(
+                          height: 120.0,
+                          width: double.infinity,
+                          /*    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15.0),
+                      gradient: LinearGradient(
+                        colors: [
+                          Colors.green,
+                          Colors.blackAccent,
+                          Colors.black,
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                    ),*/
+                          child: Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15.0),
+                            ),
+                            color: Colors.white,
+                            elevation: 5,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                ShaderMask(
+                                  shaderCallback: (rect) {
+                                    return LinearGradient(
+                                      begin: Alignment.centerLeft,
+                                      end: Alignment.centerRight,
+                                      colors: [
+                                        Colors.black,
+                                        Colors.transparent
+                                      ],
+                                    ).createShader(Rect.fromLTRB(
+                                        0, 0, rect.width, rect.height));
+                                  },
+                                  blendMode: BlendMode.dstIn,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(15.0),
+                                    child: Image.asset('assets/expert.jpg',
+                                        fit: BoxFit.fill,
+                                        width: 150.0,
+                                        height: 150.0),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 5.0,
+                                ),
+                                Container(
+                                  child: Text('Get quality help now',
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 22)),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SellerList()));
+                        }),
+                    SizedBox(
+                      height: 5.0,
+                    ),
+                    GestureDetector(
+                      child: Container(
+                        height: 120.0,
+                        width: double.infinity,
+                        /*
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15.0),
+                    gradient: LinearGradient(
+                      colors: [
+                        Colors.green,
+                        Colors.blackAccent,
+                        Colors.black,
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                  ),*/
+                        child: Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0),
+                          ),
+                          color: Colors.white,
+                          elevation: 5,
+                          child: Container(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                ShaderMask(
+                                  shaderCallback: (rect) {
+                                    return LinearGradient(
+                                      begin: Alignment.centerLeft,
+                                      end: Alignment.centerRight,
+                                      colors: [
+                                        Colors.black,
+                                        Colors.transparent
+                                      ],
+                                    ).createShader(Rect.fromLTRB(
+                                        0, 0, rect.width, rect.height));
+                                  },
+                                  blendMode: BlendMode.dstIn,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(15.0),
+                                    child: Image.asset('assets/item5.jpg',
+                                        fit: BoxFit.fill,
+                                        width: 150.0,
+                                        height: 150.0),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 10.0,
+                                ),
+                                Container(
+                                  child: Text('Information',
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 22)),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      onTap: () {
+                        Navigator.of(context).push(_createRoute());
+                      },
+                    ),
+                  ],
                 ),
               ),
-              onTap: () {
-                Navigator.of(context).push(_createRoute());
-              },
             ),
           ],
         ),
       ),
-
     );
   }
+
   Route _createRoute() {
     return PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) => Categorylist(),

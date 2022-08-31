@@ -308,13 +308,15 @@ class MapScreenState extends State<ProfilePage>
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: <Widget>[
                                     new Container(
+
                                         width: 140.0,
                                         height: 140.0,
                                         decoration: new BoxDecoration(
+                                          border: Border.all(color: Colors.blueAccent),
                                           shape: BoxShape.circle,
                                           image: new DecorationImage(
-                                            image: _image!=null?FileImage(_image): AssetImage(
-                                                'assets/profile.png'),
+                                            image: _image==null?AssetImage(
+                                                'assets/profile.png'):FileImage(_image),
                                             fit: BoxFit.cover,
                                           ),
                                         )),

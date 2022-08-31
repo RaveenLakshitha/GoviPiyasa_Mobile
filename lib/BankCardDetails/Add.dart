@@ -51,8 +51,8 @@ class AddScreenState extends State<AddScreen> {
           decoration: BoxDecoration(
             image: !useBackgroundImage
                 ? const DecorationImage(
-              image: ExactAssetImage('assets/about.jpg'),
-              fit: BoxFit.fill,
+              image: ExactAssetImage('assets/loginimg.jpg'),
+              fit: BoxFit.fitHeight,
             )
                 : null,
             color: Colors.black,

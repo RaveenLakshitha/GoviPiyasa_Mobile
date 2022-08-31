@@ -63,7 +63,7 @@ dependencies:
   flutter_rating_bar: ^4.0.0
   flutter_local_notifications: ^1.4.4+1
   animated_splash_screen: ^1.2.0
-  video_player: ^1.0.1
+
   email_auth:
   firebase_core:
   firebase_messaging:
@@ -99,6 +99,12 @@ dependencies:
   extended_image:
   oktoast: ^3.1.5
   image_size_getter: ^2.1.2
+  hexcolor:
+
+
+
+
+
 
 
 
@@ -164,8 +170,6 @@ flutter:
     - assets/plants1.jpg
     - assets/fertilizer.jpg
     - assets/card_provider/
-    - assets/top1.png
-    - assets/top2.png
     - assets/main.png
     - assets/placeholder.png
     - assets/expertform.png
@@ -199,6 +203,8 @@ flutter:
     - assets/board1.jpg
     - assets/board2.jpg
     - assets/board3.jpg
+    - assets/splashscreen.jpg
+    - assets/bankimg.jpg
 
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg

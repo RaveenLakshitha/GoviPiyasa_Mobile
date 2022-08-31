@@ -63,11 +63,11 @@ class _WishlistState extends State<Wishlist> {
   final items = List<String>.generate(20, (i) => "Item ${i + 1}");
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-      appBar: AppBar(
+    /*  appBar: AppBar(
         title: Text("WishList"),
-      ),
+        backgroundColor: Colors.white,
+      ),*/
       body:Column(
         children: [
           Expanded(

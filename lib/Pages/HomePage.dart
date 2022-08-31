@@ -19,6 +19,7 @@ import 'package:blogapp/Screen/Navbar/About.dart';
 import 'package:blogapp/Screen/Navbar/Delivery.dart';
 import 'package:blogapp/Screen/HomeScreen.dart';
 import 'package:blogapp/Screen/Navbar/Architectlist.dart';
+import 'package:blogapp/Screen/Navbar/aboutPage.dart';
 import 'package:blogapp/Screen/Navbar/chatBot.dart';
 import 'package:blogapp/Screen/Services/ExpertForm.dart';
 import 'package:blogapp/Screen/Services/Settings.dart';
@@ -31,11 +32,13 @@ import 'package:blogapp/Wishlist/wishlist.dart';
 import 'package:blogapp/architecture/widget_screen.dart';
 import 'package:blogapp/checkout/mainpage.dart';
 import 'package:blogapp/shop/ShopProfile/Shopdashboard.dart';
-import 'package:blogapp/shop/ShopProfile/shoprofile.dart';
+
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:blogapp/NetworkHandler.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -43,6 +46,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:showcaseview/showcase_widget.dart';
 
 import '../OrderPage.dart';
+import '../usersAppointments.dart';
 import 'bg_drawer.dart';
 
 //import 'package:blogapp/onesignal_flutter/onesignal_flutter.dart';
@@ -60,6 +64,7 @@ static final String oneSignalAppId="7a1f4b11-b687-479e-84b1-35d8ac53978f";
 Future<void> initPlateformState() async{
   OneSignal.shared.setAppId(oneSignalAppId);
 }*/
+  int index=1;
   final storage = FlutterSecureStorage();
   NetworkHandler networkHandler = NetworkHandler();
   final keyOne = GlobalKey();
@@ -67,7 +72,11 @@ Future<void> initPlateformState() async{
   final keyThree = GlobalKey();
   final keyFour = GlobalKey();
   int currentState = 0;
-  List<Widget> widgets = [HomeScreen(),Chatbot(),Shop(),ProfilePage()];
+ // List<Widget> screen = [HomeScreen(),Chatbot(),Shop(),ProfilePage()];
+  final screens=[
+
+    Wishlist(), HomeScreen(),UserAppointment(),ProfilePage()
+  ];
   List<String> titleString = ["Home Page", "Profile Page"];
   bool approval ;
   bool approval2 ;
@@ -142,7 +151,7 @@ Future<void> initPlateformState() async{
       }
     } catch (err) {}
   }
-
+  final navigationKey=GlobalKey<CurvedNavigationBarState>();
   void fetchArchitect() async {
     print('Architect Working');
     String token = await storage.read(key: "token");
@@ -334,7 +343,14 @@ Future<void> initPlateformState() async{
   @override
   Widget build(BuildContext context) {
     String _message;
+    final items=<Widget>[
 
+      Icon(Icons.favorite,size:30),
+      Icon(Icons.home,size:30),
+      Icon(Icons.calendar_today,size:30),
+      Icon(Icons.person,size:30),
+
+    ];
     DateTime now = DateTime.now();
     String _currentHour = DateFormat('kk').format(now);
     int hour = int.parse(_currentHour);
@@ -351,6 +367,7 @@ Future<void> initPlateformState() async{
       },
     );
     return Scaffold(
+
       drawer: Drawer(
           child: CustomPaint(
             painter: BackgroundDrawer(),
@@ -389,21 +406,22 @@ Future<void> initPlateformState() async{
                   },
                 ),
                 ListTile(
-                  title: Text("Designers"),
-                  trailing: Icon(Icons.assistant_rounded, color: Colors.green),
+                  title: Text("Manage BankCards"),
+                  trailing: Icon(Icons.credit_card, color: Colors.green),
                   onTap: () {
                     Navigator.of(context)
-                        .push(MaterialPageRoute(builder: (context) => expert()));
+                        .push(MaterialPageRoute(builder: (context) => ListScreen()));
                   },
                 ),
-                ListTile(
+           /*     ListTile(
                   title: Text("Expertlist"),
                   trailing: Icon(Icons.lightbulb_rounded, color: Colors.green),
                   onTap: () {
                     Navigator.of(context).push(
                         MaterialPageRoute(builder: (context) => SellerList()));
                   },
-                ),
+                ),*/
+                //F8F8Fb
                 ListTile(
                   title: Text("Bot"),
                   trailing: Icon(Icons.assignment_sharp, color: Colors.green),
@@ -417,7 +435,7 @@ Future<void> initPlateformState() async{
                   trailing: Icon(Icons.assignment_sharp, color: Colors.green),
                   onTap: () {
                     Navigator.of(context)
-                        .push(MaterialPageRoute(builder: (context) => About()));
+                        .push(MaterialPageRoute(builder: (context) => AboutPage()));
                   },
                 ),
                 Divider(),
@@ -430,8 +448,10 @@ Future<void> initPlateformState() async{
             ),
           )),
       appBar: AppBar(
-        //backgroundColor: Colors.white,
+        backgroundColor: HexColor("#F8F8FB"),
         elevation: 5,
+  /*      backgroundColor: Colors.white,
+
         //centerTitle: true,
         title: TextLiquidFill(
           waveDuration: Duration(milliseconds: 4000),
@@ -443,7 +463,7 @@ Future<void> initPlateformState() async{
               fontWeight: FontWeight.bold,
               fontFamily: 'Roboto'),
           boxHeight: 300.0,
-        ),
+        ),*/
         /*  flexibleSpace: Image(
           image: AssetImage('assets/about.jpg'),
           fit: BoxFit.cover,
@@ -543,7 +563,7 @@ Future<void> initPlateformState() async{
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: FloatingActionButton(
+  /*    floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.teal,
         onPressed: () {
           showPopUp(context);
@@ -552,8 +572,25 @@ Future<void> initPlateformState() async{
           "+",
           style: TextStyle(fontSize: 40),
         ),
-      ),
-      bottomNavigationBar: BottomAppBar(
+      ),*/
+      bottomNavigationBar:Theme(
+        data:Theme.of(context).copyWith(
+          iconTheme:IconThemeData(color:Colors.black),
+
+        ) ,
+        child:CurvedNavigationBar(
+          key:navigationKey,
+          height: 60,
+          color:Colors.lightGreen,
+          buttonBackgroundColor:HexColor("#e9fce4") ,
+          backgroundColor:HexColor("#e9fce4") ,
+          items:items,
+          index:index,
+          onTap: (index)=>setState(()=>this.index=index),
+
+
+        ),),
+   /*   bottomNavigationBar: BottomAppBar(
         elevation: 10,
         // color: Colors.lightGreen,
         shape: CircularNotchedRectangle(),
@@ -609,8 +646,8 @@ Future<void> initPlateformState() async{
             ),
           ),
         ),
-      ),
-      body: widgets[currentState],
+      ),*/
+      body: screens[index],
     );
   }
 
