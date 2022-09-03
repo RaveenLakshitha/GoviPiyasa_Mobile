@@ -10,6 +10,9 @@ import PersonIcon from "@mui/icons-material/Person";
 import SettingsIcon from "@mui/icons-material/Settings";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import StoreIcon from "@mui/icons-material/Store";
+import ChatIcon from '@mui/icons-material/Chat';
+import CampaignIcon from '@mui/icons-material/Campaign';
+import { Link } from "react-router-dom";
 
 
 export const SidebarData = [
@@ -66,12 +69,16 @@ export const SidebarData = [
   },
   {
     title: "Advertisements",
-    icon: <SettingsIcon />,
+    icon: <CampaignIcon />,
     link: "/advertisement",
   },
   // {
-  //   title: "New Admin",
-  //   icon: <AddModeratorIcon />,
-  //   link: "/registerNewAdmin",
+  //   title: "Chat",
+  //   icon: <ChatIcon />,
+    
+    // link: <Link to={{ pathname: "https://dashboard.kommunicate.io/login" }} target="_blank" />,
+    
+    // <Link to={{ pathname: "https://example.zendesk.com/hc/en-us/articles/123456789-Privacy-Policies" }} target="_blank" />
+    // link: <a target="_blank" rel="noopener" href="https://dashboard.kommunicate.io/login">Policies</a>,
   // },
 ];

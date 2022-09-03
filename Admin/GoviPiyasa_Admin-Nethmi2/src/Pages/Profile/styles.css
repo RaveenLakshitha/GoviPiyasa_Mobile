@@ -1,0 +1,35 @@
+.pro{
+    height: 450px;
+    width: 780px;
+    /* background-image: url("../../Images/prof.gif"); */
+    /* background-color: rgb(104, 206, 134); */
+    border: 5px solid green;
+    border-radius: 2rem;
+    padding-top: 15px;
+    padding-left: 20px;
+    display: flex;
+    padding-right: 10px;
+    justify-content: center;
+    margin: 0 auto;
+    margin-top: 5rem;
+}
+
+/* img{
+    height: 100px;
+    width: 100px;
+} */
+
+.child {
+    
+    /* Center horizontally*/
+    margin-right: 1.5rem;
+    margin-top: 1.95rem;
+  }
+
+  .img{
+    width:150px;
+    height:150px;
+    border-radius:50%;
+    margin-left: 20%;
+    
+}

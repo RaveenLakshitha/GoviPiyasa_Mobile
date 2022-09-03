@@ -18,6 +18,7 @@ import Header from "../Header";
 import { Link } from "react-router-dom";
 import barimage from "./barimage.jpg";
 import sidebar from './sidebar.jpg';
+import logo from "../logo.png";
 
 const drawerWidth = 220;
 
@@ -71,7 +72,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 
 export default function NewSideBar() {
   const theme = useTheme();
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
 
   const handleDrawerOpen = () => setOpen(true);
   const handleDrawerClose = () => setOpen(false);
@@ -80,16 +81,16 @@ export default function NewSideBar() {
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar position="fixed" open={open} sx= {{backgroundColor: '#198805'}}>
-        <Toolbar>
-          <IconButton color="inherit" aria-label="open drawer" onClick={handleDrawerOpen}
-            edge="start" sx={{ mr: 2, ...(open && { display: 'none' }) }}
-          >
-            <MenuIcon />
-          </IconButton>
-         <Header/>
-        </Toolbar>
-      </AppBar>
+        <AppBar position="fixed" open={open} sx= {{backgroundColor: 'white'}}>
+        
+          <Toolbar>
+            <IconButton color="default" aria-label="open drawer" onClick={handleDrawerOpen}
+              edge="start" sx={{ mr: 2, ...(open && { display: 'none' }) }}>
+              <MenuIcon />
+            </IconButton>
+          <Header/>
+          </Toolbar>
+        </AppBar>
       <Drawer 
         sx={{ width: drawerWidth, flexShrink: 0 ,
             '& .MuiDrawer-paper': { width: drawerWidth, boxSizing: 'border-box', backgroundColor:'#135405'}}}
@@ -100,7 +101,10 @@ export default function NewSideBar() {
         style={{backgroundImage: `url('sidebar.jpg')`}}
       >
         <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
+        
+              <img src={logo} height="50" alt="" />
+         
+          <IconButton onClick={handleDrawerClose} color="default">
             {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
           </IconButton>
         </DrawerHeader>

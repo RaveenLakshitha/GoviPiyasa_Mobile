@@ -38,9 +38,10 @@ export default function BoxCard(props) {
     <Link to="/shop">
     <Card sx={{ display: 'flex', height: '130px'}}>
       <Box sx={{ display: 'flex', flexDirection: 'row', paddingTop:"5%" , width:"50%"}}>
-        <CardContent sx={{ flex: '1 0 auto' }}>
-          <Typography component="div" variant="h6" color="green" fontWeight="bold" >
-            {props.name}
+        <CardContent sx={{ flex: '1 0 auto' , textDecoration:"none"}}>
+          <Typography component="div" variant="h6" color="green" fontWeight="bold" textDecoration="none">
+            {props.name}<br></br>
+            {props.data}
           </Typography>
         </CardContent>
       

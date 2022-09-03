@@ -42,7 +42,7 @@ const DeliveryForm = (props) => {
   };
   return (
     <div>
-      <Modal show={props.show} onHide={props.handleClose}>
+      <Modal show={props.show} onHide={props.handleClose} centered>
         <Modal.Header closeButton>
           <Modal.Title>Add Delivery</Modal.Title>
         </Modal.Header>
