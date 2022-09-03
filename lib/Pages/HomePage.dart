@@ -6,20 +6,19 @@ import 'package:blogapp/BankCardDetails/CardList.dart';
 
 import 'package:blogapp/Expertprofile/Expertdashboard.dart';
 import 'package:blogapp/Language/translator.dart';
+import 'package:blogapp/LoadingScreen/loading4.dart';
 import 'package:blogapp/NewCart/CartScreenNew.dart';
 import 'package:blogapp/Notification/destination_screen.dart';
 import 'package:blogapp/Notification/notify.dart';
 import 'package:blogapp/Pages/WelcomePage.dart';
 import 'package:blogapp/Profile/ProfileScreen1.dart';
+import 'package:blogapp/Screen/Maps/CurrentLocation.dart';
 import 'package:blogapp/Screen/Maps/Map.dart';
-import 'package:blogapp/Screen/Maps/Map2.dart';
 
-import 'package:blogapp/Screen/Maps/MapActivity.dart';
-import 'package:blogapp/Screen/Navbar/About.dart';
-import 'package:blogapp/Screen/Navbar/Delivery.dart';
 import 'package:blogapp/Screen/HomeScreen.dart';
-import 'package:blogapp/Screen/Navbar/Architectlist.dart';
+import 'package:blogapp/Screen/Maps/Nearshop.dart';
 import 'package:blogapp/Screen/Navbar/aboutPage.dart';
+
 import 'package:blogapp/Screen/Navbar/chatBot.dart';
 import 'package:blogapp/Screen/Services/ExpertForm.dart';
 import 'package:blogapp/Screen/Services/Settings.dart';
@@ -42,14 +41,10 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import 'package:showcaseview/showcase_widget.dart';
-
 import '../OrderPage.dart';
 import '../usersAppointments.dart';
 import 'bg_drawer.dart';
 
-//import 'package:blogapp/onesignal_flutter/onesignal_flutter.dart';
 class HomePage extends StatefulWidget {
   HomePage({Key key, this.value}) : super(key: key);
   String value;
@@ -72,12 +67,9 @@ Future<void> initPlateformState() async{
   final keyThree = GlobalKey();
   final keyFour = GlobalKey();
   int currentState = 0;
- // List<Widget> screen = [HomeScreen(),Chatbot(),Shop(),ProfilePage()];
-  final screens=[
 
-    Wishlist(), HomeScreen(),UserAppointment(),ProfilePage()
-  ];
-  List<String> titleString = ["Home Page", "Profile Page"];
+  final screens=[Wishlist(), HomeScreen(),UserAppointment(),ProfilePage()];
+ // List<String> titleString = ["Home Page", "Profile Page"];
   bool approval ;
   bool approval2 ;
   bool approval3 ;
@@ -189,7 +181,13 @@ Future<void> initPlateformState() async{
       }
     } catch (err) {}
   }
+  void writeNotification() async{
+    setState(() async{
+      await storage.write(key: "notificationcount", value:_notificationcount.toString());
+    });
 
+    print(_notificationcount.toString());
+  }
   void fetchShop() async {
     print('Shop Working');
     String token = await storage.read(key: "token");
@@ -239,13 +237,42 @@ Future<void> initPlateformState() async{
     username1 = await storage.read(key: "id");
     print(username1);
   }
+  int _notificationcount=0;
+  var _notification=[];
 
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-  FlutterLocalNotificationsPlugin();
+  void fetchPrivateNotification() async {
+    print('fetchPrivateNotification');
+    String token = await storage.read(key: "token");
+    try {
+      final response = await get(Uri.parse('https://govi-piyasa-v-0-1.herokuapp.com/api/v1/notifications/getUsersNotifications'),  headers: {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      });
+      print('Token : ${token}');
+
+      print('Notification Data : ${response.body}');
+      final jsonData = jsonDecode(response.body)['data'];
+      print(jsonData);
+      setState(() {
+        _notification = jsonData;
+        _notificationcount=_notification.length;
+        //notification=_notification[0]['Title'];
+      });
+      print("Private Notification");
+      print(_notification);
+    } catch (err) {
+
+    }
+
+
+  }
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
   @override
   void initState() {
     loadCounter();
+    writeNotification();
+    fetchPrivateNotification();
     fetchShop();
     fetchArchitect();
     fetchexpert();
@@ -269,15 +296,7 @@ Future<void> initPlateformState() async{
     readuser();
     super.initState();
 
-    // checkProfile();
-/*    WidgetsBinding.instance.addPostFrameCallback(
-          (_) => ShowCaseWidget.of(context).startShowCase([
-        keyOne,
-        keyThree,
-        keyFour,
-        keyTwo,
-      ]),
-    );*/
+
   }
 
   void requestPermissions() {
@@ -322,7 +341,7 @@ Future<void> initPlateformState() async{
       animationDuration: Duration(milliseconds: 300),
       animationType: BadgeAnimationType.slide,
       badgeContent: Text(
-        Count.toString(),
+        _notificationcount.toString(),
         style: TextStyle(color: Colors.white),
       ),
       child: IconButton(
@@ -377,62 +396,62 @@ Future<void> initPlateformState() async{
                   child: Column(
                     children: <Widget>[
                       Container(
-                        height: 120,
+                        height:MediaQuery.of(context).size.height/8,
                         width: 120,
                         decoration: BoxDecoration(
                           image: new DecorationImage(
                             image: new AssetImage("assets/3.png"),
                             fit: BoxFit.cover,
                           ),
-                          borderRadius: BorderRadius.circular(40),
+                          borderRadius: BorderRadius.circular(50),
                         ),
                       ),
                       Text(
                         "Govipiyasa",
                         style: TextStyle(
                           color: Colors.black,
-                          fontSize: 15,
+                          fontSize: 25,
                         ),
                       ),
                     ],
                   ),
                 ),
                 ListTile(
-                  title: Text("Feedback"),
-                  trailing: Icon(Icons.feedback, color: Colors.green),
+                  title: Text("Feedback",style:TextStyle(fontSize:20,)),
+                  trailing: Icon(Icons.feedback, color: Colors.black),
                   onTap: () {
                     Navigator.of(context)
                         .push(MaterialPageRoute(builder: (context) => FeedBack()));
                   },
                 ),
                 ListTile(
-                  title: Text("Manage BankCards"),
-                  trailing: Icon(Icons.credit_card, color: Colors.green),
+                  title: Text("Manage BankCards",style:TextStyle(fontSize:20,)),
+                  trailing: Icon(Icons.credit_card, color: Colors.black),
                   onTap: () {
                     Navigator.of(context)
                         .push(MaterialPageRoute(builder: (context) => ListScreen()));
                   },
                 ),
-           /*     ListTile(
-                  title: Text("Expertlist"),
-                  trailing: Icon(Icons.lightbulb_rounded, color: Colors.green),
+                ListTile(
+                  title: Text("Near by Shops",style:TextStyle(fontSize:20,)),
+                  trailing: Icon(Icons.lightbulb_rounded, color: Colors.black),
                   onTap: () {
                     Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => SellerList()));
+                        MaterialPageRoute(builder: (context) => NearShops()));
                   },
-                ),*/
+                ),
                 //F8F8Fb
                 ListTile(
-                  title: Text("Bot"),
-                  trailing: Icon(Icons.assignment_sharp, color: Colors.green),
+                  title: Text("Bot",style:TextStyle(fontSize:20,)),
+                  trailing: Icon(Icons.chat_outlined, color: Colors.black),
                   onTap: () {
                     Navigator.of(context)
                         .push(MaterialPageRoute(builder: (context) => Chatbot()));
                   },
                 ),
                 ListTile(
-                  title: Text("About"),
-                  trailing: Icon(Icons.assignment_sharp, color: Colors.green),
+                  title: Text("About",style:TextStyle(fontSize:20,)),
+                  trailing: Icon(Icons.assignment_sharp, color: Colors.black),
                   onTap: () {
                     Navigator.of(context)
                         .push(MaterialPageRoute(builder: (context) => AboutPage()));
@@ -440,8 +459,8 @@ Future<void> initPlateformState() async{
                 ),
                 Divider(),
                 ListTile(
-                  title: Text("Logout"),
-                  trailing: Icon(Icons.power_settings_new, color: Colors.green),
+                  title: Text("Logout",style:TextStyle(fontSize:20,)),
+                  trailing: Icon(Icons.power_settings_new, color: Colors.black),
                   onTap: logout,
                 ),
               ],
@@ -530,7 +549,7 @@ Future<void> initPlateformState() async{
                   ],
                 ),
               ),
-              PopupMenuItem<int>(
+         /*     PopupMenuItem<int>(
                 value: 3,
                 child: Row(
                   children: [
@@ -538,9 +557,9 @@ Future<void> initPlateformState() async{
                     Text("Language"),
                   ],
                 ),
-              ),
+              ),*/
               PopupMenuItem<int>(
-                value: 4,
+                value: 3,
                 child: Row(
                   children: [
                     Icon(Icons.add_location_rounded, color: Colors.blue),
@@ -548,7 +567,7 @@ Future<void> initPlateformState() async{
                   ],
                 ),
               ),
-              PopupMenuItem<int>(
+        /*      PopupMenuItem<int>(
                 value: 5,
                 child: Row(
                   children: [
@@ -556,7 +575,7 @@ Future<void> initPlateformState() async{
                     Text("Wish List"),
                   ],
                 ),
-              ),
+              ),*/
 
             ],
           )
@@ -666,18 +685,18 @@ Future<void> initPlateformState() async{
         Navigator.of(context)
             .push(MaterialPageRoute(builder: (context) => ListScreen()));
         break;
-      case 3:
+  /*    case 3:
         Navigator.of(context)
             .push(MaterialPageRoute(builder: (context) => OrderPage()));
-        break;
-      case 4:
+        break;*/
+      case 3:
         Navigator.of(context)
             .push(MaterialPageRoute(builder: (context) =>  googlemap(lat: 6.0559758, long: 80.1769773)));
         break;
-      case 5:
+    /*  case 5:
         Navigator.of(context)
             .push(MaterialPageRoute(builder: (context) =>  Wishlist()));
-        break;
+        break;*/
 
     }
   }

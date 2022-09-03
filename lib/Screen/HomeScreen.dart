@@ -3,7 +3,9 @@ import 'package:blogapp/LoadingScreen/loading.dart';
 import 'package:blogapp/LoadingScreen/loading2.dart';
 import 'package:blogapp/Search/HomeScreen.dart';
 import 'package:blogapp/shop/ShopProfile/shopview.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:translator/translator.dart';
 
 import 'package:blogapp/Information/infoui.dart';
@@ -26,6 +28,7 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   void initState() {
+
     fetchPosts();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       images.forEach((imageUrl) {
@@ -167,7 +170,7 @@ class _HomeScreenState extends State<HomeScreen>
               elevation: 0,
                 color: Colors.white.withOpacity(0.7),
               shape: RoundedRectangleBorder(
-                side: BorderSide(color: Colors.lightBlue[200], width: 1),
+               // side: BorderSide(color: Colors.lightBlue[200], width: 1),
                 borderRadius: BorderRadius.circular(15.0),
               ),
               child: Padding(

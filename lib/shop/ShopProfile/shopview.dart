@@ -4,7 +4,7 @@ import 'package:blogapp/Screen/Maps/Map2.dart';
 import 'package:blogapp/checkout/widgets/viewgallery.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:blogapp/Screen/Maps/Map.dart';
+
 import 'package:blogapp/shop/custom/BorderIcon.dart';
 
 import 'package:blogapp/shop/utils/widget_functions.dart';
@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
-import '../custom/OptionButton.dart';
+
 class Shopview extends StatefulWidget {
   final String id;
 
@@ -91,9 +91,6 @@ class _ShopviewState extends State<Shopview> {
 
     fetchShop(id);
     super.initState();
-    // infocategory(id);
-
-
   }
 
   Future<http.Response> addrate(String rate) {

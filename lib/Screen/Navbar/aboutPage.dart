@@ -225,17 +225,18 @@ class _AboutPageState extends State<AboutPage> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                             /*   Text("Govi Piyasa",
-                                  style: TextStyle(
-                                    fontSize: 30.0,
-                                    fontFamily: 'Indies',
-                                    fontWeight: FontWeight.w800,
-                                  ),),*/
-
                                 Text(
-                                  finalemail,
+                                  "About Us",
                                   style: TextStyle(
-                                    color: Colors.grey,
+                                    fontSize: 20.0,
+                                    fontWeight: FontWeight.w800,
+
+                                  ),
+                                ),
+                                Text(
+                                  "Govi piyasa is a commercial app for users to buy and sell agriculture products. Contact garden designers is a great feature that provide for users. QnA forum allows to post questions while others including experts can answers them. Use the app and experience a great set of features",
+                                  style: TextStyle(
+                                    color: Colors.black,
                                     fontSize: 16.0,
                                   ),
                                 ),
@@ -254,15 +255,15 @@ class _AboutPageState extends State<AboutPage> {
                           child: Padding(
                             padding: EdgeInsets.all(10.0),
                             child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Text(
-                                  "About Us",
+                                  "Group Members",
                                   style: TextStyle(
                                     fontSize: 20.0,
                                     fontWeight: FontWeight.w800,
-
                                   ),
+
                                 ),
                                 Divider(
                                   color: Colors.grey[300],
@@ -278,17 +279,12 @@ class _AboutPageState extends State<AboutPage> {
                                       crossAxisAlignment:
                                       CrossAxisAlignment.start,
                                       children: [
-                                        Text(
-                                          "Group Members",
-                                          style: TextStyle(
-                                            fontSize: 20.0,
-                                          ),
-                                        ),
+
                                         Text(
                                           members,
                                           style: TextStyle(
                                             fontSize: 16.0,
-                                            color: Colors.grey[400],
+                                            color: Colors.black,
                                           ),
                                         )
                                       ],
@@ -317,7 +313,7 @@ class LogoPainter extends CustomPainter {
       begin: Alignment.centerLeft,
       end: Alignment.centerRight,
       colors: [
-        Color.fromARGB(255, 21, 226, 131),
+        Color.fromARGB(255, 8, 194, 108),
         Color.fromARGB(255, 81, 205, 14),
       ],
     ).createShader(rect);
@@ -325,7 +321,7 @@ class LogoPainter extends CustomPainter {
     path.conicTo(size.width / 1.2, size.height, size.width, size.height - size.height / 8, 9);
     path.lineTo(size.width, 0);
     path.close();
-    canvas.drawShadow(path,const Color.fromARGB(255, 57, 208, 222), 4, false);
+    canvas.drawShadow(path,const Color.fromARGB(255, 98, 220, 47), 4, false);
     canvas.drawPath(path, paint);
   }
 

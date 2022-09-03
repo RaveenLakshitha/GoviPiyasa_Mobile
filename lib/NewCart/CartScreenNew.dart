@@ -134,6 +134,7 @@ class _CartScreenNewState extends State<CartScreenNew> {
   var _cartitems=[];
   var _cartdata;
   var _cartTotal;
+  int totalAmount;
   var _priceToPay;
   void fetchcartItems() async {
 
@@ -228,7 +229,7 @@ class _CartScreenNewState extends State<CartScreenNew> {
                                           CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              "${_cartitems[index]['_id']}",
+                                              "${_cartitems[index]['item']['productName']}",
                                               style: TextStyle(
                                                 fontSize: 16,
                                                 fontFamily: 'Roboto',
@@ -252,9 +253,12 @@ class _CartScreenNewState extends State<CartScreenNew> {
                                                         onTap: ()async {
                                                           setState(() {
                                                             _isLoading=true;
+                                                            _cartitems[index]['amount']--;
                                                           });
 
+                                                          totalAmount=0;
                                                           decreseAmount(_cartitems[index]['_id']);
+                                                          totalAmount=totalAmount-_cartitems[index]['unitPrice']* _cartitems[index]['amount'];
                                                           await Future.delayed(
                                                               Duration(seconds: 8));
                                                           setState(() {
@@ -276,8 +280,11 @@ class _CartScreenNewState extends State<CartScreenNew> {
                                                         onTap: () async{
                                                           setState(() {
                                                             _isLoading=true;
+                                                            _cartitems[index]['amount']++;
                                                           });
+                                                          totalAmount=0;
                                                           increseAmount(_cartitems[index]['_id']);
+                                                         totalAmount=totalAmount+_cartitems[index]['unitPrice']* _cartitems[index]['amount'];
                                                           await Future.delayed(
                                                               Duration(seconds: 8));
 
@@ -314,17 +321,10 @@ class _CartScreenNewState extends State<CartScreenNew> {
                                                   ],
                                                 )
                                             ),
-                                            Text("Rs:${_cartitems[index]['unitPrice']}",
+                                            Text("Rs:${_cartitems[index]['unitPrice']* _cartitems[index]['amount']}",
                                                 style: TextStyle(
                                                   color: Colors.red,
-                                                )),
-
-
-
-
-
-
-                                          ],
+                                                )),],
                                         ),
                                       ),
                                     ],
@@ -401,7 +401,7 @@ class _CartScreenNewState extends State<CartScreenNew> {
                   child: Card(
                     child: ListTile(
                       title: Text("CartTotal:${_cartTotal}"),
-                      subtitle: Text("priceToPayOnline:${_priceToPay}"),
+                      subtitle: Text("priceToPayOnline:${totalAmount}"),
                       trailing:   _cartitems.length==0?SizedBox(child:Text("No more Items")): OutlinedButton(
                         style:OutlinedButton.styleFrom(
                           padding:const EdgeInsets.symmetric(horizontal: 40),
@@ -416,7 +416,7 @@ class _CartScreenNewState extends State<CartScreenNew> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>   OrderPage(),
+                                builder: (context) =>   OrderPage(total:"${_cartTotal}"),
                               ));
 
 

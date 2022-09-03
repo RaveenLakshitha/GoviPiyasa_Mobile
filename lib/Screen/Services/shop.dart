@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:path/path.dart';
@@ -30,6 +32,7 @@ class _ShopState extends State<Shop> {
   FlutterSecureStorage storage = FlutterSecureStorage();
   final picker = ImagePicker();
   File _file;
+  bool loading = false;
   final GlobalKey<ScaffoldState> _scaffoldstate = new GlobalKey<ScaffoldState>();
   Dio dio =Dio();
   Future getFile()async{
@@ -40,7 +43,16 @@ class _ShopState extends State<Shop> {
     });
   }
   final String endPoint = 'https://govi-piyasa-v-0-1.herokuapp.com/api/v1/shops';
+  String textFromField = 'Empty';
 
+  getData() async {
+    String response;
+    response = await rootBundle.loadString('assets/policy/policy.txt');
+    setState(() {
+      textFromField = response;
+    });
+  }
+  bool _isAcceptTermsAndConditions = false;
   createShop(shopName,email,longitude,latitude,address,File file,File shopimg1,File shopimg2,File shopimg3,File pic) async {
     String token = await storage.read(key: "token");
     dio.options.contentType = 'application/json';
@@ -125,6 +137,7 @@ class _ShopState extends State<Shop> {
   }
   void initState() {
     // TODO: implement initState
+    getData();
     arr[0] = latlang;
     arr[1] = longitude;
     print(arr);
@@ -706,7 +719,70 @@ class _ShopState extends State<Shop> {
                             BorderRadius.all(Radius.circular(5.0)),
                           ),
                         ),*/
-                        RaisedButton(
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Checkbox(
+                                  value: _isAcceptTermsAndConditions,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      // 2
+                                      _isAcceptTermsAndConditions =
+                                          value ?? false;
+                                    });
+                                  }),
+                              privacyPolicyLinkAndTermsOfService(),
+                              // Text('I accept the terms and conditions.'),
+                            ]),
+                        ElevatedButton(
+                          // 3
+                          onPressed: _isAcceptTermsAndConditions
+                              ? () async {
+                            if (_formkey.currentState.validate()) {
+                              setState(() {
+                                loading = true;
+                              });
+                              await Future.delayed(
+                                  Duration(seconds: 4));
+                              createShop(shopName,email,longitude,latlang,address,_image,_shopimg1,_shopimg2,_shopimg3,_pic);
+
+                              setState(() {
+                                loading = false;
+                              });
+                              AwesomeDialog(
+                                context: context,
+                                dialogType: DialogType.SUCCES,
+                                headerAnimationLoop: false,
+                                animType: AnimType.BOTTOMSLIDE,
+                                title: 'Sucessfully Created',
+                                buttonsTextStyle: const TextStyle(
+                                    color: Colors.black),
+                                showCloseIcon: false,
+                                btnOkOnPress: () {},
+                              ).show();
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          HomePage()));
+                            } else {
+                              AwesomeDialog(
+                                context: context,
+                                dialogType: DialogType.ERROR,
+                                headerAnimationLoop: false,
+                                animType: AnimType.BOTTOMSLIDE,
+                                title: 'UnSucessfully',
+                                buttonsTextStyle: const TextStyle(
+                                    color: Colors.black),
+                                showCloseIcon: false,
+                                btnOkOnPress: () {},
+                              ).show();
+                            }
+                          }
+                              : null,
+                          child: Text('Create Architect shop'),
+                        ),
+                 /*       RaisedButton(
                           padding: EdgeInsets.fromLTRB(70, 10, 70, 10),
                           onPressed: ()async {
 
@@ -752,7 +828,7 @@ class _ShopState extends State<Shop> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20.0),
                           ),
-                        ),
+                        ),*/
                         SizedBox(height: 50,),
                       ],
                     ),
@@ -763,5 +839,55 @@ class _ShopState extends State<Shop> {
           ),
         ));
   }
+  Widget privacyPolicyLinkAndTermsOfService() {
+    return Container(
+      alignment: Alignment.center,
+      padding: EdgeInsets.all(10),
+      child: Center(
+          child: Text.rich(TextSpan(
+              text: 'By continuing, you agree to our ',
+              style: TextStyle(fontSize: 16, color: Colors.black),
+              children: <TextSpan>[
+                TextSpan(
+                    text: '\n Terms of Service',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.black,
+                      decoration: TextDecoration.underline,
+                    ),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        // code to open / launch terms of service link here
+                      }),
+                TextSpan(
+                    text: ' and ',
+                    style: TextStyle(fontSize: 18, color: Colors.black),
+                    children: <TextSpan>[
+                      TextSpan(
+                          text: 'Privacy Policy',
+                          style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.black,
+                              decoration: TextDecoration.underline),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              getData();
+                              showPolicy(context);
+                              // code to open / launch privacy policy link here
+                            })
+                    ])
+              ]))),
+    );
+  }
 
+  showPolicy(context) {
+    showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        content: SingleChildScrollView(
+          child: Text(textFromField),
+        ),
+      ),
+    );
+  }
 }

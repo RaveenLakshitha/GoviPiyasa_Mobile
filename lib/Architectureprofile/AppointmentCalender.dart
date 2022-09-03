@@ -44,7 +44,7 @@ class _CalenderviewState extends State<Calenderview> {
   List Appointments;
   @override
   void initState() {
-   length=widget.appointmentSlots.length;
+  // length=widget.appointmentSlots.length;
 
     super.initState();
   }
@@ -58,9 +58,6 @@ class _CalenderviewState extends State<Calenderview> {
               style: TextStyle(
                   color: Colors.black, fontSize: 25.0, fontFamily: 'Roboto',fontWeight: FontWeight.w600)),
 
-          actions: [
-
-          ],
         ),
       body:SingleChildScrollView(
         child: Column(

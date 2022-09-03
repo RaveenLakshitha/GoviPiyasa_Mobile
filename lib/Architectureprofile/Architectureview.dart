@@ -126,7 +126,8 @@ class _ArchitectureviewState extends State<Architectureview> {
   }
 @override
   void initState() {
-    // TODO: implement initState
+
+  print(widget.appointmentSlots);
   fetchAwards(widget.id);
     super.initState();
   }
@@ -147,7 +148,8 @@ class _ArchitectureviewState extends State<Architectureview> {
           },
         ),
         centerTitle: false,
-        title: AnimatedTextKit(
+  //title: Text(widget.appointmentSlots.length.toString()),
+       title: AnimatedTextKit(
           isRepeatingAnimation: true,
           animatedTexts: [
             ScaleAnimatedText(
@@ -187,7 +189,7 @@ class _ArchitectureviewState extends State<Architectureview> {
                       height: 200.0,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                        color: Colors.redAccent,
+                        color: Colors.white,
                       ),
                       child: Image.network(
                         widget.image,

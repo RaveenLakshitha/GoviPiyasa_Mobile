@@ -19,7 +19,7 @@ class _expertState extends State<expert> {
   final url = "https://govi-piyasa-v-0-1.herokuapp.com/api/v1/architects";
   var _itemsJson = [];
   void fetchPosts() async {
-    print("architect");
+    print("========================architectureList==============================");
     String token = await storage.read(key: "token");
     try {
       final response = await get(Uri.parse(url),headers: {
@@ -189,7 +189,7 @@ class _expertState extends State<expert> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => Architectureview(id:"${item['_id']}",businessName:"${item['businessName']}",description:"${item['description']}",contactNumber:"${item['contactNumber']}",motto:"${item['motto']}",email:"${item['email']}",rating:"${item['rating']}",image:"https://source.unsplash.com/random?sig=$index"),
+                      builder: (context) => Architectureview(id:"${item['_id']}",businessName:"${item['businessName']}",description:"${item['description']}",contactNumber:"${item['contactNumber']}",motto:"${item['motto']}",email:"${item['email']}",rating:"${item['rating']}",appointmentSlots:_itemsJson[index]['appointmentSlots'],image:"https://source.unsplash.com/random?sig=$index"),
                     ));
 
               },

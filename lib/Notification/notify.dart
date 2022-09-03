@@ -9,6 +9,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Notify extends StatefulWidget {
   const Notify({Key key}) : super(key: key);
@@ -26,12 +27,13 @@ class _NotifyState extends State<Notify> {
   final storage = FlutterSecureStorage();
   var ID;
   var Count;
+
   void readuser() async {
     Count = await storage.read(key: "notificationcount");
-    ID = await storage.read(key: "id");
-    print(ID);
+   // ID = await storage.read(key: "id");
+    print(Count);
     Fluttertoast.showToast(
-      msg: ID,
+      msg: Count,
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.BOTTOM,
       backgroundColor: Colors.red,
@@ -52,13 +54,14 @@ class _NotifyState extends State<Notify> {
   }*/
 
   var notificationlist = [];
-
+int length;
   void fetchnotification() async {
     try {
       final response = await get(Uri.parse(url));
       final jsonData = jsonDecode(response.body)['data'] as List;
       setState(() {
         notificationlist = jsonData;
+       length=notificationlist.length;
       });
     } catch (err) {}
   }
@@ -89,15 +92,12 @@ class _NotifyState extends State<Notify> {
 
 
   }
-  void writeNotification() async{
-    await storage.write(key: "notificationcount", value:_notification.length.toString());
-    print(_notification.length.toString());
-  }
+
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   @override
   void initState() {
     readuser();
-    writeNotification();
+
     fetchnotification();
     fetchPrivateNotification();
     super.initState();
@@ -137,20 +137,7 @@ class _NotifyState extends State<Notify> {
       ),
       body:Column(
         children: [
-          Container(child:Card(
-            elevation: 3,
 
-            child: ListTile(
-              title:  Text(
-                notificationAlert,
-              ),
-              subtitle:   Text(
-                messageTitle,
-                style: Theme.of(context).textTheme.headline4,
-              ),
-            ),
-          ),
-          ),
           Container(child:Text("Private Messages",style: TextStyle(fontSize:25,fontFamily: 'Roboto',fontWeight: FontWeight.bold),)),
           Expanded(child:
           Container(
@@ -166,13 +153,13 @@ class _NotifyState extends State<Notify> {
                       decoration: BoxDecoration(
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
+                            color: Colors.white70.withOpacity(0.5),
                             spreadRadius: 5,
                             blurRadius: 7,
                             offset: Offset(0, 3), // changes position of shadow
                           ),
                         ],
-                        border: Border.all(color: Colors.blueAccent,width: 3),
+                        border: Border.all(color: Colors.blueAccent,width: 1),
                         borderRadius: BorderRadius.all(Radius.circular(
                             5.0) //                 <--- border radius here
                         ),
@@ -200,6 +187,21 @@ class _NotifyState extends State<Notify> {
             ),
           )
           ),
+          Container(child:Card(
+            elevation: 3,
+
+            child: ListTile(
+              title:  Text(
+                notificationAlert,
+              ),
+              subtitle:   Text(
+                messageTitle,
+                style: Theme.of(context).textTheme.headline5,
+              ),
+            ),
+          ),
+          ),
+         SizedBox(height: 10,),
          /* Container(child:Text("Public Messages",style: TextStyle(fontSize:25 ,fontFamily: 'Roboto',fontWeight: FontWeight.bold),),),
           Expanded(child:
           Container(

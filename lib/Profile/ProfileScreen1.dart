@@ -237,7 +237,7 @@ class MapScreenState extends State<ProfilePage>
                                               color: Colors.black)),
                                     ),
                                     SizedBox(width: 50,),
-                                    Padding(
+                              /*      Padding(
                                       padding: EdgeInsets.only(right: 2.0),
                                       child:Material(
                                         type: MaterialType.transparency,
@@ -265,7 +265,7 @@ class MapScreenState extends State<ProfilePage>
                                           ),
                                         ),
                                       ),
-                                    ),
+                                    ),*/
                                     SizedBox(width: 10,),
                                     Padding(
                                       padding: EdgeInsets.only(right: 2.0),

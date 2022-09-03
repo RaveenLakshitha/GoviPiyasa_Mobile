@@ -161,30 +161,55 @@ class _ExpertFormState extends State<ExpertForm> {
                     child: Column(
                       children: <Widget>[
                         SizedBox(height: 5.0),
-                        /*            Container(
+                        Container(
                           margin:
-                              const EdgeInsets.only(left: 10.0, right: 10.0),
+                          const EdgeInsets.only(left: 10.0, right: 10.0),
                           child: TextFormField(
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return 'Field is empty';
+                              }
+                              return null;
+                            },
+                            controller: myController5,
                             decoration: InputDecoration(
-                              labelText: 'Email',
-                              prefixIcon: Icon(
-                                Icons.attach_email_rounded,
+                              labelText: 'City',
+                              suffixIcon: GestureDetector(
+                                child: Icon(
+                                  Icons.add_location_alt,
+                                  color: Colors.red,
+                                ),
+                                onTap:(){      Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => expertmap()));} ,
+                              ),
+                              prefixIcon:Icon(
+                                Icons.add_location,
                                 color: Colors.blue,
                               ),
+
                             ),
                             onChanged: (val) {
-                              email = val;
+                              city = val;
                             },
                           ),
                           decoration: BoxDecoration(
                             border:
-                                Border.all(color: Colors.lightGreen, width: 1),
+                            Border.all(color: Colors.lightGreen, width: 1),
+                            borderRadius:
+                            BorderRadius.all(Radius.circular(5.0)),
                           ),
-                        ),*/
+                        ),
+                        SizedBox(height: 5.0),
                         Container(
                             margin:
                             const EdgeInsets.only(left: 10.0, right: 10.0),
                             child: TextFormField(
+                              validator: (value) {
+                                if (value.isEmpty) {
+                                  return 'Field is empty';
+                                }
+                                return null;
+                              },
                               decoration: InputDecoration(
                                 labelText: 'Description',
                                 prefixIcon: Icon(
@@ -230,6 +255,12 @@ class _ExpertFormState extends State<ExpertForm> {
                           margin:
                           const EdgeInsets.only(left: 10.0, right: 10.0),
                           child: TextFormField(
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return 'Field is empty';
+                              }
+                              return null;
+                            },
                             decoration: InputDecoration(
                                 labelText: 'Designation',
                                 prefixIcon: Icon(
@@ -252,6 +283,12 @@ class _ExpertFormState extends State<ExpertForm> {
                           margin:
                           const EdgeInsets.only(left: 10.0, right: 10.0),
                           child: TextFormField(
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return 'Field is empty';
+                              }
+                              return null;
+                            },
                             decoration: InputDecoration(
                               labelText: 'Qualification',
                               prefixIcon: Icon(
@@ -271,44 +308,18 @@ class _ExpertFormState extends State<ExpertForm> {
                           ),
                         ),
                         SizedBox(height: 5.0),
+
+                      //  SizedBox(height: 5.0),
                         Container(
                           margin:
                           const EdgeInsets.only(left: 10.0, right: 10.0),
                           child: TextFormField(
-                            controller: myController5,
-                            decoration: InputDecoration(
-                              labelText: 'City',
-                              suffixIcon: GestureDetector(
-                                child: Icon(
-                                  Icons.add_location_alt,
-                                  color: Colors.red,
-                                ),
-                                onTap:(){      Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => expertmap()));} ,
-                              ),
-                              prefixIcon:Icon(
-                                  Icons.add_location,
-                                  color: Colors.blue,
-                                ),
-
-                            ),
-                            onChanged: (val) {
-                              city = val;
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return 'Field is empty';
+                              }
+                              return null;
                             },
-                          ),
-                          decoration: BoxDecoration(
-                            border:
-                            Border.all(color: Colors.lightGreen, width: 1),
-                            borderRadius:
-                            BorderRadius.all(Radius.circular(5.0)),
-                          ),
-                        ),
-                        SizedBox(height: 5.0),
-                        Container(
-                          margin:
-                          const EdgeInsets.only(left: 10.0, right: 10.0),
-                          child: TextFormField(
-
                             decoration: InputDecoration(
                               labelText: 'Email',
                               prefixIcon: GestureDetector(
@@ -340,6 +351,12 @@ class _ExpertFormState extends State<ExpertForm> {
                           margin:
                           const EdgeInsets.only(left: 10.0, right: 10.0),
                           child: TextFormField(
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return 'Field is empty';
+                              }
+                              return null;
+                            },
                             decoration: InputDecoration(
                               labelText: 'Contact Number',
                               prefixIcon: GestureDetector(
@@ -421,15 +438,17 @@ class _ExpertFormState extends State<ExpertForm> {
                                   color: Colors.lightGreen, width: 1),
                             ),
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Container(
-                                  padding: EdgeInsets.only(left: 16, right: 16),
+                                  padding: EdgeInsets.all(5),
                                   child: _pic != null
                                       ? Container(
                                     height: 50,
                                     width: 50,
                                     decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(10)),
                                       border: Border.all(
                                           color: Colors.blueAccent,
                                           width: 3),
@@ -501,10 +520,11 @@ class _ExpertFormState extends State<ExpertForm> {
                             ),
                           ),
                           onPressed: () {
-                            // uploadFileToServer(_image);
-                            // postExpert();
-                            // upload(_image.path);
-                            createExpert(email,contact,description,city,designation,qualification,lat,long,_image,_pic);
+    if (_formkey.currentState.validate()) {
+      createExpert(email,contact,description,city,designation,qualification,lat,long,_image,_pic);
+    }
+
+
                             //postExpert(description,designation,qualification,lat,long,city,email,contact);
                             /*    Navigator.push(
                                 context,

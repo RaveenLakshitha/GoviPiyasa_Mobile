@@ -5,7 +5,7 @@ import 'package:blogapp/payment/gateway/PaymentScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 import 'package:invoiceninja/invoiceninja.dart';
 import 'package:invoiceninja/models/client.dart';
 import 'package:invoiceninja/models/invoice.dart';
@@ -13,13 +13,15 @@ import 'package:invoiceninja/models/product.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
 import 'BankCardDetails/Add.dart';
-import 'BankCardDetails/CardList.dart';
 import 'BankCardDetails/Model.dart';
 import 'BankCardDetails/dbCard.dart';
 
 
 class OrderPage extends StatefulWidget {
-  OrderPage({Key key}) : super(key: key);
+  final String total;
+  OrderPage(
+      {
+        @required this.total});
 
   @override
   _OrderPageState createState() => _OrderPageState();
@@ -155,7 +157,7 @@ class _OrderPageState extends State<OrderPage> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title:Text("Order Details"),
+          title:Text("${widget.total}"),
           actions: [
             IconButton(
                 icon: Icon(Icons.credit_card, color: Colors.blue),
@@ -242,7 +244,7 @@ class _OrderPageState extends State<OrderPage> with WidgetsBindingObserver {
                                                     _value=value;
                                                    // changePayment(_cartitems[index]['_id'],"Takeway");
                                                   });
-                                                  print(_value); //selected value
+                                                  print(_value.substring(19,25)); //selected value
                                                 }
                                             ),
                                             contentPadding: const EdgeInsets.all(8.0),
@@ -279,7 +281,7 @@ class _OrderPageState extends State<OrderPage> with WidgetsBindingObserver {
 
                             //Logic to check if everything is completed
                            Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => Payment(amount:"100",cardNo:"343354544646",expiredate:""),
+                              builder: (context) => Payment(amount:"${widget.total}",cardNo:"${_value.substring(0,19)}",expiredate:"${_value.substring(19,25)}"),
                             ));
                             print('Completed, check fields.');
                           }

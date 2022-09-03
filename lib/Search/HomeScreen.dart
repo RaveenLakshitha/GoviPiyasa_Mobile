@@ -195,12 +195,12 @@ class _SearchitemsState extends State<Searchitems>
                     child: GestureDetector(
                       onTap:(){
                         setState(() {
-                          category="Seeds";
+                          category="Vegetables";
                           tabController.index=2;
                         });
                       },
                       child: Text(
-                        'Seeds',
+                        'Vegetables',
                         style: TextStyle(
                             fontSize: 17.0,
                             fontFamily: 'Montserrat',
@@ -242,7 +242,8 @@ class _SearchitemsState extends State<Searchitems>
                             childAspectRatio: 2 / 2.5,
                             crossAxisCount: 2),
                         itemCount: data?.length,
-
+                        shrinkWrap: true,
+                        primary: false,
                         itemBuilder: (context, index) {
 
                           if (!snapshot.hasData) {

@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 
+import 'AdminChat.dart';
 import 'DataGrid/newJsonTable.dart';
 import 'ShopProfile/ReaqustAds.dart';
 import 'ShopProfile/ShopCharts.dart';
@@ -47,7 +48,7 @@ class _ServiceState extends State<Service> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text("view Order"),
-                  Icon(Icons.description_outlined,color: Colors.pink,
+                  Icon(Icons.description_outlined,color: Colors.black,
                     size: 50.0,),
                 ],),
             ),
@@ -68,7 +69,7 @@ class _ServiceState extends State<Service> {
                 crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text("Tables"),
-                Icon(Icons.dvr_rounded , color: Colors.pink,
+                Icon(Icons.dvr_rounded , color: Colors.black,
                   size: 50.0,),
               ],),
 
@@ -87,8 +88,8 @@ class _ServiceState extends State<Service> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text("view Order"),
-                  Icon(Icons.developer_board_rounded , color: Colors.pink,
+                  Text("Admin Chat"),
+                  Icon(Icons.chat_outlined , color: Colors.black,
                     size: 50.0,),
                 ],),
 
@@ -96,11 +97,11 @@ class _ServiceState extends State<Service> {
               color: Colors.teal[300],
 
             ), onTap: () {
-            /*Navigator.push(
+            Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => DataTableDemo(),
-                ));*/
+                  builder: (context) => AdminChat(),
+                ));
           },
           ),
           GestureDetector(
@@ -110,7 +111,7 @@ class _ServiceState extends State<Service> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text("Charts"),
-                  Icon(Icons.add_chart_sharp ,     color: Colors.pink,
+                  Icon(Icons.add_chart_sharp , color: Colors.black,
                     size: 50.0,),
                 ],),
               padding: const EdgeInsets.all(8),
@@ -132,7 +133,7 @@ class _ServiceState extends State<Service> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text("view Order"),
-                  Icon(Icons.assignment_rounded ,   color: Colors.pink,
+                  Icon(Icons.assignment_rounded ,   color: Colors.black,
                     size: 50.0,),
                 ],),
               padding: const EdgeInsets.all(8),
@@ -156,7 +157,7 @@ class _ServiceState extends State<Service> {
                 children: [
                   Text("Request Ads"),
                   Icon(Icons.ballot_sharp ,
-                    color: Colors.pink,
+                    color: Colors.black,
                     size: 50.0,
                   )
                 ],),

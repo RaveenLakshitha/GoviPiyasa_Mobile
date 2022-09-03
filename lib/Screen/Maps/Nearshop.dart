@@ -13,19 +13,18 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart';
 
 import 'CurrentLocation.dart';
-class googlemap extends StatefulWidget {
+class NearShops extends StatefulWidget {
 
-  double lat;
-  double long;
-  googlemap({Key key,this.lat,this.long}) : super(key: key);
+
+  NearShops({Key key}) : super(key: key);
   @override
-  _googlemapState createState() => _googlemapState();
+  _NearShopsState createState() => _NearShopsState();
 }
 
-class _googlemapState extends State<googlemap> {
+class _NearShopsState extends State<NearShops> {
   Set<Marker> _markers={};
- // Set<Marker> _markers = Set();
- // List <Marker> _markers=<Marker>[];
+  // Set<Marker> _markers = Set();
+  // List <Marker> _markers=<Marker>[];
   BitmapDescriptor mapMarker;
   GoogleMapController googleMapController;
 
@@ -35,7 +34,7 @@ class _googlemapState extends State<googlemap> {
   double pos1,pos2;
 
   void initState(){
-    fetchPosts();
+
 
 
 
@@ -47,8 +46,7 @@ class _googlemapState extends State<googlemap> {
     super.initState();
 
     setCustomMarker();
-    lat=widget.lat;
-    long=widget.long ;
+
 
   }
 
@@ -58,12 +56,15 @@ class _googlemapState extends State<googlemap> {
     mapMarker= await BitmapDescriptor.fromAssetImage(ImageConfiguration(),'assets/placeholder.png');
   }
 
-  final url = "https://govi-piyasa-v-0-1.herokuapp.com/api/v1/shops/";
+
   var _shopjson = [];
 
+
   FlutterSecureStorage storage = FlutterSecureStorage();
-   fetchPosts() async {
-    print("shops");
+  fetchPosts() async {
+    final url = "https://govi-piyasa-v-0-1.herokuapp.com/api/v1/shops/radius/$lat/$long/30";
+
+    print("{$lat$long}");
     String token = await storage.read(key: "token");
     try {
       final response = await get(Uri.parse(url,),headers: {
@@ -80,27 +81,11 @@ class _googlemapState extends State<googlemap> {
   }
 
 
-/*  void _onMapCreated (GoogleMapController controller) {
-Iterable _markers = Iterable.generate(_shopjson.length, (index) {
-  return Marker(
-      markerId: MarkerId(_shopjson[index]['id']),
-      position: LatLng(
-          _shopjson[1]['location']['coordinates'][0],
-          _shopjson[1]['location']['coordinates'][1]
-      ),
-      icon:mapMarker,
-      infoWindow: InfoWindow(title: _shopjson[index]["title"])
-  );
-});
 
-
-
-
-  }*/
   void _onMapCreated(GoogleMapController controller){
 
 
-   _markers.add(
+    _markers.add(
         Marker(
           markerId: MarkerId('id-1'),
           position: LatLng(lat,long),
@@ -113,7 +98,7 @@ Iterable _markers = Iterable.generate(_shopjson.length, (index) {
         )
     );
 
-   _markers.add(
+    _markers.add(
         Marker(
           markerId: MarkerId('id-1'),
           position:LatLng( _shopjson[1]['location']['coordinates'][0],_shopjson[1]['location']['coordinates'][1]),
@@ -179,39 +164,41 @@ Iterable _markers = Iterable.generate(_shopjson.length, (index) {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar:AppBar(
-     //   title: Text('${pos1}   ${pos2}'),
+        title: Text('Near Shops'),
         actions: [
-            IconButton(
-              icon: Icon(FontAwesomeIcons.plus),
+          IconButton(
+              icon: Icon(Icons.location_on,color:Colors.lightGreen),
               onPressed: () async {
 
+                fetchPosts();
                 Position position = await _getGeoLocationPosition();
                 location ='Lat: ${position.latitude} , Long: ${position.longitude}';
+                setState(() {
+                  lat=position.latitude;
+                  long=position.longitude;
+                });
                 GetAddressFromLatLong(position);
                 showPopUp(context);
 
               }),
-          IconButton(
-              icon: Icon(Icons.location_on),
-              onPressed: () async {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => CurrrentLocation(),));
-              }),
+
 
         ],
       ),
       body:_shopjson==null?SizedBox(child: Center(child:CircularProgressIndicator()),):Stack(
         children: [
           GoogleMap(
-           onMapCreated: _onMapCreated,
+            onMapCreated: _onMapCreated,
             myLocationButtonEnabled: true,
             mapToolbarEnabled: true,
             zoomGesturesEnabled: true,
+
             initialCameraPosition:CameraPosition(
-              target:LatLng(lat,long),
-              zoom:15,),),
+              target:LatLng(7.2946291,80.5907617),
+              zoom:8,),),
           _buildGoogleMap(context),
 
-         _buildContainer(),
+          _buildContainer(),
 
         ],
       ),
@@ -225,14 +212,14 @@ Iterable _markers = Iterable.generate(_shopjson.length, (index) {
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
       child: GoogleMap(
-          myLocationEnabled: true,
-          compassEnabled: true,
-          mapType: MapType.normal,
-          initialCameraPosition:  CameraPosition(target: LatLng(lat, 	long), zoom: 10),
-          onMapCreated: (GoogleMapController controller) {
-            _controller.complete(controller);
-          },
-          markers: Set.from(markers),
+        myLocationEnabled: true,
+        compassEnabled: true,
+        mapType: MapType.normal,
+        initialCameraPosition:  CameraPosition(target: LatLng(7.2946291,80.5907617), zoom: 10),
+        onMapCreated: (GoogleMapController controller) {
+          _controller.complete(controller);
+        },
+        markers: Set.from(markers),
 
 
 
@@ -243,9 +230,9 @@ Iterable _markers = Iterable.generate(_shopjson.length, (index) {
     return Align(
       alignment: Alignment.bottomLeft,
       child: Container(
-        margin: EdgeInsets.symmetric(vertical: 10.0),
-        height: 140.0,
-         child: FutureBuilder(
+          margin: EdgeInsets.symmetric(vertical: 10.0),
+          height: 140.0,
+          child: FutureBuilder(
               future: fetchPosts(),
               builder: (context, AsyncSnapshot snapshot) {
                 if (!snapshot.hasData) {
@@ -258,28 +245,28 @@ Iterable _markers = Iterable.generate(_shopjson.length, (index) {
                           final shop=_shopjson[index];
 
                           if(_shopjson[index]['location']['coordinates']!=null){
-                             for (var i = 0; i <2; i++){
-                            print(index);
+                            for (var i = 0; i <2; i++){
+                              print(index);
 
 
-                            _markers.add(
-                                Marker(
-                                  markerId: MarkerId('id-1'),
-                                  position: LatLng( _shopjson[index]['location']['coordinates'][0],_shopjson[index]['location']['coordinates'][1]),
-                                  icon:BitmapDescriptor.defaultMarkerWithHue(
-                                    BitmapDescriptor.hueViolet,
-                                  ),
+                              _markers.add(
+                                  Marker(
+                                    markerId: MarkerId('id-1'),
+                                    position: LatLng( _shopjson[index]['location']['coordinates'][0],_shopjson[index]['location']['coordinates'][1]),
+                                    icon:BitmapDescriptor.defaultMarkerWithHue(
+                                      BitmapDescriptor.hueViolet,
+                                    ),
 
-                                  infoWindow: InfoWindow(
-                                    title: '${shop['shopName']}',
-                                    snippet: 'history',
+                                    infoWindow: InfoWindow(
+                                      title: '${shop['shopName']}',
+                                      snippet: 'history',
 
-                                  ),
-                                )
-                            );
+                                    ),
+                                  )
+                              );
 
 
-                             }
+                            }
 
                             return Container(
                               padding: const EdgeInsets.all(8.0),
@@ -463,16 +450,16 @@ Iterable _markers = Iterable.generate(_shopjson.length, (index) {
         //title: const Text('Select Your Account'),
         actions: <Widget>[
           Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children:[
-              Text('Coordinates Points',style: TextStyle(fontSize: 22,fontWeight: FontWeight.bold),),
-              SizedBox(height: 10,),
-              Text(location,style: TextStyle(color: Colors.black,fontSize: 16),),
-              SizedBox(height: 10,),
-              Text('ADDRESS',style: TextStyle(fontSize: 22,fontWeight: FontWeight.bold),),
-              Text('${Address}'),
-              SizedBox(height: 10,),
-            ]
+              mainAxisAlignment: MainAxisAlignment.center,
+              children:[
+                Text('Coordinates Points',style: TextStyle(fontSize: 22,fontWeight: FontWeight.bold),),
+                SizedBox(height: 10,),
+                Text(location,style: TextStyle(color: Colors.black,fontSize: 16),),
+                SizedBox(height: 10,),
+                Text('ADDRESS',style: TextStyle(fontSize: 22,fontWeight: FontWeight.bold),),
+                Text('${Address}'),
+                SizedBox(height: 10,),
+              ]
           )
 
 

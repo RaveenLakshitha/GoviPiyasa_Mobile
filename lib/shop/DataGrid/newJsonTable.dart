@@ -13,15 +13,15 @@ class SimpleTable extends StatefulWidget {
 class _SimpleTableState extends State<SimpleTable> {
 
   final url = "https://mongoapi3.herokuapp.com/experts";
-  var _postsJson;
+  String _postsJson;
 
   void fetchData() async {
     try {
       final response = await get(Uri.parse(url));
-      final jsonData = jsonDecode(response.body) as List;
-      print(jsonData);
+     // final jsonData = jsonDecode(response.body) as List;
+      //print(jsonData);
       setState(() {
-        _postsJson = jsonData;
+        _postsJson = response.body as String;
       });
     } catch (err) {}
   }
@@ -44,9 +44,14 @@ class _SimpleTableState extends State<SimpleTable> {
   }
   @override
   Widget build(BuildContext context) {
-    var json = jsonDecode(jsonSample);
+    var json = jsonDecode(_postsJson);
     return Scaffold(
-      body: SingleChildScrollView(
+      appBar: AppBar(
+        backgroundColor: Colors.lightGreen,
+        title: Text("Table Data"),
+
+      ),
+      body:_postsJson.length != null?Center(child:CircularProgressIndicator()): SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
         child: Container(
           child: toggle

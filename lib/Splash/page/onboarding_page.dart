@@ -12,19 +12,19 @@ class OnBoardingPage extends StatelessWidget {
         PageViewModel(
           title: 'GoviPiyasa',
           body: 'Empowering Agriculture in Srilanka.',
-          image: buildImage('assets/splash_2.png'),
+          image: buildImage('assets/welcome.jpg'),
           decoration: getPageDecoration(),
         ),
         PageViewModel(
           title: 'Start your journey',
           body: 'Buy and Sell every agri item',
-          image: buildImage('assets/splash_1.png'),
+          image: buildImage('assets/board2.jpg'),
           decoration: getPageDecoration(),
         ),
         PageViewModel(
           title: 'Simple UI',
           body: 'Helping you improve your garden appearance',
-          image: buildImage('assets/glossy-e-commerce.png'),
+          image: buildImage('assets/board3.jpg'),
           decoration: getPageDecoration(),
         ),
         PageViewModel(

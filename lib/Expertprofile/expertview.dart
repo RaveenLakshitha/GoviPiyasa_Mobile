@@ -215,9 +215,8 @@ class _expertViewState extends State<expertView> {
                         SizedBox(height: 10.0),
                         Center(
                           child:Text("Expert Riviews",    style: TextStyle(
-                            fontFamily: 'Indies',
+                            fontFamily: 'Roboto',fontWeight: FontWeight.bold,
                             color: Colors.black,
-                            fontWeight: FontWeight.bold,
                             fontSize: 30.0,
                           ),),
                         ),
@@ -243,9 +242,9 @@ class _expertViewState extends State<expertView> {
                               }),),
                         Center(
                           child:Text("Proof Documents",    style: TextStyle(
-                            fontFamily: 'Indies',
+                            fontFamily: 'Roboto',fontWeight: FontWeight.bold,
                             color: Colors.black,
-                            fontWeight: FontWeight.bold,
+
                             fontSize: 30.0,
                           ),),
                         ),
