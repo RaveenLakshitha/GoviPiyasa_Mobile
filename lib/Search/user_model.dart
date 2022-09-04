@@ -7,11 +7,11 @@ class Userlist {
   int price;
   String description;
   int quantity;
-  String parentCategoryName;
-  ShopId shopId;
-  int rating;
-  Thumbnail thumbnail;
-  productPictures1 productPictures;
+   String parentCategoryName;
+  //ShopId shopId;
+   int rating;
+   Thumbnail thumbnail;
+   productPictures1 productPictures;
 
 
   Userlist(
@@ -21,11 +21,11 @@ class Userlist {
         this.price,
         this.description,
         this.quantity,
-        this.parentCategoryName,
-        this.shopId,
-       this.rating,
-        this.thumbnail,
-      //  this.productPictures,
+         this.parentCategoryName,
+    //     this.shopId,
+        this.rating,
+         this.thumbnail,
+        this.productPictures,
 
 
       });
@@ -36,11 +36,11 @@ class Userlist {
     price = json['price'];
     description = json['description'];
     quantity = json['quantity'];
-    parentCategoryName = json['parentCategoryName'];
-
-    shopId = json['shopId'] != null ? new ShopId.fromJson(json['shopId']): null;
-    rating = json['rating'];
-    thumbnail = json['thumbnail'][0] != null ? new Thumbnail.fromJson(json['thumbnail'][0]): null;
+     parentCategoryName = json['parentCategoryName'];
+    //
+    // shopId = json['shopId'] != null ? new ShopId.fromJson(json['shopId']): null;
+     rating = json['rating'];
+     thumbnail = json['thumbnail'][0] != null ? new Thumbnail.fromJson(json['thumbnail'][0]): null;
    // productPictures = json['productPictures'] != null ? new productPictures1.fromJson(json['productPictures']): null;
 
 
@@ -54,11 +54,11 @@ class Userlist {
     data['price'] = this.price;
     data['description'] = this.description;
     data['quantity']=this. quantity ;
-    data['parentCategoryName']=this.parentCategoryName;
-    data['shopId']=this.shopId;
-    data['rating']=this.rating;
-    data['thumbnail']=this.thumbnail;
-   // data['productPictures']=this.productPictures;
+     data['parentCategoryName']=this.parentCategoryName;
+    // data['shopId']=this.shopId;
+     data['rating']=this.rating;
+     data['thumbnail']=this.thumbnail;
+    data['productPictures']=this.productPictures;
 
     return data;
   }

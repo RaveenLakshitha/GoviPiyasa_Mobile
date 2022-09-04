@@ -16,15 +16,15 @@ class OnBoardingPage extends StatelessWidget {
           decoration: getPageDecoration(),
         ),
         PageViewModel(
-          title: 'Start your journey',
+          title: 'Explore Agri Products',
           body: 'Buy and Sell every agri item',
           image: buildImage('assets/board2.jpg'),
           decoration: getPageDecoration(),
         ),
         PageViewModel(
-          title: 'Simple UI',
+          title: 'Design your Garden',
           body: 'Helping you improve your garden appearance',
-          image: buildImage('assets/board3.jpg'),
+          image: buildImage('assets/expert.png'),
           decoration: getPageDecoration(),
         ),
         PageViewModel(
@@ -34,7 +34,7 @@ class OnBoardingPage extends StatelessWidget {
             text: 'Let\'s Start',
             onClicked: () => goToHome(context),
           ),
-          image: buildImage('assets/splash_3.png'),
+          image: buildImage('assets/garden2.jpg'),
           decoration: getPageDecoration(),
         ),
       ],

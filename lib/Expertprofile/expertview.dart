@@ -5,6 +5,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'ExpertAppointmentCalender.dart';
+import 'expertmap.dart';
 
 class expertView extends StatefulWidget {
   final  designation;
@@ -39,7 +40,7 @@ class _expertViewState extends State<expertView> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-        backgroundColor: Colors.lightGreen,
+        backgroundColor: Colors.white,
         appBar: AppBar(
           leading: IconButton(
             onPressed: () {
@@ -52,14 +53,20 @@ class _expertViewState extends State<expertView> {
           elevation: 0.0,
           title: Text('${widget.name}',
               style: TextStyle(
-                  fontFamily: 'Montserrat',
+                  fontFamily: 'Roboto',
                   fontSize: 28.0,
                   color: Colors.white)),
           centerTitle: true,
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.more_horiz),
-              onPressed: () {},
+              onPressed: () {
+              /*  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => expertmap()));*/
+
+              },
               color: Colors.white,
             )
           ],
@@ -214,11 +221,11 @@ class _expertViewState extends State<expertView> {
                         ),
                         SizedBox(height: 10.0),
                         Center(
-                          child:Text("Expert Riviews",    style: TextStyle(
-                            fontFamily: 'Roboto',fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                            fontSize: 30.0,
-                          ),),
+                          child:Text("Expert Riviews",style: TextStyle(
+                              fontFamily: 'Roboto',
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF545D68))),
                         ),
                         Container(
                           height: 150,
@@ -241,12 +248,11 @@ class _expertViewState extends State<expertView> {
 
                               }),),
                         Center(
-                          child:Text("Proof Documents",    style: TextStyle(
-                            fontFamily: 'Roboto',fontWeight: FontWeight.bold,
-                            color: Colors.black,
-
-                            fontSize: 30.0,
-                          ),),
+                          child:Text("Proof Documents",     style: TextStyle(
+                              fontFamily: 'Roboto',
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF545D68))),
                         ),
                         Container(
                           height: 150,

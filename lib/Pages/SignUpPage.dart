@@ -1,10 +1,8 @@
 import 'dart:convert';
-
-import 'package:blogapp/Pages/ForgetPassword.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:blogapp/Pages/HomePage.dart';
 import 'package:blogapp/Pages/SignUpPage.dart';
 import "package:flutter/material.dart";
-import 'package:fluttertoast/fluttertoast.dart';
 
 import '../NetworkHandler.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -93,10 +91,11 @@ class _SignUpPageState extends State<SignUpPage> {
                         ),
                         InkWell(
                           onTap: () async {
-                            setState(() {
-                              circular = true;
-                            });
+
                             if (_globalkey.currentState.validate()) {
+                              setState(() {
+                                circular = true;
+                              });
                               Map<String, String> data = {
                                 "userName":_usernameController.text,
                                 "email": _emailController.text,
@@ -109,7 +108,7 @@ class _SignUpPageState extends State<SignUpPage> {
                               print(output["token"]);
                               await storage.write(key: "token", value: output["token"]);
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('Processing Data')),
+                                const SnackBar(content: Text('Successfully  Register')),
                               );
                               Navigator.pushAndRemoveUntil(
                                   context,
@@ -182,12 +181,7 @@ class _SignUpPageState extends State<SignUpPage> {
     return Column(
       children: [
         TextFormField(
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'Please enter some text';
-            }
-            return null;
-          },
+          validator: (value) => EmailValidator.validate(value) ? null : "Please enter a valid email",
           controller: _emailController,
           decoration: InputDecoration(
 
@@ -207,7 +201,7 @@ class _SignUpPageState extends State<SignUpPage> {
         TextFormField(
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return 'Please enter some text';
+              return 'Please enter some password';
             }
             return null;
           },

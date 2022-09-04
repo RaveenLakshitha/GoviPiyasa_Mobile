@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:blogapp/checkout/screens/cart_screen.dart';
+import 'package:blogapp/shop/ShopProfile/Shopdashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:stripe_payment/stripe_payment.dart';
@@ -36,13 +37,13 @@ class _PaymentState extends State<Payment> {
 
 
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
-final String amount;
+  final String amount;
   final String cardNo;
   final String expiredate;
   _PaymentState(this.amount,this.cardNo,this.expiredate);
 
   int myInt;
-   CreditCard testCard;
+  CreditCard testCard;
   @override
   initState() {
     super.initState();
@@ -74,6 +75,11 @@ final String amount;
         leading: IconButton(
             icon: Icon(FontAwesomeIcons.arrowLeft),
             onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Shopdashboard(),
+                  ));
             }),
         backgroundColor: Colors.lightGreen,
         title: new Text(' Select Payment Method '),
@@ -95,7 +101,7 @@ final String amount;
         controller: _controller,
         padding: const EdgeInsets.all(20),
         children: <Widget>[
-         RaisedButton(
+          RaisedButton(
             child: Text("Create Source"),
             onPressed: () {
               StripePayment.createSourceWithParams(SourceParams(
@@ -157,7 +163,7 @@ final String amount;
               }).catchError(setError);
             },
           ),
-       /*   RaisedButton(
+          /*   RaisedButton(
             child: Text("Create Payment Method with existing token"),
             onPressed: _paymentToken == null
                 ? null
@@ -176,7 +182,7 @@ final String amount;
               }).catchError(setError);
             },
           ),*/
-   /*       Divider(),
+          /*       Divider(),
           RaisedButton(
             child: Text("Confirm Payment Intent"),
             onPressed: _paymentMethod == null || _currentSecret == null
@@ -210,8 +216,8 @@ final String amount;
               }).catchError(setError);
             },
           ),*/
-          Divider(),/*
-          RaisedButton(
+          Divider(),
+       /*   RaisedButton(
             child: Text("Google Pay"),
             onPressed: () {
               if (Platform.isIOS) {
@@ -240,7 +246,7 @@ final String amount;
               }).catchError(setError);
             },
           ),*/
-       /*   RaisedButton(
+          /*   RaisedButton(
             child: Text("Complete Native Payment"),
             onPressed: () {
               StripePayment.completeNativePayRequest().then((_) {

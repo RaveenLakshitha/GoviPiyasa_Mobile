@@ -1,41 +1,21 @@
 import 'dart:convert';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:http/http.dart';
-import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import 'dart:async';
+
+import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:blogapp/payment/AdsPayments.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
 import 'package:dio/dio.dart';
-import 'package:http/http.dart' as http;
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 
-/*Future<Response> sendForm(
-    String url, Map<String, dynamic> data, Map<String, File> files) async {
-  Map<String, MultipartFile> fileMap = {};
-  for (MapEntry fileEntry in files.entries) {
-    File file = fileEntry.value;
-    String fileName = basename(file.path);
-    fileMap[fileEntry.key] =
-        MultipartFile(file.openRead(), await file.length(), filename: fileName);
-  }
-  data.addAll(fileMap);
-  var formData = FormData.fromMap(data);
-  Dio dio = new Dio();
-  return await dio.post(url,
-      data: formData, options: Options(contentType: 'multipart/form-data'));
-}
+import 'Shopdashboard.dart';
 
-Future<Response> sendFile(String url, File file) async {
-  Dio dio = new Dio();
-  var len = await file.length();
-  var response = await dio.post(url,
-      data: file.openRead(),
-      options: Options(headers: {
-        Headers.contentLengthHeader: len,
-      } // set content-length
-      ));
-  return response;
-}*/
+
 
 class Ads extends StatefulWidget {
   Ads({Key key, this.title}) : super(key: key);
@@ -47,10 +27,13 @@ class Ads extends StatefulWidget {
 
 class _AdsState extends State<Ads> {
   final storage = FlutterSecureStorage();
+  Dio dio =Dio();
+  bool _isLoading = false;
 @override
   void initState() {
-  //checkvisibility();
-  fetchshop();
+  //getHttp();
+  //fetchshop();
+  getConsumerInfo();
     super.initState();
   }
 
@@ -66,9 +49,9 @@ class _AdsState extends State<Ads> {
     });
   }
 
-  var _adsjson;
+  var _adsjson=[];
   var  _reqads;
-  void fetchshop() async {
+/*  void fetchshop() async {
     print('Shop');
     String token = await storage.read(key: "token");
     try {
@@ -92,8 +75,8 @@ class _AdsState extends State<Ads> {
       });
     //  print(_reqads[0]['Paid']);
     } catch (err) {}
-  }
-  void checkvisibility() async {
+  }*/
+/*  void checkvisibility() async {
     try {
       final response = await get(Uri.parse('https://govi-piyasa-v-0-1.herokuapp.com/api/v1/advertisements'));
       final jsonData = jsonDecode(response.body)['data'] as List;
@@ -105,39 +88,89 @@ class _AdsState extends State<Ads> {
       });
       print("done");
     } catch (err) {}
+  }*/
+
+  getConsumerInfo() async {
+    String token = await storage.read(key: "token");
+    print("=========ads============");
+    try {
+      dio.options.headers['authorization'] = 'Bearer $token';
+      final response = await dio.get('https://govi-piyasa-v-0-1.herokuapp.com/api/v1/advertisements/getUsersAdd');
+      print(response.data['data']);
+
+      setState(() {
+        _adsjson=response.data['data'];
+        visibility=_adsjson[0]['Paid'];
+      });
+      print(visibility);
+      print("=========ads============");
+    } on DioError catch (e) {
+      Fluttertoast.showToast(
+          msg: e.response?.data['msg'],
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
   }
+/*  void getHttp() async {
+    print("=========ads============");
+    try {
+      var response = await Dio().get('https://govi-piyasa-v-0-1.herokuapp.com/api/v1/advertisements');
+     // final jsonData = jsonDecode(response.data)['data'];
+      print(response.data['data']['Paid']);
+      setState(() {
+        _adsjson =response.data['data'];
+        visibility=_adsjson  ;
+      });
+      print(visibility);
+      print("=========ads============");
 
-  uploadImage(String title, File file) async {
-    var request = http.MultipartRequest(
-        "POST", Uri.parse("https://api.imgur.com/3/image"));
+    } catch (e) {
+      print(e);
+    }
+  }*/
+  final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
+  uploadAds(Title,File file) async {
+    String token = await storage.read(key: "token");
+    dio.options.contentType = 'application/json';
+    dio.options.headers["authorization"] = "Bearer ${token}";
+    print(token);
+    try {
 
-    request.fields['title'] = "dummyImage";
-    request.headers['Authorization'] = "Client-ID " + "f7........";
+      String doc=file.path.split('/').last;
+      FormData formData=FormData.fromMap({
+        "Title": Title,
 
-    var picture = http.MultipartFile.fromBytes('image',
-        (await rootBundle.load('assets/about.jpg')).buffer.asUint8List(),
-        filename: 'about.jpg');
+        "image":await MultipartFile.fromFile(file.path, filename:doc),
 
-    request.files.add(picture);
-
-    var response = await request.send();
-
-    var responseData = await response.stream.toBytes();
-
-    var result = String.fromCharCodes(responseData);
-
-    print(result);
+      });
+      final response=await dio.post('https://govi-piyasa-v-0-1.herokuapp.com/api/v1/advertisements', data: formData);
+      print(response);
+      return response;
+    } on DioError catch (e) {
+      Fluttertoast.showToast(
+          msg: e.message,
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
   }
   Future<Null> refreshList2() async {
     await Future.delayed(Duration(seconds: 3));
   }
+  final myController5 = TextEditingController();
+  final myController6 = TextEditingController();
   //uploadImage('image', File('assets/about.jpg'));
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: RefreshIndicator(
+      body:_isLoading==true?SizedBox(child:Center(child:CircularProgressIndicator())):  RefreshIndicator(
         onRefresh: refreshList2,
-        child:visibility != true
+        child:visibility != false
           ? Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
@@ -145,28 +178,43 @@ class _AdsState extends State<Ads> {
                   padding: EdgeInsets.all(10),
                   child:Center(
                   child:Text("Make Your Advertistment",  style: TextStyle(
-                      color: Colors.black, fontSize: 30.0, fontFamily: 'Indies'),),
+                      color: Colors.black, fontSize: 30.0, fontFamily: 'Roboto'),),
                   )
                 ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: 'Enter Title',
+                Form(
+                    key: _formkey,
+                  child:  Container(
+
+                    margin: const EdgeInsets.all(10.0),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.blueAccent),
+                      borderRadius: BorderRadius.all(Radius.circular(
+                          5.0) //                 <--- border radius here
+                      ),
+                    ),
+                   // padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                    child:  TextFormField(
+                      controller:myController5,
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return 'Please enter title';
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                        enabledBorder: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                        labelText: 'ShopName',
+                        prefixIcon: Icon(
+                          Icons.person,
+                          color: Colors.blue,
+                        ),
+                      ),
+
                     ),
                   ),
                 ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: 'Enter Subtitle',
-                    ),
-                  ),
-                ),
+
                 Container(
                     margin: const EdgeInsets.all(13.0),
                     padding: const EdgeInsets.all(3.0),
@@ -227,7 +275,50 @@ class _AdsState extends State<Ads> {
                       borderRadius: BorderRadius.circular(20),
                     ),
                   ),
-                  onPressed: () {},
+                  onPressed: ()async {
+                    if (_formkey.currentState.validate()) {
+                      setState(() {
+                        _isLoading = true;
+                      });
+
+                      await Future.delayed(
+                          Duration(seconds: 4));
+                      uploadAds(myController5.text,_image);
+
+                      setState(() {
+                        _isLoading = false;
+                      });
+                      AwesomeDialog(
+                        context: context,
+                        dialogType: DialogType.SUCCES,
+                        headerAnimationLoop: false,
+                        animType: AnimType.BOTTOMSLIDE,
+                        title: 'Sucessfully Created',
+                        buttonsTextStyle: const TextStyle(
+                            color: Colors.black),
+                        showCloseIcon: false,
+                        btnOkOnPress: () {},
+                      ).show();
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  Shopdashboard()));
+                    } else {
+                      AwesomeDialog(
+                        context: context,
+                        dialogType: DialogType.ERROR,
+                        headerAnimationLoop: false,
+                        animType: AnimType.BOTTOMSLIDE,
+                        title: 'UnSucessfully',
+                        buttonsTextStyle: const TextStyle(
+                            color: Colors.black),
+                        showCloseIcon: false,
+                        btnOkOnPress: () {},
+                      ).show();
+                    }
+
+                  },
                   child: Text("Apply",
                       style: TextStyle(
                         fontSize: 16,
@@ -248,9 +339,10 @@ class _AdsState extends State<Ads> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                   child: TextField(
+                    controller:myController6,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
-                      hintText: 'Enter amount',
+                      hintText: 'Enter amount minimum Rs 500',
                     ),
                   ),
                 ),
@@ -263,8 +355,12 @@ class _AdsState extends State<Ads> {
                       borderRadius: BorderRadius.circular(20),
                     ),
                   ),
-                  onPressed: () {},
-                  child: Text("Pay ",
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => Payment(amount:"${myController6.text}",cardNo:"4444 4444 4444 4444",expiredate:"12/22"),
+                    ));
+                  },
+                  child: Text("Pay",
                       style: TextStyle(
                         fontSize: 16,
                         letterSpacing: 2.2,

@@ -434,7 +434,7 @@ Future<void> initPlateformState() async{
                 ),
                 ListTile(
                   title: Text("Near by Shops",style:TextStyle(fontSize:20,)),
-                  trailing: Icon(Icons.lightbulb_rounded, color: Colors.black),
+                  trailing: Icon(Icons.add_location_alt_rounded , color: Colors.black),
                   onTap: () {
                     Navigator.of(context).push(
                         MaterialPageRoute(builder: (context) => NearShops()));

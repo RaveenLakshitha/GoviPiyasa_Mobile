@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:email_validator/email_validator.dart';
 import 'package:blogapp/Pages/ForgetPassword.dart';
 import 'package:blogapp/Pages/HomePage.dart';
 import 'package:blogapp/Pages/SignUpPage.dart';
@@ -215,6 +215,7 @@ class _SignInPageState extends State<SignInPage> {
     return Column(
       children: [
         TextFormField(
+          validator: (value) => EmailValidator.validate(value) ? null : "Please enter a valid email",
           controller: _usernameController,
           decoration: InputDecoration(
 
@@ -232,6 +233,12 @@ class _SignInPageState extends State<SignInPage> {
     return Column(
       children: [
         TextFormField(
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Please enter some password';
+            }
+            return null;
+          },
           controller: _passwordController,
           obscureText: vis,
           decoration: InputDecoration(

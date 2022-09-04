@@ -93,7 +93,7 @@ class _expertState extends State<expert> {
               child:InkWell(
                 child: Ink.image(
                   image: NetworkImage(
-                      'https://source.unsplash.com/random?sig=$index'),
+                      '${_itemsJson[index]['profilePicture'][0]['img']}'),
                   fit: BoxFit.cover,
                 ),
                 onTap: (){
@@ -132,8 +132,8 @@ class _expertState extends State<expert> {
                     AnimatedTextKit(
                       animatedTexts: [
                         FadeAnimatedText(
-                          'Fade First',
-                          textStyle: TextStyle(color:Colors.blue,fontSize: 25.0, fontWeight: FontWeight.bold),
+                          'Design your Garden',
+                          textStyle: TextStyle(color:Colors.black,fontSize: 25.0, fontWeight: FontWeight.bold),
                         ),
                      /*   ScaleAnimatedText(
                           'Then Scale',
@@ -164,7 +164,7 @@ class _expertState extends State<expert> {
               leading: CircleAvatar(
                 radius: 28,
                 backgroundImage: NetworkImage(
-                    'https://source.unsplash.com/random?sig=$index'),
+                    '${item['profilePicture'][0]['img']}'),
               ),
               title: AnimatedTextKit(
                 animatedTexts: [

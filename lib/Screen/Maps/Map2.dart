@@ -8,7 +8,9 @@ class Map2 extends StatefulWidget {
 
   double lat;
   double long;
-  Map2({Key key,this.lat,this.long}) : super(key: key);
+  String name;
+  String address;
+  Map2({Key key,this.lat,this.long,this.name,this.address}) : super(key: key);
   @override
   State<Map2> createState() => _Map2State();
 }
@@ -71,8 +73,8 @@ class _Map2State extends State<Map2> {
             position: LatLng(lat,long),
             icon:mapMarker,
             infoWindow: InfoWindow(
-              title: 'colombo',
-              snippet: 'history',
+              title: '${widget.name}',
+              snippet: '${widget.address}',
 
             ),
           )
@@ -92,7 +94,7 @@ class _Map2State extends State<Map2> {
   Widget build(BuildContext context) {
     return Scaffold(
       // floatingActionButtonLocation: CustomFabLoc(),
-        floatingActionButton: FloatingActionButton.extended(
+       /* floatingActionButton: FloatingActionButton.extended(
           onPressed:() async{
             Fluttertoast.showToast(
               msg: "Unsuccessfull",
@@ -105,10 +107,10 @@ class _Map2State extends State<Map2> {
           },
           label: Text('lo'),
           icon: Icon(Icons.location_on),
-        ),
-        drawer: Drawer(
+        ),*/
+      /*  drawer: Drawer(
           child: mapDrawer(),
-        ),
+        ),*/
         appBar: AppBar(
           title: const Text('Google Maps'),
           backgroundColor: Colors.lightGreen,

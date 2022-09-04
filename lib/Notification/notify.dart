@@ -131,7 +131,7 @@ int length;
         title: Text('Notifications',style: TextStyle(
             color: Colors.black,
             fontSize: 30.0,
-            fontFamily: 'Indies'
+            fontFamily: 'Roboto'
         ),),
         elevation: 3,
       ),

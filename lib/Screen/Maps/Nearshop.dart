@@ -23,6 +23,7 @@ class NearShops extends StatefulWidget {
 
 class _NearShopsState extends State<NearShops> {
   Set<Marker> _markers={};
+  ScrollController _scrollController = new ScrollController();
   // Set<Marker> _markers = Set();
   // List <Marker> _markers=<Marker>[];
   BitmapDescriptor mapMarker;
@@ -34,14 +35,11 @@ class _NearShopsState extends State<NearShops> {
   double pos1,pos2;
 
   void initState(){
-
-
-
-
     setState(() {
+      //fetchPosts();
       markers = _markers;
-    });
 
+    });
 //}
     super.initState();
 
@@ -62,7 +60,7 @@ class _NearShopsState extends State<NearShops> {
 
   FlutterSecureStorage storage = FlutterSecureStorage();
   fetchPosts() async {
-    final url = "https://govi-piyasa-v-0-1.herokuapp.com/api/v1/shops/radius/$lat/$long/30";
+    final url = "https://govi-piyasa-v-0-1.herokuapp.com/api/v1/shops/radius/$long/$lat/20";
 
     print("{$lat$long}");
     String token = await storage.read(key: "token");
@@ -160,12 +158,54 @@ class _NearShopsState extends State<NearShops> {
     setState(()  {
     });
   }
+
+  Set<Circle> circles = Set.from([Circle(
+    circleId: CircleId("1"),
+    center: LatLng(5.9407838,80.5661177),
+    radius: 50000,
+    fillColor: Colors.blue.shade100.withOpacity(0.5),
+    strokeColor:  Colors.blue.shade100.withOpacity(0.5),
+  )]);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar:AppBar(
         title: Text('Near Shops'),
-        actions: [
+        actions: <Widget>[
+          SizedBox.fromSize(
+            size: Size(90, 60), // button width and height
+            child: ClipRect(
+              child: Material(
+                color: Colors.white, // button color
+                child: InkWell(
+                  splashColor: Colors.green, // splash color
+                  onTap: ()async {
+
+                    fetchPosts();
+                    Position position = await _getGeoLocationPosition();
+                    location ='Lat: ${position.latitude} , Long: ${position.longitude}';
+                    setState(() {
+                      lat=position.latitude;
+                      long=position.longitude;
+                    });
+                    GetAddressFromLatLong(position);
+                    showPopUp(context);
+                  }, // button pressed
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Icon(Icons.location_on,color:Colors.lightGreen), // icon
+                      Text("Select Your Near shops"), // text
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          )
+
+          // _shoppingCartBadge()
+        ],
+        /*actions: [
           IconButton(
               icon: Icon(Icons.location_on,color:Colors.lightGreen),
               onPressed: () async {
@@ -183,7 +223,7 @@ class _NearShopsState extends State<NearShops> {
               }),
 
 
-        ],
+        ],*/
       ),
       body:_shopjson==null?SizedBox(child: Center(child:CircularProgressIndicator()),):Stack(
         children: [
@@ -220,6 +260,7 @@ class _NearShopsState extends State<NearShops> {
           _controller.complete(controller);
         },
         markers: Set.from(markers),
+        circles: circles,
 
 
 
@@ -238,6 +279,9 @@ class _NearShopsState extends State<NearShops> {
                 if (!snapshot.hasData) {
                   return Container(
                     child:ListView.builder(
+                        controller: _scrollController,
+                        reverse: true,
+                        shrinkWrap: true,
                         scrollDirection: Axis.horizontal,
                         itemCount: _shopjson.length,
                         itemBuilder: (BuildContext context, int index){
@@ -245,7 +289,7 @@ class _NearShopsState extends State<NearShops> {
                           final shop=_shopjson[index];
 
                           if(_shopjson[index]['location']['coordinates']!=null){
-                            for (var i = 0; i <2; i++){
+                            //for (var i = 0; i <2; i++){
                               print(index);
 
 
@@ -266,12 +310,12 @@ class _NearShopsState extends State<NearShops> {
                               );
 
 
-                            }
+                            //}
 
                             return Container(
                               padding: const EdgeInsets.all(8.0),
                               child: _boxes(
-                                  "https://source.unsplash.com/random?sig=$index",
+                                  shop['profilePic'][0]['img'],
                                   shop['location']['coordinates'][0],shop['location']['coordinates'][1],"${shop['shopName']}","${shop['email']}","${shop['address']}","${shop['rating']}","${shop['contactNumber']}","${shop['_id']}"),
                             );
                           }else{

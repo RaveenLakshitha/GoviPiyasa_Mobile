@@ -3,6 +3,7 @@ import 'package:blogapp/shop/table/main.dart';
 import 'package:blogapp/shop/vieworders.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hexcolor/hexcolor.dart';
 
 
 import 'AdminChat.dart';
@@ -22,13 +23,13 @@ class _ServiceState extends State<Service> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.lightGreen,
+        backgroundColor: Colors.white,
         centerTitle: true,
-        flexibleSpace: Image(
+     /*   flexibleSpace: Image(
           image: NetworkImage('https://images.pexels.com/photos/443356/pexels-photo-443356.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940'),
           fit: BoxFit.cover,
           height: 150.0,
-        ),
+        ),*/
 
 
       ),
@@ -42,7 +43,7 @@ class _ServiceState extends State<Service> {
           GestureDetector(
             child: Container(
               padding: const EdgeInsets.all(8),
-              color: Colors.teal[100],
+              color: HexColor("#e9fce4"),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -63,7 +64,7 @@ class _ServiceState extends State<Service> {
           GestureDetector(
             child: Container(
               padding: const EdgeInsets.all(8),
-              color: Colors.teal[200],
+              color: HexColor("#e9fce4"),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -94,7 +95,7 @@ class _ServiceState extends State<Service> {
                 ],),
 
               padding: const EdgeInsets.all(8),
-              color: Colors.teal[300],
+              color: HexColor("#e9fce4"),
 
             ), onTap: () {
             Navigator.push(
@@ -115,7 +116,7 @@ class _ServiceState extends State<Service> {
                     size: 50.0,),
                 ],),
               padding: const EdgeInsets.all(8),
-              color: Colors.teal[400],
+              color: HexColor("#e9fce4"),
 
             ),
             onTap: () {
@@ -132,12 +133,12 @@ class _ServiceState extends State<Service> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text("view Order"),
+                  Text("view Order Table"),
                   Icon(Icons.assignment_rounded ,   color: Colors.black,
                     size: 50.0,),
                 ],),
               padding: const EdgeInsets.all(8),
-              color: Colors.teal[500],
+              color: HexColor("#e9fce4"),
             ),
             onTap: () {
 
@@ -155,14 +156,14 @@ class _ServiceState extends State<Service> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text("Request Ads"),
+                  Text("Charts with Orders"),
                   Icon(Icons.ballot_sharp ,
                     color: Colors.black,
                     size: 50.0,
                   )
                 ],),
               padding: const EdgeInsets.all(8),
-              color: Colors.teal[600],
+              color: HexColor("#e9fce4"),
 
             ),
             onTap: () {

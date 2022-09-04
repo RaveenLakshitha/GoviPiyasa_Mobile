@@ -47,11 +47,11 @@ class _SimpleTableState extends State<SimpleTable> {
     var json = jsonDecode(_postsJson);
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.lightGreen,
+        backgroundColor: Colors.white,
         title: Text("Table Data"),
 
       ),
-      body:_postsJson.length != null?Center(child:CircularProgressIndicator()): SingleChildScrollView(
+      body:_postsJson.length == null?Center(child:CircularProgressIndicator()): SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
         child: Container(
           child: toggle

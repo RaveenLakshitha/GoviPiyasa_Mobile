@@ -35,13 +35,14 @@ class _CartScreenNewState extends State<CartScreenNew> {
   }
 
   Future<Cart> DeleteData(String id) async {
+    print(id);
     var response = await http.delete(Uri.parse(
         'https://govi-piyasa-v-0-1.herokuapp.com/api/v1/cartItems/$id'));
     var data = response.body;
     print(data);
     if (response.statusCode == 201) {
       String responseString = response.body;
-      //CartFromJson(responseString);
+    //  CartFromJson(responseString);
     }
   }
   final url = "https://govi-piyasa-v-0-1.herokuapp.com/api/v1/cartItems/";
@@ -137,7 +138,7 @@ class _CartScreenNewState extends State<CartScreenNew> {
   int totalAmount;
   var _priceToPay;
   void fetchcartItems() async {
-
+    print("cart Items");
     String token = await storage.read(key: "token");
     try {
       final response = await get(
@@ -160,7 +161,7 @@ class _CartScreenNewState extends State<CartScreenNew> {
         _priceToPay=_cartdata['priceToPayOnline'];
 
       });
-
+print(_cartitems);
     } catch (err) {}
   }
   @override
@@ -216,7 +217,7 @@ class _CartScreenNewState extends State<CartScreenNew> {
                                         height: 100,
                                         width: 100,
                                         image: NetworkImage(
-                                            "https://source.unsplash.com/random?sig=$index"),
+                                            "${_cartitems[index]['item']['thumbnail'][0]['img']}"),//"https://source.unsplash.com/random?sig=$index"${_cartitems[index]['thumbnail'][0]['img']}
                                       ),
                                       SizedBox(
                                         width: 10,
@@ -282,7 +283,7 @@ class _CartScreenNewState extends State<CartScreenNew> {
                                                             _isLoading=true;
                                                             _cartitems[index]['amount']++;
                                                           });
-                                                          totalAmount=0;
+                                                          //totalAmount;
                                                           increseAmount(_cartitems[index]['_id']);
                                                          totalAmount=totalAmount+_cartitems[index]['unitPrice']* _cartitems[index]['amount'];
                                                           await Future.delayed(
@@ -304,20 +305,21 @@ class _CartScreenNewState extends State<CartScreenNew> {
                                                     InkWell(
                                                         onTap: () async{
                                                           setState(() {
-                                                            _isLoading=true;
+                                                            //_isLoading=true;
+                                                            DeleteData(_cartitems[index]['item']['_id']);
                                                           });
-                                                          DeleteData(_cartitems[index]['_id']);
+                                                          _cartitems.removeAt(index);
+                                                     /*
                                                           await Future.delayed(
                                                               Duration(seconds: 8));
                                                           setState(() {
                                                             _isLoading=false;
-                                                          });
+                                                          });*/
                                                         //  deletePost(_cartitems[index]['_id']);
 
                                                           //Navigator.pop(context);
                                                         },
-                                                        child:
-                                                       Icon(Icons.delete,color: Colors.red))
+                                                        child: Icon(Icons.delete,color: Colors.red))
                                                   ],
                                                 )
                                             ),

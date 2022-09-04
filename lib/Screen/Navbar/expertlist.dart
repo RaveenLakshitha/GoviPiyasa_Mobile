@@ -235,7 +235,7 @@ class _SellerListState extends State<SellerList> {
                               GestureDetector(
                                 child: Icon(Icons.settings_phone_rounded),
                                 onTap: () {
-                                  launch("tel://+94${post['contactNumber']}");
+                                  launch("tel:+94${post['contactNumber']}");
                                   // launch("mailto:ashennilura@gmail.com?subject=Meeting&body=Can we meet via Google Meet");
                                 },
                               ),

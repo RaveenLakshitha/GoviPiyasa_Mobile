@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:blogapp/Architectureprofile/constants.dart';
 import 'package:blogapp/Screen/Navbar/Delivery.dart';
 import 'package:blogapp/checkout/widgets/itemdetails.dart';
 import 'package:blogapp/checkout/widgets/viewgallery.dart';
@@ -52,6 +53,8 @@ class _ShowitemState extends State<Showitem> with TickerProviderStateMixin {
   List shopPics;
   String imgurl;
   var _shopjson;
+  List doc;
+  List shopItems;
   String _imagepath;
 
   List<Widget> widgets = [Showitem(), Chart()];
@@ -81,16 +84,19 @@ class _ShowitemState extends State<Showitem> with TickerProviderStateMixin {
         profilepic = _shopjson['profilePic'];
         imgurl = profilepic[0]['img'];
         shopPics = _shopjson['shopPictures'];
-        city=_shopjson['googlelocation']['city'];
+        city=_shopjson['city'];
+        shopItems=_shopjson['shopItems'];
+        doc=_shopjson['proofDocs'];
+
       });
       print(shopPics);
     } catch (err) {}
   }
 
-  var _itemsJson = [];
+  //var _itemsJson = [];
   String thumbnail1;
-  void fetchitems() async {
-    print('item');
+  void fetchrentitems() async {
+    print('============items==================');
     String token = await storage.read(key: "token");
     try {
       final response = await get(
@@ -105,10 +111,10 @@ class _ShowitemState extends State<Showitem> with TickerProviderStateMixin {
       print('Shop Items : ${response.body}');
       final jsonData = jsonDecode(response.body)['data']['shopItems'];
       setState(() {
-        _itemsJson = jsonData;
-       // thumbnail1=_itemsJson['thumbnail'][0]['img'];
+       // _itemsJson = jsonData;
+        // thumbnail1=_itemsJson['thumbnail'][0]['img'];
       });
-      print(_itemsJson);
+     // print(_itemsJson);
     } catch (err) {}
   }
 
@@ -169,7 +175,8 @@ class _ShowitemState extends State<Showitem> with TickerProviderStateMixin {
 
   void initState() {
     getData();
-    fetchitems();
+    fetchrentitems();
+
     loadImage();
     fetchshop();
     super.initState();
@@ -204,6 +211,8 @@ class _ShowitemState extends State<Showitem> with TickerProviderStateMixin {
   ):*/
   @override
   Widget build(BuildContext context) {
+    final double padding = 25;
+    final sidePadding = EdgeInsets.symmetric(horizontal: padding);
     return Scaffold(
       //AssetImage("assets/architect.jpg")
       body: _shopjson == null
@@ -270,7 +279,7 @@ class _ShowitemState extends State<Showitem> with TickerProviderStateMixin {
                                                         child: Icon(
                                                           Icons.edit,
                                                           size: 25.0,
-                                                          color: Colors.blue,
+                                                          color: Colors.black,
                                                         ),
                                                       ),
                                                     ),
@@ -348,7 +357,7 @@ class _ShowitemState extends State<Showitem> with TickerProviderStateMixin {
                                         Text(
                                           "${shopName.toString()}",
                                           style: TextStyle(
-                                            color: Colors.red,
+                                            color: Colors.black,
                                             fontWeight: FontWeight.bold,
                                             fontSize: 30.0,
                                           ),
@@ -356,9 +365,9 @@ class _ShowitemState extends State<Showitem> with TickerProviderStateMixin {
                                         Text(
                                           "${city.toString()}",
                                           style: TextStyle(
-                                            color: Colors.red,
+                                            color: Colors.black,
                                             fontWeight: FontWeight.bold,
-                                            fontSize: 10.0,
+                                            fontSize: 15.0,
                                           ),
                                         ),
                                       ]),
@@ -376,14 +385,14 @@ class _ShowitemState extends State<Showitem> with TickerProviderStateMixin {
                               Text(
                                 "${email.toString()}",
                                 style: TextStyle(
-                                  color: Colors.blue,
+                                  color: Colors.black,
                                   fontSize: 15.0,
                                 ),
                               ),
                               Text(
                                 "${address.toString()}",
                                 style: TextStyle(
-                                  color: Colors.blue,
+                                  color: Colors.black,
                                   fontSize: 15.0,
                                 ),
                               ),
@@ -400,7 +409,7 @@ class _ShowitemState extends State<Showitem> with TickerProviderStateMixin {
                                   Text(
                                     "(${rating.toString()})",
                                     style: TextStyle(
-                                      color: Colors.blue,
+                                      color: Colors.black,
                                       fontSize: 15.0,
                                     ),
                                   ),
@@ -413,7 +422,7 @@ class _ShowitemState extends State<Showitem> with TickerProviderStateMixin {
                     Divider(
                       color: Colors.black,
                     ),
-                    Container(
+                     shopPics.length >0 ?Container(
                       child: GridView.builder(
                           gridDelegate:
                               SliverGridDelegateWithFixedCrossAxisCount(
@@ -434,50 +443,35 @@ class _ShowitemState extends State<Showitem> with TickerProviderStateMixin {
                               child: Container(
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                                  color:
-                                  const Color(0x1A0097A7).withOpacity(0.1),
+                                 // borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                  color: const Color(0x1A0097A7).withOpacity(0.1),
                                 ),
-                                child: Image.network(shopPics[index]["img"]),
+                                child: Container(
+
+                                    child:Image.network(shopPics[index]["img"])),
                               ),
                             );
                           }),
+                    ):Container(child:Center(child:Text("No data"))),
+                    Divider(
+                      color: Colors.black,
                     ),
                     Container(
-                      height: 50,
-                      child: ListView(
-                        scrollDirection: Axis.horizontal,
-                        children: <Widget>[
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.all(Radius.circular(
-                                      5.0) //                 <--- border radius here
-                                  ),
-                            ),
-                            width: 185,
-                            child: const Center(
-                                child: Text(
-                              'Items',
-                              style: TextStyle(
-                                  fontSize: 18, color: Colors.lightGreen),
-                            )),
-                          ),
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.all(Radius.circular(
-                                      5.0) //                 <--- border radius here
-                                  ),
-                            ),
-                            width: 185,
-                            child: const Center(
-                                child: Text(
-                              'RentItems',
-                              style:
-                                  TextStyle(fontSize: 18, color: Colors.green),
-                            )),
-                          ),
-                        ],
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(
+                            5.0) //                 <--- border radius here
+                        ),
                       ),
+                      width: 185,
+                      child: const Center(
+                          child: Text(
+                            'Items',
+                              style: TextStyle(
+                                  fontFamily: 'Roboto',
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF545D68))
+                          )),
                     ),
                     Container(
                       child: GridView.builder(
@@ -485,11 +479,11 @@ class _ShowitemState extends State<Showitem> with TickerProviderStateMixin {
                               SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
                           ),
-                          itemCount: _itemsJson.length,
+                          itemCount: shopItems.length,
                           physics: NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
                           itemBuilder: (context, index) {
-                            final item = _itemsJson[index];
+                            final item = shopItems[index];
                             return Card(
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(15.0),
@@ -501,10 +495,10 @@ class _ShowitemState extends State<Showitem> with TickerProviderStateMixin {
                                     children: [
                                       GestureDetector(
                                         child: Container(
-                                          width: 100,
-                                          height: 100,
+                                          width: 80,
+                                          height: 80,
                                           decoration: BoxDecoration(
-                                            color: Colors.deepPurpleAccent,
+                                            color: Colors.white,
                                             image: DecorationImage(
                                               image: NetworkImage(
                                                 '${item['thumbnail'][0]['img']}',
@@ -541,7 +535,7 @@ class _ShowitemState extends State<Showitem> with TickerProviderStateMixin {
                                                   child: Icon(
                                                     FontAwesomeIcons.eye,
                                                     size: 25.0,
-                                                    color: Colors.red,
+                                                    color: Colors.black,
                                                   ),
                                                   onTap: () {
                                                     Navigator.push(
@@ -564,7 +558,7 @@ class _ShowitemState extends State<Showitem> with TickerProviderStateMixin {
                                         child: Icon(
                                           FontAwesomeIcons.edit,
                                           size: 22.0,
-                                          color: Colors.red,
+                                          color: Colors.black,
                                         ),
                                         onTap: () {
                                           Navigator.push(
@@ -611,6 +605,316 @@ class _ShowitemState extends State<Showitem> with TickerProviderStateMixin {
                                   ),
                                 )
 
+                            );
+                          }),
+                    ),
+                    Divider(
+                      color: Colors.black,
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(
+                            5.0) //                 <--- border radius here
+                        ),
+                      ),
+                      width: 185,
+                      child: const Center(
+                          child: Text(
+                            'RentItems',
+                              style: TextStyle(
+                                  fontFamily: 'Roboto',
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF545D68))
+                          )),
+                    ),
+                    Container(
+                      child: GridView.builder(
+                          gridDelegate:
+                          SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                          ),
+                          itemCount: shopItems.length,
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            final item = shopItems[index];
+                            return Card(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15.0),
+                                  side: BorderSide(
+                                      color: Colors.lightGreen, width: 1),
+                                ),
+                                child: ListTile(
+                                  title: Column(
+                                    children: [
+                                      GestureDetector(
+                                        child: Container(
+                                          width: 80,
+                                          height: 80,
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            image: DecorationImage(
+                                              image: NetworkImage(
+                                                '${item['thumbnail'][0]['img']}',
+                                              ),
+                                            ),
+                                            borderRadius:
+                                            BorderRadius.circular(10),
+                                          ),
+                                        ),
+                                        onTap: () {
+                                          //Navigator.push(context,MaterialPageRoute(
+                                          //builder: (context) => Shopview(text: '${data[index].producyName}',price:'${data[index].description}',image:'https://source.unsplash.com/random?sig=$index',description:'${data[index].description}',quantity:'${data[index].description}',category:'${data[index].description}'),));
+                                        },
+                                      ),
+                                      SizedBox(width: 20),
+                                      Column(
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "${item['description']}",
+                                            style: TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.w600),
+                                          ),
+
+                                          Text("Rs:${item['price']}"),
+                                          Container(
+                                              child:Row(
+                                                children: [
+                                                  Text("${item['quantity']}"),
+                                                  SizedBox(width: 40,),
+                                                  GestureDetector(
+                                                    child: Icon(
+                                                      FontAwesomeIcons.eye,
+                                                      size: 25.0,
+                                                      color: Colors.black,
+                                                    ),
+                                                    onTap: () {
+                                                      Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                            builder: (context) => Itemdetails(text: '${item['productName']}',price:'${item['price']}',image:'${item['thumbnail'][0]['img']}',description:'${item['description']}',quantity:'${item['quantity']}',category:'${item['categoryName']}'),
+                                                          ));
+                                                    },
+                                                  ),
+                                                ],
+                                              )
+                                          )
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                  trailing: Column(
+                                    children: [
+                                      GestureDetector(
+                                        child: Icon(
+                                          FontAwesomeIcons.edit,
+                                          size: 22.0,
+                                          color: Colors.black,
+                                        ),
+                                        onTap: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) => Updateitem(
+                                                    id: '${item['_id']}',
+                                                    productName: '${item['productName']}',
+                                                    description:
+                                                    '${item['description']}',
+                                                    price: '${item['price']}',
+                                                    quantity: '${item['quantity']}',
+                                                    categoryName: '${item['categoryName']}',
+                                                    image: '${item['image']}'),
+                                              ));
+                                        },
+                                      ),
+                                      SizedBox(
+                                        height: 5.0,
+                                      ),
+
+
+                                      GestureDetector(
+                                        child: Icon(
+                                          FontAwesomeIcons.trash,
+                                          size: 22.0,
+                                          color: Colors.red,
+                                        ),
+                                        onTap: () {
+
+                                          DeleteData(item['_id']);
+
+                                          Fluttertoast.showToast(
+                                            msg: "Deleted",
+                                            toastLength: Toast.LENGTH_SHORT,
+                                            gravity: ToastGravity.BOTTOM,
+                                            backgroundColor: Colors.red,
+                                            textColor: Colors.white,
+                                            fontSize: 16.0,
+                                          );
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                )
+
+                            );
+                          }),
+                    ),
+                    Padding(
+                      padding: sidePadding,
+                      child: Center(
+                          child: Text(
+                              "ProofDocuments",
+                              style: TextStyle(
+                                  fontFamily: 'Roboto',
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF545D68))
+                          )),
+                    ),
+                    doc == null
+                        ? SizedBox()
+                        : Container(
+                      height: 200,
+                      decoration: BoxDecoration(
+                        border:
+                        Border.all(color: Colors.blueAccent),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(22),
+                          topRight: Radius.circular(22),
+                          bottomLeft: Radius.circular(22),
+                          bottomRight: Radius.circular(22),
+                        ),
+                      ),
+                      margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                      child: ListView.builder(
+                          itemCount: doc.length,
+                          itemBuilder:
+                              (BuildContext context, int index) {
+                            return Container(
+                              margin:
+                              EdgeInsets.fromLTRB(10, 0, 10, 0),
+                              height: 160,
+                              child: InkWell(
+                                onTap: () {},
+                                child: Stack(
+                                  alignment: Alignment.bottomCenter,
+                                  children: <Widget>[
+                                    // Those are our background
+                                    Container(
+                                      height: 116,
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                        BorderRadius.circular(
+                                            22),
+                                        color: index.isEven
+                                            ? kBlueColor
+                                            : kSecondaryColor,
+                                        boxShadow: [kDefaultShadow],
+                                      ),
+                                      child: Container(
+                                        margin: EdgeInsets.only(
+                                            right: 10),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                          BorderRadius.circular(
+                                              22),
+                                        ),
+                                      ),
+                                    ),
+                                    // our product image
+                                    GestureDetector(
+                                      onTap: ()
+                                      {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => viewgallery(
+                                                    image:"${doc[index]['img']}")));
+                                      },
+                                      child: Positioned(
+                                        top: 55,
+                                        right: 20,
+                                        child: Hero(
+                                          tag: 'mk',
+                                          child: Container(
+                                            padding:
+                                            EdgeInsets.symmetric(
+                                                horizontal:
+                                                kDefaultPadding),
+                                            height: 100,
+                                            // image is square but we add extra 20 + 20 padding thats why width is 200
+                                            width: 160,
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                BorderRadius
+                                                    .circular(10),
+                                                image: DecorationImage(
+                                                    image: NetworkImage(
+                                                        "${doc[index]['img']}"),
+                                                    fit: BoxFit
+                                                        .cover)),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+
+                                    // Product title and price
+                                    Positioned(
+                                      bottom: 0,
+                                      left: 0,
+                                      child: SizedBox(
+                                        height: 106,
+                                        // our image take 200 width, thats why we set out total width - 200
+                                        width: 200,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                          CrossAxisAlignment
+                                              .start,
+                                          children: <Widget>[
+                                            Spacer(),
+                                            Padding(
+                                              padding: const EdgeInsets.symmetric(
+                                                  horizontal:
+                                                  kDefaultPadding),
+                                              child: Text(
+                                                "",
+                                                style: Theme.of(
+                                                    context)
+                                                    .textTheme
+                                                    .button,
+                                              ),
+                                            ),
+                                            // it use the available space
+                                            Spacer(),
+                                            /*     Container(
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: kDefaultPadding * 1.5, // 30 padding
+                                                vertical: kDefaultPadding / 4, // 5 top and bottom
+                                              ),
+                                              decoration: BoxDecoration(
+                                                color: kSecondaryColor,
+                                                borderRadius: BorderRadius.only(
+                                                  bottomLeft: Radius.circular(22),
+                                                  topRight: Radius.circular(22),
+                                                ),
+                                              ),
+                                              child: Text(
+                                                "\$",
+                                                style: Theme.of(context).textTheme.button,
+                                              ),
+                                            ),*/
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             );
                           }),
                     ),

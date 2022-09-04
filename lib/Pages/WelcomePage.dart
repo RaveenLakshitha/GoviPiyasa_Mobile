@@ -129,7 +129,7 @@ class _WelcomePageState extends State<WelcomePage>
               ),
               boxContainer(
                 "assets/email2.png",
-                "Sign up with Email",
+                "Create Account",
                 onEmailClick,
               ),
               SizedBox(

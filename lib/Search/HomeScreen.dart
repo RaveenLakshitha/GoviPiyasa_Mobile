@@ -244,6 +244,7 @@ class _SearchitemsState extends State<Searchitems>
                         itemCount: data?.length,
                         shrinkWrap: true,
                         primary: false,
+                        physics: ScrollPhysics(),
                         itemBuilder: (context, index) {
 
                           if (!snapshot.hasData) {
@@ -260,12 +261,10 @@ class _SearchitemsState extends State<Searchitems>
                                         text: "${data[index].productName}",
                                         price: "${data[index].price}",
                                         image: '${data[index].thumbnail.img}',
-                                        description:
-                                        "${data[index].description}",
+                                        description: "${data[index].description}",
                                         quantity: "${data[index].quantity}",
-                                        category:
-                                        "${data[index].parentCategoryName}",
-                                        //shopPic1:"${data[index].productPictures.img}",
+                                         category: "${data[index].parentCategoryName}",
+                                       // shopPic1:"${data[index].productPictures.img}",
                                       ),
 
                                     ));
@@ -381,7 +380,7 @@ class _SearchitemsState extends State<Searchitems>
                                                       Scaffold.of(context).showSnackBar(new SnackBar(
                                                           content: new Text("Item Added to wishlist")
                                                       ));
-                                                      /*     Navigator.push(
+                                                           Navigator.push(
                                                       context,
                                                       MaterialPageRoute(
                                                         builder: (context) => Itemdetails(
@@ -390,14 +389,14 @@ class _SearchitemsState extends State<Searchitems>
                                                             price:
                                                             "${data[index].price}",
                                                             image:
-                                                            'https://source.unsplash.com/random?sig=$index',
+                                                            '${data[index].thumbnail.img}',
                                                             description:
                                                             "${data[index].description}",
                                                             quantity:
                                                             "${data[index].quantity}",
-                                                            category:
-                                                            "${data[index].categoryName}"),
-                                                      ));*/
+                                                         //   category: "${data[index].categoryName}"
+                                                        ),
+                                                      ));
                                                     },
                                                     icon: Icon(
                                                       Icons.favorite,
@@ -412,13 +411,13 @@ class _SearchitemsState extends State<Searchitems>
                                                         size: 25,
                                                       ),
                                                       onPressed: () {
-                                                        Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                              builder: (context) => Shopview(
-                                                                id: "${data[index].shopId.id}",),
-                                                            ));
-                                                        print(data[index].shopId.id);
+                                                        // Navigator.push(
+                                                        //     context,
+                                                        //     MaterialPageRoute(
+                                                        //       builder: (context) => Shopview(
+                                                        //         id: "${data[index].shopId.id}",),
+                                                        //     ));
+                                                        //print(data[index].shopId.id);
                                                       }),
                                                 ),
                                                 Align(
@@ -472,7 +471,7 @@ class _SearchitemsState extends State<Searchitems>
                                 ),
                               ),
                             );
-                          }else{
+                           }else{
                             return SizedBox.shrink();
                           }
 

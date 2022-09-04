@@ -58,7 +58,7 @@ class _ShopdashboardState extends State<Shopdashboard> {
         title: Text(
           "My Shop",
           style: TextStyle(
-              color: Colors.black, fontSize: 30.0, fontFamily: 'Indies'),
+              color: Colors.black, fontSize: 30.0, fontFamily: 'Roboto'),
         ),
         centerTitle: true,
         actions: [
