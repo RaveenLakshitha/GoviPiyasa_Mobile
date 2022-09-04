@@ -148,9 +148,9 @@ class _SellerListState extends State<SellerList> {
               }),
           title: Text('ExpertList',
               style: TextStyle(
-                  fontFamily: 'Varela',
+                  fontFamily: 'Roboto',
                   fontSize: 20.0,
-                  color: Colors.blue)),
+                  color: Colors.black)),
         ),
         body: RefreshIndicator(
           onRefresh: refreshList2,
@@ -259,7 +259,7 @@ class _SellerListState extends State<SellerList> {
                                 list:_postsJson[index]['expertReviews'],
                                 slots:_postsJson[index]['appointmentSlots'],
                                 docs:_postsJson[index]['proofDocuments'],
-                                image:"https://source.unsplash.com/random?sig=$index",
+                                image:"${post['user']['profilePicture']}",
                                 email:"${post['email']}",
                               )));
                     },

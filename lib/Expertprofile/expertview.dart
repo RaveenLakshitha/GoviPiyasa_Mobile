@@ -3,6 +3,7 @@ import 'package:blogapp/checkout/widgets/viewgallery.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:http/http.dart' as http;
 import 'ExpertAppointmentCalender.dart';
 import 'expertmap.dart';
@@ -40,14 +41,14 @@ class _expertViewState extends State<expertView> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-        backgroundColor: Colors.white,
+     //   backgroundColor: Colors.white,
         appBar: AppBar(
           leading: IconButton(
             onPressed: () {
               Navigator.of(context).pop();
             },
             icon: Icon(Icons.arrow_back_ios),
-            color: Colors.white,
+            color: Colors.black,
           ),
           backgroundColor: Colors.transparent,
           elevation: 0.0,
@@ -55,21 +56,9 @@ class _expertViewState extends State<expertView> {
               style: TextStyle(
                   fontFamily: 'Roboto',
                   fontSize: 28.0,
-                  color: Colors.white)),
+                  color: Colors.black)),
           centerTitle: true,
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.more_horiz),
-              onPressed: () {
-              /*  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => expertmap()));*/
 
-              },
-              color: Colors.white,
-            )
-          ],
         ),
         body: ListView(
             children: [
@@ -86,7 +75,7 @@ class _expertViewState extends State<expertView> {
                               topLeft: Radius.circular(45.0),
                               topRight: Radius.circular(45.0),
                             ),
-                            color: Colors.white),
+                          color:  HexColor("#e9fce4"),),
                         height: MediaQuery.of(context).size.height - 100.0,
                         width: MediaQuery.of(context).size.width)),
                 Positioned(
@@ -94,14 +83,21 @@ class _expertViewState extends State<expertView> {
                     left: (MediaQuery.of(context).size.width / 1.8) - 100.0,
                     child: Hero(
                         tag: widget.description,
-                        child: Container(
+                        child:widget.image==null? Container(
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
                                 image: DecorationImage(
-                                    image: NetworkImage("${widget.image}"),
+                                    image: NetworkImage("https://source.unsplash.com/random?sig=${1}"),
                                     fit: BoxFit.cover)),
                             height: 150.0,
-                            width: 150.0))),
+                            width: 150.0): Container(
+                            decoration: BoxDecoration(
+    borderRadius: BorderRadius.circular(10),
+    image: DecorationImage(
+    image: NetworkImage("${widget.image}"),
+    fit: BoxFit.cover)),
+    height: 150.0,
+    width: 150.0))),
                 Positioned(
                     top: 180.0,
                     left: 25.0,

@@ -303,7 +303,7 @@ print(id);
                             margin: EdgeInsets.all(5),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
-                              color: index.isEven ? Colors.blue : Colors.lightGreen,
+                              color: index.isEven ? Colors.lightBlueAccent : Colors.lightGreen,
                             ),
                             child: ListTile(
                               title: Text("${slots[index]['description']}"),

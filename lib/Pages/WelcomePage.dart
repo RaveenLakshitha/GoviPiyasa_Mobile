@@ -128,7 +128,7 @@ class _WelcomePageState extends State<WelcomePage>
                 height: 30,
               ),
               boxContainer(
-                "assets/email2.png",
+                "assets/register1.png",
                 "Create Account",
                 onEmailClick,
               ),

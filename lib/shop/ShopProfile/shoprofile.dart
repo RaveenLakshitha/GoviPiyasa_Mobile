@@ -49,6 +49,7 @@ class _ShowitemState extends State<Showitem> with TickerProviderStateMixin {
   String shopid;
   String rating;
   String address;
+  String contact;
   List profilepic;
   List shopPics;
   String imgurl;
@@ -82,11 +83,12 @@ class _ShowitemState extends State<Showitem> with TickerProviderStateMixin {
         rating = _shopjson['rating'].toString();
         address = _shopjson['address'].toString();
         profilepic = _shopjson['profilePic'];
-        imgurl = profilepic[0]['img'];
+       // imgurl = profilepic[0]['img'];
         shopPics = _shopjson['shopPictures'];
         city=_shopjson['city'];
         shopItems=_shopjson['shopItems'];
         doc=_shopjson['proofDocs'];
+        contact= _shopjson['contactNumber'];
 
       });
       print(shopPics);
@@ -270,7 +272,8 @@ class _ShowitemState extends State<Showitem> with TickerProviderStateMixin {
                                                                   email:
                                                                       "${email}",
                                                                   address:
-                                                                      "${address}"),
+                                                                      "${address}",
+                                                              contact:"${contact}"),
                                                             ));
                                                       },
                                                       child: Padding(
@@ -329,37 +332,33 @@ class _ShowitemState extends State<Showitem> with TickerProviderStateMixin {
                                                         MainAxisAlignment
                                                             .center,
                                                     children: [
-                                                      IconButton(
+                                                   /*   IconButton(
                                                           onPressed: () {
                                                             chooseImage(
                                                                 ImageSource
                                                                     .gallery);
                                                           },
                                                           icon: Icon(Icons
-                                                              .camera_alt_sharp)),
-                                                      /*         IconButton(
-                                          onPressed: () {
-                                            SaveImage(_image.path);
-                                            Fluttertoast.showToast(
-                                              msg: "Saved",
-                                              toastLength: Toast.LENGTH_SHORT,
-                                              gravity: ToastGravity.BOTTOM,
-                                              backgroundColor: Colors.red,
-                                              textColor: Colors.white,
-                                              fontSize: 16.0,
-                                            );
-                                          },
-                                          icon: Icon(Icons.api_outlined)),*/
+                                                              .camera_alt_sharp)),*/
+                                                      Text(
+                                                        "${shopName.toString()}",
+                                                        style: TextStyle(
+                                                          color: Colors.black,
+                                                          fontWeight: FontWeight.bold,
+                                                          fontSize: 30.0,
+                                                        ),
+                                                      ),
+
                                                     ]),
                                               ),
                                             ]),
                                        ),
                                         Text(
-                                          "${shopName.toString()}",
+                                          "${contact.toString()}",
                                           style: TextStyle(
                                             color: Colors.black,
                                             fontWeight: FontWeight.bold,
-                                            fontSize: 30.0,
+                                            fontSize: 20.0,
                                           ),
                                         ),
                                         Text(

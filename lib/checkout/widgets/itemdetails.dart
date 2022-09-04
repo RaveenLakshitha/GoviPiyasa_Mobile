@@ -11,16 +11,18 @@ import 'package:http/http.dart' as http;
 import 'package:share/share.dart';
 
 class Itemdetails extends StatefulWidget {
+  final String id;
   final String text;
   final String price;
   final String image;
   final String quantity;
   final String description;
   final String category;
-  final String shopPic1;
+  final List shopPic1;
 
   Itemdetails(
       {Key key,
+        @required this.id,
       @required this.text,
       @required this.price,
       @required this.image,
@@ -32,20 +34,22 @@ class Itemdetails extends StatefulWidget {
 
   @override
   State<Itemdetails> createState() =>
-      _ItemdetailsState(text, price, image, quantity, description, category,shopPic1);
+      _ItemdetailsState(id,text, price, image, quantity, description, category,shopPic1);
 }
 
 class _ItemdetailsState extends State<Itemdetails> {
   double rating = 0.0;
+  String id;
   String text;
   String price;
   String image;
   String quantity;
   String category;
   String description;
-  String shopPic1;
+  List shopPic1;
 
   FlutterSecureStorage storage = FlutterSecureStorage();
+
   addrate(String rate,String id)async{
 
     String token = await storage.read(key: "token");
@@ -70,8 +74,7 @@ class _ItemdetailsState extends State<Itemdetails> {
       }
     });
   }
-  _ItemdetailsState(this.text, this.price, this.image, this.quantity,
-      this.description, this.category,this.shopPic1);
+  _ItemdetailsState(this.id,this.text, this.price, this.image, this.quantity, this.description, this.category,this.shopPic1);
 
   void showRating(id) => showDialog(
         context: context,
@@ -96,8 +99,9 @@ class _ItemdetailsState extends State<Itemdetails> {
           actions: [
             TextButton(
                 onPressed: () async {
-                  addrate(rating.toString(),id);
-                  await Future.delayed(Duration(seconds: 3));
+                  //showRating(id);
+                 addrate(rating.toString(),id);
+                 await Future.delayed(Duration(seconds: 3));
                   Navigator.pop(context);
                   Fluttertoast.showToast(
                     msg: "successfully",
@@ -149,8 +153,8 @@ class _ItemdetailsState extends State<Itemdetails> {
         children: [
           Column(
             children: [
-              Expanded(
-                flex: 3,
+              Container(
+
                 child: Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
@@ -159,9 +163,7 @@ class _ItemdetailsState extends State<Itemdetails> {
                     ),*/
                       ),
                   child: Column(children: [
-                    SizedBox(
-                      height: 40.0,
-                    ),
+                    SizedBox(height: 20,),
                     Positioned(
                       width: size.width,
                       top: padding,
@@ -183,21 +185,25 @@ class _ItemdetailsState extends State<Itemdetails> {
                                 ),
                               ),
                             ),
-                            BorderIcon(
-                              height: 50,
-                              width: 50,
-                              child: Icon(
-                                Icons.favorite_border,
-                                color: Colors.red,
+                            InkWell(
+                              onTap:(){
+                                showRating(id);
+                                //Navigator.pop(context);
+                              },
+                              child: BorderIcon(
+                                height: 50,
+                                width: 50,
+                                child: Icon(
+                                  Icons.rate_review,
+                                  color: Colors.red,
+                                ),
                               ),
                             ),
                           ],
                         ),
                       ),
                     ),
-                    SizedBox(
-                      height: 10.0,
-                    ),
+
                     GestureDetector(
                       onTap: () {
                         Navigator.push(
@@ -207,9 +213,9 @@ class _ItemdetailsState extends State<Itemdetails> {
                                     viewgallery(image: image)));
                       },
                       child: Container(
-                        width: 500,
-                        height: 240,
-                        margin: EdgeInsets.all(20.0),
+                        width: 350,
+                        height: 200,
+                        margin: EdgeInsets.all(15.0),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(15.0),
                           image: DecorationImage(
@@ -219,86 +225,45 @@ class _ItemdetailsState extends State<Itemdetails> {
                         ),
                       ),
                     ),
-                    Center(
-                      child: Container(
-                        margin: EdgeInsets.fromLTRB(30, 0, 30, 0),
-                        height: 60,
-                        child: ListView(
-                          scrollDirection: Axis.horizontal,
-                          children: <Widget>[
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => viewgallery(
-                                            image:
-                                                'https://images.unsplash.com/photo-1586882829491-b81178aa622e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2850&q=80')));
-                              },
-                              child: Card(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15.0),
-                                ),
-                                /* decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.all(Radius.circular(5.0) //                 <--- border radius here
-                                  ),
-                                ),*/
-                                //width: 200,
 
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(8.0),
-                                  child: Image.network(
-                                      'https://images.unsplash.com/photo-1586882829491-b81178aa622e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2850&q=80'),
-                                ),
+                    Container(
+                      child: GridView.builder(
+                          gridDelegate:
+                          SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                          ),
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: shopPic1.length,
+                          itemBuilder: (BuildContext ctx, index) {
+                            return GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => viewgallery(
+                                            image: shopPic1[index]
+                                            ["img"])));
+                              },
+                              child: Container(
+                                 // height: MediaQuery.of(context).size.height,
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    // borderRadius: BorderRadius.all(
+                                    //     Radius.circular(10.0)),
+                                    color: const Color(0x1A0097A7)
+                                        .withOpacity(0.1),
+                                  ),
+                                  child:
+                                  FittedBox(
+                                    child:Image.network(
+
+                                        shopPic1[index]["img"]),
+                                    fit: BoxFit.fill,
+                                  )
                               ),
-                            ),
-                            SizedBox(
-                              width: 2.0,
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => viewgallery(
-                                            image:
-                                                'https://images.unsplash.com/photo-1586871608370-4adee64d1794?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2862&q=80')));
-                              },
-                              child: Card(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15.0),
-                                  ),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(8.0),
-                                    child: Image.network(
-                                        'https://images.unsplash.com/photo-1586882829491-b81178aa622e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2850&q=80'),
-                                  )),
-                            ),
-                            SizedBox(
-                              width: 2.0,
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => viewgallery(
-                                            image:
-                                                'https://images.unsplash.com/photo-1586882829491-b81178aa622e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2850&q=80')));
-                              },
-                              child: Card(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15.0),
-                                  ),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(8.0),
-                                    child: Image.network(
-                                        'https://images.unsplash.com/photo-1586882829491-b81178aa622e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2850&q=80'),
-                                  )),
-                            ),
-                          ],
-                        ),
-                      ),
+                            );
+                          }),
                     ),
                     SizedBox(
                       height: 10.0,
@@ -314,9 +279,22 @@ class _ItemdetailsState extends State<Itemdetails> {
                         Share.share('${text}', subject: '${description}');
                       },
                     ),
+                    Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                        buildRating1(double.parse("${rating}")),
+                        // Icon(Icons.star,color: Colors.yellow,),
+                        Text(
+                          "(${rating})",
+                          style: TextStyle(
+                            color: Colors.blue,
+                            fontSize: 20.0,
+                          ),
+                        ),
+                      ]),
+                    ),
 
-                    /* buildRating1(
-                            double.parse(widget.rating.toString())),*/
                     Container(
                       /* decoration: BoxDecoration(
                         gradient: LinearGradient(
@@ -329,10 +307,10 @@ class _ItemdetailsState extends State<Itemdetails> {
                                 borderRadius: BorderRadius.circular(15.0),
                                 side: BorderSide(color: Colors.black, width: 1),
                               ),
-                              margin: EdgeInsets.fromLTRB(0.0, 45.0, 0.0, 0.0),
+                              margin: EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 0.0),
                               child: Container(
                                   width: 310.0,
-                                  height: 220.0,
+                                  height: 210.0,
                                   child: Padding(
                                     padding: EdgeInsets.all(10.0),
                                     child: Column(

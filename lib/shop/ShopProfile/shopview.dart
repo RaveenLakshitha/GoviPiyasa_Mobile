@@ -3,6 +3,7 @@ import 'package:blogapp/Architectureprofile/constants.dart';
 import 'package:blogapp/Screen/Maps/Map2.dart';
 import 'package:blogapp/checkout/widgets/viewgallery.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:blogapp/shop/custom/BorderIcon.dart';
@@ -101,14 +102,17 @@ class _ShopviewState extends State<Shopview> {
     super.initState();
   }
 
-  Future<http.Response> addrate(String rate) {
+  Future<http.Response> addrate(String rate,String id) async{
+    String token = await storage.read(key: "token");
     return http.post(
-      Uri.parse('https://jsonplaceholder.typicode.com/albums'),
+      Uri.parse('https://govi-piyasa-v-0-1.herokuapp.com/api/v1/ratings'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token',
       },
       body: jsonEncode(<String, String>{
         'rating': rate,
+        'shopId':id
       }),
     );
   }
@@ -589,9 +593,20 @@ class _ShopviewState extends State<Shopview> {
               ]),
           actions: [
             TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                  // addrate(rating.toString());
+                onPressed: ()async {
+setState(() {
+  addrate(rating.toString(),id);
+});
+await Future.delayed(Duration(seconds: 10));
+                   Navigator.pop(context);
+                   Fluttertoast.showToast(
+                     msg: "Rate added",
+                     toastLength: Toast.LENGTH_SHORT,
+                     gravity: ToastGravity.BOTTOM,
+                     backgroundColor: Colors.red,
+                     textColor: Colors.white,
+                     fontSize: 16.0,
+                   );
                 },
                 child: Text('Ok', style: TextStyle(fontSize: 20))),
             TextButton(

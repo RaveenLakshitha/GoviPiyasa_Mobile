@@ -38,7 +38,7 @@ dependencies:
   geocoding: any
   fluttertoast:
   url_launcher: ^5.4.1
-  font_awesome_flutter: ^9.2.0
+
   charts_flutter: ^0.7.0
   flutter_widget_from_html_core: ^0.2.0
   flutter_carousel_slider: ^1.0.1
@@ -99,7 +99,9 @@ dependencies:
   extended_image:
   oktoast: ^3.1.5
   image_size_getter: ^2.1.2
+  font_awesome_flutter: ^10.1.0
   hexcolor:
+
 
 
 
@@ -208,6 +210,7 @@ flutter:
     - assets/splashscreen.jpg
     - assets/bankimg.jpg
     - assets/garden2.jpg
+    - assets/register1.png
 
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg

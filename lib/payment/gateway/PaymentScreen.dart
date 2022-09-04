@@ -75,10 +75,10 @@ final String amount;
             icon: Icon(FontAwesomeIcons.arrowLeft),
             onPressed: () {
             }),
-        backgroundColor: Colors.lightGreen,
+        backgroundColor: Colors.white,
         title: new Text(' Select Payment Method '),
         actions: <Widget>[
-          IconButton(
+       /*   IconButton(
             icon: Icon(Icons.clear),
             onPressed: () {
               setState(() {
@@ -88,7 +88,7 @@ final String amount;
                 _paymentToken = null;
               });
             },
-          )
+          )*/
         ],
       ),
       body: ListView(
@@ -96,7 +96,7 @@ final String amount;
         padding: const EdgeInsets.all(20),
         children: <Widget>[
          RaisedButton(
-            child: Text("Create Source"),
+            child: Text("Proceed Payment"),
             onPressed: () {
               StripePayment.createSourceWithParams(SourceParams(
                 type: 'ideal',
@@ -114,8 +114,8 @@ final String amount;
               }).catchError(setError);
             },
           ),
-          Divider(),
-          RaisedButton(
+         // Divider(),
+       /*   RaisedButton(
             child: Text("Create Token with Card Form"),
             onPressed: () {
               StripePayment.paymentRequestWithCardForm(CardFormPaymentRequest()).then((paymentMethod) {
@@ -156,7 +156,7 @@ final String amount;
                 });
               }).catchError(setError);
             },
-          ),
+          ),*/
        /*   RaisedButton(
             child: Text("Create Payment Method with existing token"),
             onPressed: _paymentToken == null

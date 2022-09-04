@@ -128,9 +128,9 @@ class _SignInPageState extends State<SignInPage> {
                             circular = true;
                           });
                           await Future.delayed(Duration(seconds: 15));
-                          setState(() {
+                       /*   setState(() {
                             circular = false;
-                          });
+                          });*/
                           //Login Logic start here
                           Map<String, String> data = {
                             "email": _usernameController.text,

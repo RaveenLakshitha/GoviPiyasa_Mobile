@@ -21,7 +21,7 @@ class _OtpState extends State<Otp> {
     var res =await EmailAuth.sendOtp(receiverMail:_emailController.text);
     if(res){
       Fluttertoast.showToast(
-        msg: 'OTP Send',
+        msg: 'OTP Send to your Email',
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         backgroundColor: Colors.red,
@@ -47,7 +47,7 @@ class _OtpState extends State<Otp> {
          MaterialPageRoute(
              builder: (context) => Forgetpassword()));
      Fluttertoast.showToast(
-       msg: 'Sucessfull',
+       msg: 'Sucessfully verified',
        toastLength: Toast.LENGTH_SHORT,
        gravity: ToastGravity.BOTTOM,
        backgroundColor: Colors.red,

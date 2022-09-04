@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:blogapp/Architectureprofile/screens/ArchitectureProjects.dart';
+import 'package:blogapp/checkout/widgets/viewgallery.dart';
 
 import 'package:blogapp/shop/DataModel.dart';
 import 'package:blogapp/shop/ShopProfile/updateitem.dart';
@@ -8,6 +10,7 @@ import 'package:blogapp/shop/ShopProfile/updateitem.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:hexcolor/hexcolor.dart';
 
 import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
@@ -33,7 +36,11 @@ class _ArchitectprofileState extends State<Architectprofile>{
   String arcid;
   String description;
   String motto;
-
+  List profilepic;
+  List services;
+  List shopPics;
+  List projects;
+  List proofDocuments;
   var _architecture;
   String _imagepath;
 
@@ -72,7 +79,11 @@ class _ArchitectprofileState extends State<Architectprofile>{
         motto = _architecture['motto'].toString();
         email = _architecture['email'].toString();
         arcid = _architecture['_id'].toString();
-        // arcid = _architecture['awards'];
+        profilepic=_architecture['profilePicture'];
+        shopPics = _architecture['shopImages'];
+        services= _architecture['services'];
+        projects = _architecture['projects'];
+        proofDocuments = _architecture['proofDocuments'];
       });
     } catch (err) {}
   }
@@ -194,11 +205,11 @@ class _ArchitectprofileState extends State<Architectprofile>{
 
                           child:Text(
                             "${businessName.toString()}",
-                            style: TextStyle(
-                              color: Colors.red,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 30.0,
-                            ),
+                              style: TextStyle(
+                                  fontFamily: 'Roboto',
+                                  fontSize: 30.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF545D68))
                           ),
                         ),
                       ),
@@ -269,7 +280,7 @@ class _ArchitectprofileState extends State<Architectprofile>{
                                                     Radius.circular(8.0)),
                                                 image: DecorationImage(
                                                   image: NetworkImage(
-                                                      'https://govibucket01.s3.amazonaws.com/N1xVmQtgz-devil_may_cry_character_wings_army_light_sword_21828_1920x1080.jpg'),
+                                                      '${profilepic[0]['img']}'),
                                                 ),
                                               ),
                                             )
@@ -299,7 +310,7 @@ class _ArchitectprofileState extends State<Architectprofile>{
                                           SizedBox(
                                             height: 50,
                                             child: Center(
-                                              child: Column(children: [
+                                              child: Column(children: [/*
                                                 GestureDetector(
                                                   child: Row(
                                                       mainAxisAlignment: MainAxisAlignment.center,
@@ -310,7 +321,7 @@ class _ArchitectprofileState extends State<Architectprofile>{
                                                             },
                                                             icon: Icon(Icons.camera_alt_sharp)),
                                                       ]),
-                                                ),
+                                                ),*/
                                               ]),
                                             ),
                                           ),
@@ -335,7 +346,7 @@ class _ArchitectprofileState extends State<Architectprofile>{
                         child: Container(
                             padding: EdgeInsets.all(8),
                             decoration: BoxDecoration(
-                              color: Colors.lightBlue,
+                              color: HexColor("#e9fce4"),
                               borderRadius: BorderRadius.only(
                                 topLeft: Radius.circular(22),
                                 topRight: Radius.circular(22),
@@ -360,13 +371,44 @@ class _ArchitectprofileState extends State<Architectprofile>{
                     ]),
 
               ),
+              shopPics.length >0 ?Container(
+                child: GridView.builder(
+                    gridDelegate:
+                    SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                    ),
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: shopPics.length,
+                    itemBuilder: (BuildContext ctx, index) {
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => viewgallery(
+                                      image: shopPics[index]["img"])));
+                        },
+                        child: Container(
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            // borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                            color: const Color(0x1A0097A7).withOpacity(0.1),
+                          ),
+                          child: Container(
+
+                              child:Image.network(shopPics[index]["img"])),
+                        ),
+                      );
+                    }),
+              ):Container(child:Center(child:Text("No data"))),
               Container(
                 padding: EdgeInsets.symmetric(
                   horizontal: kDefaultPadding * 1.5, // 30 padding
                   vertical: kDefaultPadding / 4, // 5 top and bottom
                 ),
                 decoration: BoxDecoration(
-                  color: kSecondaryColor,
+                  color: HexColor("#e9fce4"),
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(22),
                     topRight: Radius.circular(22),
@@ -381,24 +423,24 @@ class _ArchitectprofileState extends State<Architectprofile>{
                   ),
                 ),
               ),
-              Container(child:Text("Awards",  style: TextStyle(
+              Container(child:Text("Services",  style: TextStyle(
                 color: Colors.black,
                 fontSize: 25.0,
                 fontWeight: FontWeight.bold,
               ),),),
               Container(
-                  height: 150.0,
+                  height: 100.0,
                   child: ListView.builder(
-                      itemCount: 5,
+                      itemCount: services.length,
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (BuildContext context, int index){
-                        return  _buildInfoCard('WEIGHT', '', 'G');
+                        return  _buildInfoCard('${services[index]}}', '', '');
                       }
 
 
                   )),
               Divider(),
-              Container(child:Text("Projects",  style: TextStyle(
+              Container(child:Text("My Projects",  style: TextStyle(
                 color: Colors.black,
                 fontSize: 25.0,
                 fontWeight: FontWeight.bold,
@@ -416,14 +458,19 @@ class _ArchitectprofileState extends State<Architectprofile>{
                 height: 200,
                 margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
                 child: ListView.builder(
-                    itemCount: 3,
+                    itemCount: projects?.length,
                     itemBuilder: (BuildContext context, int index) {
                       return Container(
                         margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
 
                         height: 160,
                         child: InkWell(
-                          onTap: (){},
+                          onTap: (){
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ArchitectProject(title:"${projects[index]['title']}",description:"${projects[index]['description']}",pics:projects[index]['projectPictures'])));
+                          },
                           child: Stack(
                             alignment: Alignment.bottomCenter,
                             children: <Widget>[
@@ -458,7 +505,7 @@ class _ArchitectprofileState extends State<Architectprofile>{
                                         borderRadius: BorderRadius.circular(10),
                                         image: DecorationImage(
                                             image: NetworkImage(
-                                                "https://source.unsplash.com/random?sig=$index"),
+                                                "${projects[index]['projectPictures'][0]['img']}"),
                                             fit: BoxFit.cover)),
                                   ),
                                 ),
@@ -469,7 +516,7 @@ class _ArchitectprofileState extends State<Architectprofile>{
                                 bottom: 0,
                                 left: 0,
                                 child: SizedBox(
-                                  height: 106,
+                                  height: 100,
                                   // our image take 200 width, thats why we set out total width - 200
                                   width:200,
                                   child: Column(
@@ -480,7 +527,7 @@ class _ArchitectprofileState extends State<Architectprofile>{
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: kDefaultPadding),
                                         child: Text(
-                                          "nnj",
+                                          "${projects[index]['title']}",
                                           style: Theme.of(context).textTheme.button,
                                         ),
                                       ),
@@ -513,7 +560,23 @@ class _ArchitectprofileState extends State<Architectprofile>{
                       );
                     }),
               ),
+              Container(child:Text("Proof Documents",  style: TextStyle(
+                color: Colors.black,
+                fontSize: 25.0,
+                fontWeight: FontWeight.bold,
+              ),),),
+              Container(
+                  height: 150.0,
+                  child: ListView.builder(
+                      itemCount: proofDocuments.length,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (BuildContext context, int index){
+                        return  _buildInfoCard1('', '${proofDocuments[0]['img']}', '');
+                      }
 
+
+                  )),
+              SizedBox(height: 50,),
             ],
           ),
         ),
@@ -528,6 +591,80 @@ class _ArchitectprofileState extends State<Architectprofile>{
       _image = File(_imagepath.toString());
     });
     print(_imagepath);
+  }
+  Widget _buildInfoCard1(String cardTitle, String info, String unit) {
+    return InkWell(
+        onTap: () {
+          selectCard(cardTitle);
+        },
+        child: AnimatedContainer(
+            margin: EdgeInsets.all(5),
+            duration: Duration(milliseconds: 500),
+            curve: Curves.easeIn,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10.0),
+              color:
+              cardTitle == selectedCard ? Colors.lightGreen : Colors.white,
+              border: Border.all(
+                  color: cardTitle == selectedCard
+                      ? Colors.transparent
+                      : Colors.grey.withOpacity(0.3),
+                  style: BorderStyle.solid,
+                  width: 0.75),
+            ),
+            height: 100.0,
+            width: 200.0,
+            child: Column(
+
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                    onTap: (){
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => viewgallery(
+                                  image:info)));
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(10),
+
+                      height: 100,
+                      width: 180,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          image: DecorationImage(
+                              image: NetworkImage(
+                                  "${info}"),
+                              fit: BoxFit.cover)),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 15.0, bottom: 8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text("",
+                            style: TextStyle(
+                                fontFamily: 'Roboto',
+                                fontSize: 14.0,
+                                color: cardTitle == selectedCard
+                                    ? Colors.white
+                                    : Colors.black,
+                                fontWeight: FontWeight.bold)),
+                        Text(unit,
+                            style: TextStyle(
+                              fontFamily: 'Roboto',
+                              fontSize: 12.0,
+                              color: cardTitle == selectedCard
+                                  ? Colors.white
+                                  : Colors.black,
+                            ))
+                      ],
+                    ),
+                  )
+                ])));
   }
   Widget _buildInfoCard(String cardTitle, String info, String unit) {
     return InkWell(
@@ -549,7 +686,7 @@ class _ArchitectprofileState extends State<Architectprofile>{
                   style: BorderStyle.solid,
                   width: 0.75),
             ),
-            height: 100.0,
+            height: 60.0,
             width: 100.0,
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -571,9 +708,9 @@ class _ArchitectprofileState extends State<Architectprofile>{
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text(info,
+                        Text("",
                             style: TextStyle(
-                                fontFamily: 'Montserrat',
+                                fontFamily: 'Roboto',
                                 fontSize: 14.0,
                                 color: cardTitle == selectedCard
                                     ? Colors.white
@@ -581,7 +718,7 @@ class _ArchitectprofileState extends State<Architectprofile>{
                                 fontWeight: FontWeight.bold)),
                         Text(unit,
                             style: TextStyle(
-                              fontFamily: 'Montserrat',
+                              fontFamily: 'Roboto',
                               fontSize: 12.0,
                               color: cardTitle == selectedCard
                                   ? Colors.white

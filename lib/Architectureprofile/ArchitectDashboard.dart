@@ -1,4 +1,5 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:blogapp/Architectureprofile/projects.dart';
 import 'package:blogapp/Architectureprofile/screens/ArchitectureProjects.dart';
 import 'package:blogapp/Architectureprofile/services.dart';
 
@@ -24,7 +25,7 @@ class _ArchitectdashboardState extends State<Architectdashboard> {
   final Itemservice api = Itemservice();
   final storage = FlutterSecureStorage();
 
-  List<Widget> widgets = [Architectprofile(), Appointmentslot(), ArchitectProject()];
+  List<Widget> widgets = [Architectprofile(), Appointmentslot(), Projects()];
 
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
@@ -62,10 +63,13 @@ class _ArchitectdashboardState extends State<Architectdashboard> {
             }),
         title: Text(
           "My Architecture Profile",
-          style: TextStyle(
-              color: Colors.white, fontSize: 25.0, fontFamily: 'Indies'),
+            style: TextStyle(
+                fontFamily: 'Roboto',
+                fontSize: 20.0,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF545D68))
         ),
-        backgroundColor: Colors.lightGreen,
+        backgroundColor: Colors.white,
         centerTitle: true,
         actions: [
           IconButton(
@@ -84,7 +88,7 @@ class _ArchitectdashboardState extends State<Architectdashboard> {
             size: Size(60, 60), // button width and height
             child: ClipRect(
               child: Material(
-                color: Colors.orange, // button color
+                color: Colors.white, // button color
                 child: InkWell(
                   splashColor: Colors.green, // splash color
                   onTap: () {

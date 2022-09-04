@@ -34,10 +34,14 @@ class _CartScreenNewState extends State<CartScreenNew> {
     }
   }
 
-  Future<Cart> DeleteData(String id) async {
+   DeleteData(String id) async {
     print(id);
+    String token = await storage.read(key: "token");
     var response = await http.delete(Uri.parse(
-        'https://govi-piyasa-v-0-1.herokuapp.com/api/v1/cartItems/$id'));
+        'https://govi-piyasa-v-0-1.herokuapp.com/api/v1/cartItems/$id',),headers: {
+      "Content-Type": "application/json",
+      'Authorization': 'Bearer $token',
+    },);
     var data = response.body;
     print(data);
     if (response.statusCode == 201) {
@@ -306,7 +310,7 @@ print(_cartitems);
                                                         onTap: () async{
                                                           setState(() {
                                                             //_isLoading=true;
-                                                            DeleteData(_cartitems[index]['item']['_id']);
+                                                            DeleteData(_cartitems[index]['_id']);
                                                           });
                                                           _cartitems.removeAt(index);
                                                      /*
@@ -315,7 +319,7 @@ print(_cartitems);
                                                           setState(() {
                                                             _isLoading=false;
                                                           });*/
-                                                        //  deletePost(_cartitems[index]['_id']);
+                                                         // deletePost(_cartitems[index]['_id']);
 
                                                           //Navigator.pop(context);
                                                         },

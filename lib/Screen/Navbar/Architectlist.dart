@@ -100,7 +100,7 @@ class _expertState extends State<expert> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => Architectureview(id:"${item['_id']}",businessName:"${item['businessName']}",description:"${item['description']}",contactNumber:"${item['contactNumber']}",motto:"${item['motto']}",email:"${item['email']}",rating:"${item['rating']}",image:"https://source.unsplash.com/random?sig=$index"),//{item['profilePicture'][0]['img']}
+                        builder: (context) => Architectureview(id:"${item['_id']}",businessName:"${item['businessName']}",description:"${item['description']}",contactNumber:"${item['contactNumber']}",motto:"${item['motto']}",email:"${item['email']}",rating:"${item['rating']}",image:"${item['profilePicture'][0]['img']}",projects:item['projects'],services:item['services']),
                       ));
                 },
               ),
@@ -116,9 +116,9 @@ class _expertState extends State<expert> {
                         TypewriterAnimatedText(
                           '${item['businessName']}',
                           textStyle: const TextStyle(
-                            fontSize: 20.0,
+                            fontSize: 15.0,
                             fontWeight: FontWeight.bold,
-                            color:Colors.white
+                            color:Colors.black
                           ),
                           speed: const Duration(milliseconds: 500),
                         ),
@@ -133,7 +133,7 @@ class _expertState extends State<expert> {
                       animatedTexts: [
                         FadeAnimatedText(
                           'Design your Garden',
-                          textStyle: TextStyle(color:Colors.black,fontSize: 25.0, fontWeight: FontWeight.bold),
+                          textStyle: TextStyle(color:Colors.black,fontSize: 10.0, fontWeight: FontWeight.bold),
                         ),
                      /*   ScaleAnimatedText(
                           'Then Scale',
@@ -189,7 +189,7 @@ class _expertState extends State<expert> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => Architectureview(id:"${item['_id']}",businessName:"${item['businessName']}",description:"${item['description']}",contactNumber:"${item['contactNumber']}",motto:"${item['motto']}",email:"${item['email']}",rating:"${item['rating']}",appointmentSlots:_itemsJson[index]['appointmentSlots'],image:"https://source.unsplash.com/random?sig=$index"),
+                      builder: (context) => Architectureview(id:"${item['_id']}",businessName:"${item['businessName']}",description:"${item['description']}",contactNumber:"${item['contactNumber']}",motto:"${item['motto']}",email:"${item['email']}",rating:"${item['rating']}",appointmentSlots:_itemsJson[index]['appointmentSlots'],image:"${item['profilePicture'][0]['img']}",projects:item['projects'],services:item['services']),
                     ));
 
               },

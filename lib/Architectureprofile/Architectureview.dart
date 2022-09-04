@@ -1,12 +1,14 @@
 import 'dart:convert';
 
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:blogapp/Architectureprofile/screens/ArchitectureProjects.dart';
 import 'package:blogapp/Architectureprofile/screens/details/components/list_of_colors.dart';
 import 'package:blogapp/assets/my_flutter_app_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:http/http.dart';
 import 'package:showcaseview/showcaseview.dart';
 import 'AppointmentCalender.dart';
@@ -239,7 +241,7 @@ class _ArchitectureviewState extends State<Architectureview> {
                             vertical: kDefaultPadding / 2,
                           ),
                           decoration: BoxDecoration(
-                            color: Color(0xFFFCBF1E),
+                            color:  HexColor("#e9fce4"),
                             borderRadius: BorderRadius.circular(30),
                           ),
                           child: Row(
@@ -265,7 +267,12 @@ class _ArchitectureviewState extends State<Architectureview> {
                               vertical: kDefaultPadding / 2),
                           child: Text(
                             widget.motto,
-                            style: Theme.of(context).textTheme.headline6,
+
+                              style: TextStyle(
+                                  fontFamily: 'Roboto',
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF545D68))
                           ),
                         ),
                         Text(
@@ -273,7 +280,7 @@ class _ArchitectureviewState extends State<Architectureview> {
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w600,
-                            color: kSecondaryColor,
+                              color: Colors.black
                           ),
                         ),
                         Center(
@@ -346,10 +353,11 @@ class _ArchitectureviewState extends State<Architectureview> {
             Center(
               child: SizedBox(
                 child:DefaultTextStyle(
-                  style: const TextStyle(
-                    fontSize: 20.0,
-                    color:Colors.blue
-                  ),
+                    style: TextStyle(
+                        fontFamily: 'Roboto',
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF545D68)),
                   child: AnimatedTextKit(
                     animatedTexts: [
                       WavyAnimatedText('Projects'),
@@ -368,21 +376,24 @@ class _ArchitectureviewState extends State<Architectureview> {
             SizedBox(
               height: 10,
             ),
-           Container(
-                height: 150.0,
-                child: ListView.builder(
-                  itemCount: 7,
-                    controller: _scrollController,
-                    reverse: true,
-                    shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                    itemBuilder: (BuildContext context, int index){
-                    return  _buildInfoCard('WEIGHT', '${_awardsitem.length}', 'G');
-                    }
+           Center(
+             child: Container(
+                  height: 150.0,
+                  width: MediaQuery.of(context).size.width,
+                  child: ListView.builder(
+                    itemCount: widget.services.length,
+                      controller: _scrollController,
+                      reverse: true,
+                      shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                      itemBuilder: (BuildContext context, int index){
+                      return  _buildInfoCard('${widget.services[index]}', '${widget.services.length}', 'G');
+                      }
 
 
-                )),
-           Container(child:Center(child:Text("Awards",style: TextStyle(
+                  )),
+           ),
+           Container(child:Center(child:Text("Projects",style: TextStyle(
            color: Colors.black,
            fontSize: 25.0,
            fontWeight: FontWeight.bold,
@@ -400,14 +411,20 @@ class _ArchitectureviewState extends State<Architectureview> {
               ),
               margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
               child:ListView.builder(
-                  itemCount: 3,
+                  itemCount:widget.projects.length,
                   itemBuilder: (BuildContext context, int index) {
                     return Container(
                       margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
 
                       height: 160,
                       child: InkWell(
-                        onTap: (){},
+                        onTap: (){
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ArchitectProject(title:"${widget.projects[index]['title']}",description:"${widget.projects[index]['description']}",pics:widget.projects[index]['projectPictures'])));
+
+                        },
                         child: Stack(
                           alignment: Alignment.bottomCenter,
                           children: <Widget>[
@@ -442,7 +459,7 @@ class _ArchitectureviewState extends State<Architectureview> {
                                         borderRadius: BorderRadius.circular(10),
                                         image: DecorationImage(
                                             image: NetworkImage(
-                                                "https://source.unsplash.com/random?sig=$index"),
+                                                "${widget.projects[index]['projectPictures'][0]['img']}"),
                                             fit: BoxFit.cover)),
                                   ),
                                 ),
@@ -464,10 +481,26 @@ class _ArchitectureviewState extends State<Architectureview> {
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: kDefaultPadding),
                                       child: Text(
-                                        "hvhv",
-                                        style: Theme.of(context).textTheme.button,
+                                        "${widget.projects[index]['title']}",
+                                          style: TextStyle(
+                                            fontFamily: 'Roboto',
+                                            fontSize: 15.0,
+                                            fontWeight: FontWeight.bold,
+                                          )
                                       ),
                                     ),
+                               /*     Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: kDefaultPadding),
+                                      child: Text(
+                                        "${widget.projects[index]['description']}",
+                                        style: TextStyle(
+                                          fontFamily: 'Roboto',
+                                          fontSize: 15.0,
+
+                                        )
+                                      ),
+                                    ),*/
                                     // it use the available space
                                     Spacer(),
                                     Container(
@@ -525,7 +558,7 @@ class _ArchitectureviewState extends State<Architectureview> {
                   style: BorderStyle.solid,
                   width: 0.75),
             ),
-            height: 100.0,
+            height: 60.0,
             width: 100.0,
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -535,8 +568,8 @@ class _ArchitectureviewState extends State<Architectureview> {
                     padding: const EdgeInsets.only(top: 8.0, left: 15.0),
                     child: Text(cardTitle,
                         style: TextStyle(
-                          fontFamily: 'Montserrat',
-                          fontSize: 12.0,
+                          fontFamily: 'Roboto',
+                          fontSize: 20.0,
                           color: cardTitle == selectedCard
                               ? Colors.white
                               : Colors.grey.withOpacity(0.7),
@@ -547,22 +580,22 @@ class _ArchitectureviewState extends State<Architectureview> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text(info,
+                       /* Text(info,
                             style: TextStyle(
-                                fontFamily: 'Montserrat',
-                                fontSize: 14.0,
+                                fontFamily: 'Roboto',
+                                fontSize: 20.0,
                                 color: cardTitle == selectedCard
                                     ? Colors.white
                                     : Colors.black,
-                                fontWeight: FontWeight.bold)),
-                        Text(unit,
+                                fontWeight: FontWeight.bold)),*/
+                 /*       Text(unit,
                             style: TextStyle(
-                              fontFamily: 'Montserrat',
-                              fontSize: 12.0,
+                              fontFamily: 'Roboto',
+                              fontSize: 20.0,
                               color: cardTitle == selectedCard
                                   ? Colors.white
                                   : Colors.black,
-                            ))
+                            ))*/
                       ],
                     ),
                   )

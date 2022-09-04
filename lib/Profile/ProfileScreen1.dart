@@ -229,11 +229,11 @@ class MapScreenState extends State<ProfilePage>
                                     SizedBox(width: 10,),
                                     Padding(
                                       padding: EdgeInsets.only(left: 5.0),
-                                      child: new Text('PROFILE',
+                                      child: new Text('Profile',
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 20.0,
-                                              fontFamily: 'sans-serif-light',
+                                              fontFamily: 'Roboto',
                                               color: Colors.black)),
                                     ),
                                     SizedBox(width: 50,),
@@ -266,38 +266,7 @@ class MapScreenState extends State<ProfilePage>
                                         ),
                                       ),
                                     ),*/
-                                    SizedBox(width: 10,),
-                                    Padding(
-                                      padding: EdgeInsets.only(right: 2.0),
-                                      child:Material(
-                                        type: MaterialType.transparency,
-                                        child: Ink(
-                                          decoration: BoxDecoration(
-                                            border: Border.all(color: Colors.green, width: 2.0),
-                                            color: Colors.lightGreen,
-                                            shape: BoxShape.circle,
-                                          ),
-                                          child: InkWell(
-                                            borderRadius: BorderRadius.circular(400.0),
-                                            onTap: () {   Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      Orderhistory(),
-                                                ));},
-                                            child: Padding(
-                                              padding: EdgeInsets.all(10.0),
-                                              child: Icon(
-                                                Icons.article_sharp,
-                                                size: 25.0,
-                                                color: Colors.blue,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(width: 10,),
+
                                   ],
                                 )),
                             Padding(

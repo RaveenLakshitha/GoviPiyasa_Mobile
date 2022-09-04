@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
@@ -14,6 +15,7 @@ class Orderhistory extends StatefulWidget {
 }
 
 class _OrderhistoryState extends State<Orderhistory> {
+  FlutterSecureStorage storage = FlutterSecureStorage();
   Future<http.Response> addrate(String rate) {
     return http.post(
       Uri.parse('https://jsonplaceholder.typicode.com/albums'),
@@ -25,7 +27,7 @@ class _OrderhistoryState extends State<Orderhistory> {
       }),
     );
   }
-
+  double rating=0.0;
   Future<http.Response> addreview(String review) {
     return http.post(
       Uri.parse('https://jsonplaceholder.typicode.com/albums'),
@@ -38,7 +40,7 @@ class _OrderhistoryState extends State<Orderhistory> {
     );
   }
 
-  double rating;
+
 
   void lanchwhatsapp({@required number, @required message}) async {
     String url = "whatsapp://send?phone=$number&text=$message";
@@ -50,15 +52,19 @@ class _OrderhistoryState extends State<Orderhistory> {
 
   //https://jsonplaceholder.typicode.com/posts
   // https://mongoapi3.herokuapp.com/users
-  final url = "https://govi-piyasa-v-0-1.herokuapp.com/api/v1/auths/getExperts";
-  var _postsJson = [];
+  final url = "https://govi-piyasa-v-0-1.herokuapp.com/api/v1/shoporders/getUsersOrders";
+  var _orderhistory = [];
 
-  void fetchPosts() async {
+  void fetchOrders() async {
+    String token = await storage.read(key: "token");
     try {
-      final response = await get(Uri.parse(url));
+      final response = await get(Uri.parse(url),  headers: {
+        "Content-Type": "application/json",
+        'Authorization': 'Bearer $token',
+      },);
       final jsonData = jsonDecode(response.body)['data'] as List;
       setState(() {
-        _postsJson = jsonData;
+        _orderhistory = jsonData;
       });
     } catch (err) {}
   }
@@ -70,7 +76,7 @@ class _OrderhistoryState extends State<Orderhistory> {
       this.rating = 5;
     });
 
-    fetchPosts();
+    fetchOrders();
     // fetchData();
   }
 
@@ -82,21 +88,21 @@ class _OrderhistoryState extends State<Orderhistory> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.lightGreen,
+          backgroundColor: Colors.white,
           elevation: 0.0,
           centerTitle: true,
           title: Text('Order History',
               style: TextStyle(
-                  fontFamily: 'Varela',
+                  fontFamily: 'Roboto',
                   fontSize: 20.0,
                   color: Color(0xFF545D68))),
         ),
         body: RefreshIndicator(
           onRefresh: refreshList2,
           child: ListView.builder(
-              itemCount: _postsJson.length,
+              itemCount: _orderhistory.length,
               itemBuilder: (BuildContext context, index) {
-                final post = _postsJson[index];
+                final post = _orderhistory[index];
                 return Container(
                   margin: const EdgeInsets.all(20.0),
                   decoration: BoxDecoration(
@@ -106,52 +112,28 @@ class _OrderhistoryState extends State<Orderhistory> {
                     ),
                   ),
                   child: ListTile(
-                    leading: Image.network("${post['profilePicture']}"),
-                    title: Text("Name:${post['userName']}"),
+                    leading: Image.network("${post['orderedItem']['item']['thumbnail'][0]['img']}"),
+                    title: Text("${post['orderedItem']['item']['productName']}"),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text("Email:${post['email']}"),
-                        Text("City:${post['city']}"),
-                        Text("Contact:+94${post['contactNumber']}"),
+                        Text("${post['orderedItem']['item']['price']}"),
+                        Text("${post['orderedItem']['item']['quantity']}"),
+                        Text("${post['orderedItem']['item']['description']}"),
                         Row(children: [
-                          Text("$rating"),
-                          buildRating1(),
+                          Text("${post['orderedItem']['item']['rating']}"),
+                          buildRating1(double.parse(post['orderedItem']['item']['rating'].toString())),
                         ]),
-                        Row(
-                          children: [
-                            TextButton(
-                              child: Text(
-                                'Rate',
-                                style: TextStyle(fontSize: 14),
-                              ),
-                              onPressed: () => showRating(),
-                            ),
-                            TextButton(
-                              child: Text(
-                                'Review',
-                                style: TextStyle(fontSize: 14),
-                              ),
-                              onPressed: () => showReview(),
-                            ),
-                          ],
-                        ),
-                        GestureDetector(
-                          child: Icon(Icons.settings_phone_rounded),
-                          onTap: () {
-                            launch("tel://+94${post['contact']}");
-                            // launch("mailto:ashennilura@gmail.com?subject=Meeting&body=Can we meet via Google Meet");
-                          },
-                        ),
+
                       ],
                     ),
-                    trailing: GestureDetector(
+                /*    trailing: GestureDetector(
                       child: Icon(Icons.add_call),
                       onTap: () {
                         lanchwhatsapp(
                             number: "+94${post['contact']}", message: "hello");
                       },
-                    ),
+                    ),*/
                     isThreeLine: true,
                   ),
                 );
@@ -159,18 +141,17 @@ class _OrderhistoryState extends State<Orderhistory> {
         ));
   }
 
-  Widget buildRating() => RatingBar.builder(
+  Widget buildRating1(rating) => RatingBar.builder(
     minRating: 1,
     itemSize: 18,
+    initialRating: rating,
     itemPadding: EdgeInsets.symmetric(horizontal: 4),
     itemBuilder: (context, _) => Icon(Icons.star, color: Colors.amber),
     updateOnDrag: false,
-    onRatingUpdate: (rating) => setState(() {
-      this.rating = rating;
-    }),
+
   );
 
-  Widget buildRating1() => RatingBar.builder(
+/*  Widget buildRating1() => RatingBar.builder(
     minRating: 1,
     itemSize: 18,
     itemPadding: EdgeInsets.symmetric(horizontal: 4),
@@ -179,89 +160,7 @@ class _OrderhistoryState extends State<Orderhistory> {
     onRatingUpdate: (rating) => setState(() {
       this.rating = rating;
     }),
-  );
+  );*/
 
-  void showRating() => showDialog(
-    context: context,
-    builder: (context) => AlertDialog(
-      title: Text('Rate this Product'),
-      content: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text('Please leave a star rating',
-                style: TextStyle(fontSize: 10)),
-            SizedBox(
-              height: 5.0,
-            ),
-            Row(
-              children: [
-                Text("$rating"),
-                buildRating(),
-              ],
-            )
-          ]),
-      actions: [
-        TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              addrate(rating.toString());
-            },
-            child: Text('Ok', style: TextStyle(fontSize: 20))),
-        TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: Text('Cancel', style: TextStyle(fontSize: 20)))
-      ],
-    ),
-  );
 
-  void showReview() => showDialog(
-    context: context,
-    builder: (context) => AlertDialog(
-      title: Text('Review this Product'),
-      content: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Form(
-              key: _formKey,
-              child: Column(
-                children: <Widget>[
-                  TextFormField(
-
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter some text';
-                      }
-                      return null;
-                    },
-                    controller: myController,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: 'Review',
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 5.0,
-            ),
-
-          ]),
-      actions: [
-        TextButton(
-            onPressed: () {
-              if (_formKey.currentState.validate()) {
-                addreview(myController.text);
-                Navigator.pop(context);
-              }
-
-            },
-            child: Text('Ok', style: TextStyle(fontSize: 20)))
-      ],
-    ),
-  );
 }

@@ -1,10 +1,12 @@
-import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:http/http.dart' as http;
+
+import 'package:dio/dio.dart';
+import 'package:image_picker/image_picker.dart';
 
 class EditArchitect extends StatefulWidget {
 
@@ -52,7 +54,49 @@ class _EditArchitectState extends State<EditArchitect> with SingleTickerProvider
   final String description;
   _EditArchitectState(this.id,this.businessName, this.email, this.motto,this.description);
   bool _status = true;
+  final picker = ImagePicker();
+  File _file;
+  chooseProfileImage(ImageSource source) async {
+    final image = await picker.getImage(source: source);
+    setState(() {
+      _file = File(image.path);
+    });
+  }
   final FocusNode myFocusNode = FocusNode();
+  Dio dio =Dio();
+  updateshop(String contactNumber,String shopName,String email, String address,File pic) async {
+    String token = await storage.read(key: "token");
+    print(id);
+    dio.options.contentType = 'application/json';
+    dio.options.headers["authorization"] = "Bearer ${token}";
+    print(token);
+    try {
+
+
+      String picName=pic.path.split('/').last;
+      FormData formData=FormData.fromMap({
+        //'_id':id,
+        'businessName':businessName,
+        'email':email,
+        'motto':motto,
+        'description':description,
+        'contactNumber':contactNumber,
+        "profilePicture":await MultipartFile.fromFile(pic.path, filename:picName),
+
+      });
+      final response=await dio.post('https://govi-piyasa-v-0-1.herokuapp.com/api/v1/shops/updateUsersShop', data: formData);
+      print(response);
+      return response;
+    } on DioError catch (e) {
+      Fluttertoast.showToast(
+          msg: e.message,
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
+  }/*
   Future<Architect> updateArchitect(String id,String businessName,String email, String motto,String description) async {
     print(id);
     final response = await http.put(
@@ -78,7 +122,7 @@ class _EditArchitectState extends State<EditArchitect> with SingleTickerProvider
 
       throw Exception('Failed to update data.');
     }
-  }
+  }*/
   Future<Null> refreshList() async {
     await Future.delayed(Duration(seconds: 3));
   }
@@ -335,67 +379,52 @@ class _EditArchitectState extends State<EditArchitect> with SingleTickerProvider
                                       ),
                                     ],
                                   )),
-                              /*   Padding(
-                                  padding: EdgeInsets.only(
-                                      left: 25.0, right: 25.0, top: 25.0),
-                                  child: new Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: <Widget>[
-                                      Expanded(
-                                        child: Container(
-                                          child: new Text(
-                                            'City',
-                                            style: TextStyle(
-                                                fontSize: 16.0,
-                                                fontWeight: FontWeight.bold),
+
+                              Container(
+                                  margin:
+                                  const EdgeInsets.only(left: 10.0, right: 10.0),
+                                  decoration:BoxDecoration(
+                                      border: Border.all(color: Colors.lightGreen, width: 1),
+                                      borderRadius:BorderRadius.circular(15)
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Container(
+                                        padding: EdgeInsets.all(5),
+                                        child: _file!=null
+                                            ?Container(
+                                          height: 50,
+                                          width:80,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                                            image:DecorationImage(
+                                              image:FileImage(_file),
+                                            ),
+                                          ),
+                                        ):Container(
+                                          height: 50,
+                                          width:50,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                                            color:Colors.grey,
                                           ),
                                         ),
-                                        flex: 2,
+
+
                                       ),
-                                      Expanded(
-                                        child: Container(
-                                          child: new Text(
-                                            'Role',
-                                            style: TextStyle(
-                                                fontSize: 16.0,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        ),
-                                        flex: 2,
-                                      ),
+                                      Text("Profile Picture"),
+                                      Container(child:Row(
+                                        children: [
+                                          IconButton(
+                                              onPressed:(){
+                                                chooseProfileImage(ImageSource.gallery);
+                                              }, icon: Icon(Icons.camera_alt_sharp) )
+                                        ],
+                                      )),
                                     ],
-                                  )),*/
-                              Padding(
-                                  padding: EdgeInsets.only(
-                                      left: 25.0, right: 25.0, top: 2.0),
-                                  child: new Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: <Widget>[
-                                      /*      Flexible(
-                                        child: Padding(
-                                          padding: EdgeInsets.only(right: 10.0),
-                                          child: new TextField(
-                                            controller: myController4,
-                                            decoration: const InputDecoration(
-                                                hintText: "Enter a city"),
-                                            enabled: !_status,
-                                          ),
-                                        ),
-                                        flex: 2,
-                                      ),
-                                      Flexible(
-                                        child: new TextField(
-                                          controller: myController5,
-                                          decoration: const InputDecoration(
-                                              hintText: "Role"),
-                                          enabled: !_status,
-                                        ),
-                                        flex: 2,
-                                      ),*/
-                                    ],
-                                  )),
+                                  )
+                              ),
                               !_status ? _getActionButtons() : new Container(),
                             ],
                           ),
@@ -424,7 +453,7 @@ class _EditArchitectState extends State<EditArchitect> with SingleTickerProvider
                     textColor: Colors.white,
                     color: Colors.green,
                     onPressed: () {
-                      updateArchitect(myController4.text,myController1.text, myController2.text, myController3.text,myController3.text);
+                      updateshop(myController4.text,myController1.text, myController2.text, myController3.text,_file);
                       Fluttertoast.showToast(
                         msg: "Architect Updated",
                         toastLength: Toast.LENGTH_SHORT,

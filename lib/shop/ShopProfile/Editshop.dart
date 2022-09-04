@@ -1,35 +1,41 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:http/http.dart' as http;
 
+import 'package:dio/dio.dart';
+import 'package:image_picker/image_picker.dart';
 class Editshop extends StatefulWidget {
 
   final String id;
   final String shopName;
   final String email;
   final String address;
+  final String contact;
+
   Editshop(
       {
         @required this.id,
         @required this.shopName,
         @required this.email,
-        @required this.address,});
+        @required this.address,
+        @required this.contact,
+      });
   @override
-  State<Editshop> createState() => _EditshopState(id,shopName,email,address);
+  State<Editshop> createState() => _EditshopState(id,shopName,email,address,contact);
 }
 class Shop {
   final String id;
   final String shopName;
   final String email;
- // final String contactNumber;
+  final String contactNumber;
   final String address;
 
 
-  const Shop({@required this.id, @required this.shopName,@required this.email,@required this.address,});
+  const Shop({@required this.id, @required this.shopName,@required this.email,@required this.address,@required this.contactNumber});
 
   factory Shop.fromJson(Map<String, dynamic> json) {
     return Shop(
@@ -37,6 +43,7 @@ class Shop {
       shopName: json['shopName'],
       email: json['email'],
       address:json['address'],
+      contactNumber:json['contactNumber'],
 
 
     );
@@ -47,9 +54,11 @@ class _EditshopState extends State<Editshop> with SingleTickerProviderStateMixin
   final String shopName;
   final String email;
   final String address;
-  _EditshopState(this.id,this.shopName, this.email, this.address,);
+  final String  contactNumber;
+  _EditshopState(this.id,this.shopName, this.email, this.address,this.contactNumber);
   bool _status = true;
   final FocusNode myFocusNode = FocusNode();
+/*
   Future<Shop> updateShop(String id,String shopName,String email, String address) async {
     print(id);
     final response = await http.put(
@@ -75,18 +84,58 @@ class _EditshopState extends State<Editshop> with SingleTickerProviderStateMixin
       throw Exception('Failed to update album.');
     }
   }
+*/
+  Dio dio =Dio();
+  updateshop(String contactNumber,String shopName,String email, String address,File pic) async {
+    String token = await storage.read(key: "token");
+    print(id);
+    dio.options.contentType = 'application/json';
+    dio.options.headers["authorization"] = "Bearer ${token}";
+    print(token);
+    try {
+
+
+      String picName=pic.path.split('/').last;
+      FormData formData=FormData.fromMap({
+        //'_id':id,
+        'shopName':shopName,
+        'email':email,
+        'address':address,
+        'contactNumber':contactNumber,
+        "profilePicture":await MultipartFile.fromFile(pic.path, filename:picName),
+
+      });
+      final response=await dio.post('https://govi-piyasa-v-0-1.herokuapp.com/api/v1/shops/updateUsersShop', data: formData);
+      print(response);
+      return response;
+    } on DioError catch (e) {
+      Fluttertoast.showToast(
+          msg: e.message,
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
+  }
   Future<Null> refreshList() async {
     await Future.delayed(Duration(seconds: 3));
   }
-
-
+  final picker = ImagePicker();
+  File _file;
+  chooseProfileImage(ImageSource source) async {
+    final image = await picker.getImage(source: source);
+    setState(() {
+      _file = File(image.path);
+    });
+  }
   void initState() {
     // TODO: implement initState
     setState(() {
       myController1.text=shopName;
       myController2.text=email;
       myController3.text=address;
-      myController4.text=id;
+      myController4.text=contactNumber;
 
 
     });
@@ -295,6 +344,51 @@ class _EditshopState extends State<Editshop> with SingleTickerProviderStateMixin
                                       ),
                                     ],
                                   )),
+                              Container(
+                                  margin:
+                                  const EdgeInsets.only(left: 10.0, right: 10.0),
+                                  decoration:BoxDecoration(
+                                      border: Border.all(color: Colors.lightGreen, width: 1),
+                                      borderRadius:BorderRadius.circular(15)
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Container(
+                                        padding: EdgeInsets.all(5),
+                                        child: _file!=null
+                                            ?Container(
+                                          height: 50,
+                                          width:80,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                                            image:DecorationImage(
+                                              image:FileImage(_file),
+                                            ),
+                                          ),
+                                        ):Container(
+                                          height: 50,
+                                          width:50,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                                            color:Colors.grey,
+                                          ),
+                                        ),
+
+
+                                      ),
+                                      Text("Profile Picture"),
+                                      Container(child:Row(
+                                        children: [
+                                          IconButton(
+                                              onPressed:(){
+                                                chooseProfileImage(ImageSource.gallery);
+                                              }, icon: Icon(Icons.camera_alt_sharp) )
+                                        ],
+                                      )),
+                                    ],
+                                  )
+                              ),
                            /*   Padding(
                                   padding: EdgeInsets.only(
                                       left: 25.0, right: 25.0, top: 25.0),
@@ -384,7 +478,8 @@ class _EditshopState extends State<Editshop> with SingleTickerProviderStateMixin
                     textColor: Colors.white,
                     color: Colors.green,
                     onPressed: () {
-                      updateShop(myController4.text,myController1.text, myController2.text, myController3.text);
+                      updateshop(myController4.text,myController1.text, myController2.text, myController3.text,_file);
+                    //  updateShop(myController4.text,myController1.text, myController2.text, myController3.text);
                       Fluttertoast.showToast(
                         msg: "Shop Updated",
                         toastLength: Toast.LENGTH_SHORT,

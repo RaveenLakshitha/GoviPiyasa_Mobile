@@ -12,6 +12,7 @@ import 'package:blogapp/Notification/destination_screen.dart';
 import 'package:blogapp/Notification/notify.dart';
 import 'package:blogapp/Pages/WelcomePage.dart';
 import 'package:blogapp/Profile/ProfileScreen1.dart';
+import 'package:blogapp/Profile/orderhistory.dart';
 import 'package:blogapp/Screen/Maps/CurrentLocation.dart';
 import 'package:blogapp/Screen/Maps/Map.dart';
 
@@ -442,7 +443,7 @@ Future<void> initPlateformState() async{
                 ),
                 //F8F8Fb
                 ListTile(
-                  title: Text("Bot",style:TextStyle(fontSize:20,)),
+                  title: Text("ChatBot",style:TextStyle(fontSize:20,)),
                   trailing: Icon(Icons.chat_outlined, color: Colors.black),
                   onTap: () {
                     Navigator.of(context)
@@ -544,8 +545,8 @@ Future<void> initPlateformState() async{
                 value: 2,
                 child: Row(
                   children: [
-                    Icon(Icons.credit_card , color: Colors.blue),
-                    Text("Manage Bank Cards"),
+                    Icon(Icons.list_alt , color: Colors.blue),
+                    Text("Order History"),
                   ],
                 ),
               ),
@@ -683,7 +684,7 @@ Future<void> initPlateformState() async{
         break;
       case 2:
         Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => ListScreen()));
+            .push(MaterialPageRoute(builder: (context) => Orderhistory()));
         break;
   /*    case 3:
         Navigator.of(context)

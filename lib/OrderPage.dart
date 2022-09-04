@@ -157,7 +157,7 @@ class _OrderPageState extends State<OrderPage> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title:Text("${widget.total}"),
+          title:Text("Total:${widget.total}"),
           actions: [
             IconButton(
                 icon: Icon(Icons.credit_card, color: Colors.blue),

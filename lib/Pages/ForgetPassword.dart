@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 class Forgetpassword extends StatefulWidget {
   const Forgetpassword({Key key}) : super(key: key);
@@ -43,7 +44,7 @@ class _ForgetpasswordState extends State<Forgetpassword> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white70,
+      backgroundColor: Colors.white,
         body:Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -55,7 +56,7 @@ class _ForgetpasswordState extends State<Forgetpassword> {
                 padding: const EdgeInsets.all(18.0),
                 child:Column(
                   children: [
-                    TextField(
+              /*      TextField(
                       controller: _passwordController,
                       keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
@@ -68,12 +69,20 @@ class _ForgetpasswordState extends State<Forgetpassword> {
                           },
                         ),
                       ),
-                    ),
+                    ),*/
                     SizedBox(height: 20.0,),
                     ElevatedButton(
                       child:Text('Change Password'),
                       onPressed: (){
                         forget(_passwordController);
+                        Fluttertoast.showToast(
+                          msg: 'Check your email box ',
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.BOTTOM,
+                          backgroundColor: Colors.red,
+                          textColor: Colors.white,
+                          fontSize: 16.0,
+                        );
                       },
                     )
                   ],

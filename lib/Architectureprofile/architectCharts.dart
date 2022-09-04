@@ -21,11 +21,11 @@ class _ChartsState extends State<ArchitectCharts> {
   // https://mongoapi3.herokuapp.com/experts
   Future<String> getJsonfromApi() async {
     String token = await storage.read(key: "token");
-    String url='https://govi-piyasa-v-0-1.herokuapp.com/api/v1/architects/getUsersArchitectAppointments';
+    String url='https://govi-piyasa-v-0-1.herokuapp.com/api/v1/architects/getUsersArchitectAppointmentsGraph';
     http.Response response=await http.get(Uri.parse(url),
       headers: {
         "Content-Type": "application/json",
-        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyZjQ4ODU4NzNkNGUyZWIyYmI4NjdmMSIsImlhdCI6MTY2MDU0MzczMywiZXhwIjoxNjYzMTM1NzMzfQ.9-E5eioI5S6XrtV7HMmCTrN5sUf_csnLOYhqQmglJxo',
+        'Authorization': 'Bearer $token',
       },);
     return response.body;
   }
@@ -110,8 +110,7 @@ class SalesDetails{
   final int NoOfAppontments;
 
   factory SalesDetails.fromJson(Map<String, dynamic> parsedJson){
-    return SalesDetails(
-        parsedJson['_id']['truncatedOrderDate'].toString(), parsedJson['NoOfAppontments']
+    return SalesDetails(parsedJson['_id']['truncatedOrderDate'].toString(), parsedJson['NoOfAppontments']
     );
   }
 }
