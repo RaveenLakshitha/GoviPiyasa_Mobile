@@ -83,7 +83,7 @@ class _ShowitemState extends State<Showitem> with TickerProviderStateMixin {
         rating = _shopjson['rating'].toString();
         address = _shopjson['address'].toString();
         profilepic = _shopjson['profilePic'];
-       // imgurl = profilepic[0]['img'];
+        imgurl = profilepic[0]['img'];
         shopPics = _shopjson['shopPictures'];
         city=_shopjson['city'];
         shopItems=_shopjson['shopItems'];
@@ -540,7 +540,8 @@ class _ShowitemState extends State<Showitem> with TickerProviderStateMixin {
                                                     Navigator.push(
                                                         context,
                                                         MaterialPageRoute(
-                                                          builder: (context) => Itemdetails(text: '${item['productName']}',price:'${item['price']}',image:'${item['thumbnail'][0]['img']}',description:'${item['description']}',quantity:'${item['quantity']}',category:'${item['categoryName']}'),
+                                                          builder: (context) => Itemdetails(
+                                                              text: '${item['productName']}',price:'${item['price']}',image:'${item['thumbnail'][0]['img']}',description:'${item['description']}',quantity:'${item['quantity']}',category:'${item['categoryName']}'),
                                                         ));
                                                   },
                                                 ),
@@ -627,141 +628,7 @@ class _ShowitemState extends State<Showitem> with TickerProviderStateMixin {
                                   color: Color(0xFF545D68))
                           )),
                     ),
-                    Container(
-                      child: GridView.builder(
-                          gridDelegate:
-                          SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                          ),
-                          itemCount: shopItems.length,
-                          physics: NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemBuilder: (context, index) {
-                            final item = shopItems[index];
-                            return Card(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15.0),
-                                  side: BorderSide(
-                                      color: Colors.lightGreen, width: 1),
-                                ),
-                                child: ListTile(
-                                  title: Column(
-                                    children: [
-                                      GestureDetector(
-                                        child: Container(
-                                          width: 80,
-                                          height: 80,
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            image: DecorationImage(
-                                              image: NetworkImage(
-                                                '${item['thumbnail'][0]['img']}',
-                                              ),
-                                            ),
-                                            borderRadius:
-                                            BorderRadius.circular(10),
-                                          ),
-                                        ),
-                                        onTap: () {
-                                          //Navigator.push(context,MaterialPageRoute(
-                                          //builder: (context) => Shopview(text: '${data[index].producyName}',price:'${data[index].description}',image:'https://source.unsplash.com/random?sig=$index',description:'${data[index].description}',quantity:'${data[index].description}',category:'${data[index].description}'),));
-                                        },
-                                      ),
-                                      SizedBox(width: 20),
-                                      Column(
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            "${item['description']}",
-                                            style: TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.w600),
-                                          ),
 
-                                          Text("Rs:${item['price']}"),
-                                          Container(
-                                              child:Row(
-                                                children: [
-                                                  Text("${item['quantity']}"),
-                                                  SizedBox(width: 40,),
-                                                  GestureDetector(
-                                                    child: Icon(
-                                                      FontAwesomeIcons.eye,
-                                                      size: 25.0,
-                                                      color: Colors.black,
-                                                    ),
-                                                    onTap: () {
-                                                      Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                            builder: (context) => Itemdetails(text: '${item['productName']}',price:'${item['price']}',image:'${item['thumbnail'][0]['img']}',description:'${item['description']}',quantity:'${item['quantity']}',category:'${item['categoryName']}'),
-                                                          ));
-                                                    },
-                                                  ),
-                                                ],
-                                              )
-                                          )
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                  trailing: Column(
-                                    children: [
-                                      GestureDetector(
-                                        child: Icon(
-                                          FontAwesomeIcons.edit,
-                                          size: 22.0,
-                                          color: Colors.black,
-                                        ),
-                                        onTap: () {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) => Updateitem(
-                                                    id: '${item['_id']}',
-                                                    productName: '${item['productName']}',
-                                                    description:
-                                                    '${item['description']}',
-                                                    price: '${item['price']}',
-                                                    quantity: '${item['quantity']}',
-                                                    categoryName: '${item['categoryName']}',
-                                                    image: '${item['image']}'),
-                                              ));
-                                        },
-                                      ),
-                                      SizedBox(
-                                        height: 5.0,
-                                      ),
-
-
-                                      GestureDetector(
-                                        child: Icon(
-                                          FontAwesomeIcons.trash,
-                                          size: 22.0,
-                                          color: Colors.red,
-                                        ),
-                                        onTap: () {
-
-                                          DeleteData(item['_id']);
-
-                                          Fluttertoast.showToast(
-                                            msg: "Deleted",
-                                            toastLength: Toast.LENGTH_SHORT,
-                                            gravity: ToastGravity.BOTTOM,
-                                            backgroundColor: Colors.red,
-                                            textColor: Colors.white,
-                                            fontSize: 16.0,
-                                          );
-                                        },
-                                      ),
-                                    ],
-                                  ),
-                                )
-
-                            );
-                          }),
-                    ),
                     Padding(
                       padding: sidePadding,
                       child: Center(

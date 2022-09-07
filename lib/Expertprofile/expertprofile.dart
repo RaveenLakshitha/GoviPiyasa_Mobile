@@ -51,7 +51,7 @@ class _expertprofileState extends State<expertprofile> with TickerProviderStateM
       final jsonData = jsonDecode(response.body)['data'];
       setState(() {
         _expertjson = jsonData;
-        expertReviews = _expertjson['expertReviews'];
+        expertReviews = _expertjson['user']['expertReviews'];
         email = _expertjson['email'].toString();
         expertid = _expertjson['_id'].toString();
 
@@ -154,18 +154,18 @@ class _expertprofileState extends State<expertprofile> with TickerProviderStateM
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Text(
-                                    "ProfileName :${expertVisibility.toString()}",
+                                    "${_expertjson['user']['userName']}",
                                     style: TextStyle(
-                                      color: Colors.red,
+                                      color: Colors.black,
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 30.0,
+                                      fontSize: 20.0,
                                     ),
                                   ),
                                   SizedBox(
                                     height: 5.0,
                                   ),
                                   Container(
-                                    child: _image == null
+                                    child: _image != null
                                         ? Container(
                                       height: 150,
                                       width: 150,
@@ -173,7 +173,7 @@ class _expertprofileState extends State<expertprofile> with TickerProviderStateM
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(8.0)),
                                         image: DecorationImage(
-                                          image: NetworkImage('https://govibucket01.s3.amazonaws.com/N1xVmQtgz-devil_may_cry_character_wings_army_light_sword_21828_1920x1080.jpg'),
+                                          image: NetworkImage('${_expertjson['user']['profilePicture']}'),
                                         ),
                                       ),
                                     )
@@ -204,7 +204,7 @@ class _expertprofileState extends State<expertprofile> with TickerProviderStateM
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          "${shopid.toString()}",
+                          "${_expertjson['user']['email']}",
                           style: TextStyle(
                             color: Colors.blue,
                             fontSize: 15.0,
@@ -213,7 +213,7 @@ class _expertprofileState extends State<expertprofile> with TickerProviderStateM
                         SizedBox(
                           height: 50,
                           child: Center(
-                            child: Column(children: [
+                            child: Column(children: [/*
                               GestureDetector(
                                 child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
@@ -223,7 +223,7 @@ class _expertprofileState extends State<expertprofile> with TickerProviderStateM
                                             chooseImage(ImageSource.gallery);
                                           },
                                           icon: Icon(Icons.camera_alt_sharp)),
-                                      /*             IconButton(
+                                      *//*             IconButton(
                                           onPressed: () {
                                             SaveImage(_image.path);
                                             Fluttertoast.showToast(
@@ -235,9 +235,9 @@ class _expertprofileState extends State<expertprofile> with TickerProviderStateM
                                               fontSize: 16.0,
                                             );
                                           },
-                                          icon: Icon(Icons.api_outlined)),*/
+                                          icon: Icon(Icons.api_outlined)),*//*
                                     ]),
-                              ),
+                              ),*/
                             ]),
                           ),
                         ),
@@ -254,14 +254,14 @@ class _expertprofileState extends State<expertprofile> with TickerProviderStateM
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Text(
-                            "${shopid.toString()}",
+                            "${_expertjson['user']['role']}",
                             style: TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 20.0,
                                 fontFamily: 'sans-serif-light'
                             ),
-                          ),
+                          ),/*
                           Text(
                             "${shopid.toString()}",
                             style: TextStyle(
@@ -270,7 +270,7 @@ class _expertprofileState extends State<expertprofile> with TickerProviderStateM
                                 fontSize: 20.0,
                                 fontFamily: 'sans-serif-light'
                             ),
-                          ),
+                          ),*/
                         ],
                       )
                     ]
@@ -288,13 +288,13 @@ class _expertprofileState extends State<expertprofile> with TickerProviderStateM
                 height: 250,
                 width: 350,
                 child: ListView.builder(
-                    itemCount: 3,
+                    itemCount: 2,
                     itemBuilder: (BuildContext context, int index) {
                       return Card(
                         child: ListTile(
-
+                          //  title:Text("${expertReviews}"),
                             leading: Icon(Icons.star,color: Colors.yellow,),
-                            trailing:         GestureDetector(
+                            trailing: GestureDetector(
                               child: Icon(
                                 FontAwesomeIcons.trash,
                                 size: 22.0,

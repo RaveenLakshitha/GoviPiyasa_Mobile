@@ -62,7 +62,7 @@ class _SignInPageState extends State<SignInPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "Sign In with Email",
+                      "Sign In",
                       style: TextStyle(
                         fontSize: 30,
                         fontWeight: FontWeight.bold,

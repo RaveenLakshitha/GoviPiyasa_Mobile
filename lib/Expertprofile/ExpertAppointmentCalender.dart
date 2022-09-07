@@ -6,11 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:http/http.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:http/http.dart' as http;
 class AppointmentCalender extends StatefulWidget {
-  final List appointmentSlots;
-  AppointmentCalender({this.appointmentSlots,});
+
+  final String expertid;
+  AppointmentCalender({this.expertid});
 
   @override
   State<AppointmentCalender> createState() => _AppointmentCalenderState();
@@ -19,6 +21,30 @@ class AppointmentCalender extends StatefulWidget {
 class _AppointmentCalenderState extends State<AppointmentCalender> {
   final myController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  List appointmentSlots;
+  void fetchShop(id) async {
+   // print("shopview");
+    print(id);
+
+    try {
+      final response = await get(
+          Uri.parse('https://govi-piyasa-v-0-1.herokuapp.com/api/v1/expertappointmentslots/getAppointmentSlotsByExpert/$id'),
+      );
+      print("==========================");
+      //print(response.body);
+      print("==========================");
+      final jsonData = jsonDecode(response.body)['data'];
+      print(jsonData);
+      setState(() {
+        appointmentSlots = jsonData;
+
+
+
+      });
+print(appointmentSlots);
+      print("=========================");
+    } catch (err) {}
+  }
   FlutterSecureStorage storage = FlutterSecureStorage();
   int length;
   addnote(String note,String id) async{
@@ -45,8 +71,10 @@ class _AppointmentCalenderState extends State<AppointmentCalender> {
     });
   }
   void initState() {
-    length=widget.appointmentSlots.length;
 
+    //length=appointmentSlots.length;
+    print(widget.expertid);
+    fetchShop(widget.expertid);
     super.initState();
   }
   @override
@@ -76,7 +104,7 @@ class _AppointmentCalenderState extends State<AppointmentCalender> {
                 height: 250,
                 width: 350,
                 child: ListView.builder(
-                    itemCount: widget.appointmentSlots.length,
+                    itemCount: appointmentSlots.length,
                     itemBuilder: (BuildContext context, int index) {
                       return SizedBox(
                         height: 80,
@@ -94,13 +122,13 @@ class _AppointmentCalenderState extends State<AppointmentCalender> {
                               borderRadius: BorderRadius.circular(22),
                             ),
                             child: ListTile(
-                              title:Text("${widget.appointmentSlots[index]['date']}"),
-                              subtitle:Text("${widget.appointmentSlots[index]['time']}"),
+                              title:Text("${appointmentSlots[index]['date']}"),
+                              subtitle:Text("${appointmentSlots[index]['time']}"),
 
                               trailing:  IconButton(
                                   icon: Icon(FontAwesomeIcons.plus, color: Colors.blue),
                                   onPressed: () {
-                                    showReview(widget.appointmentSlots[index]);
+                                    showReview(appointmentSlots[index]);
                                   }),
                               // title: Text(widget.docs[index]['user'].toString())),
                             ),
@@ -180,22 +208,23 @@ class _AppointmentCalenderState extends State<AppointmentCalender> {
   List<Appointment> getAppointment(){
     List<Appointment> meetings=<Appointment>[];
     final DateTime today=DateTime.now();
-  //  final DateTime startTime=DateTime(today.year,today.month,today.day,1,0,0);
-    //final DateTime endTime=startTime.add(const Duration(hours:2));
-    for (var i = 0; i < length; i++){
-      final st=widget.appointmentSlots[i]['time'];
-      final year=widget.appointmentSlots[i]['date'];
-      final app =widget.appointmentSlots[i]['appointments'];
-      print(int.parse(year.substring(8,10)));
-      final DateTime startTime=DateTime(int.parse(year.substring(0,4)),int.parse(year.substring(5,7)),int.parse(year.substring(8,10)),int.parse(st.substring(0,2)),int.parse(st.substring(3,5)),0);
+    final DateTime startTime=DateTime(today.year,today.month,today.day,1,0,0);
+    final DateTime endTime=startTime.add(const Duration(hours:2));
+    for (var i = 0; i < 2; i++){
+/*      final st=appointmentSlots[i]['time'];
+      final year=appointmentSlots[i]['date'];
+      final app =appointmentSlots[i]['appointments'];*/
+      //print(int.parse(year.substring(8,10)));
+     // final DateTime startTime=DateTime(int.parse(year.substring(0,4)),int.parse(year.substring(5,7)),int.parse(year.substring(8,10)),int.parse(st.substring(0,2)),int.parse(st.substring(3,5)),0);
       final DateTime endTime=startTime.add(const Duration(hours:2));
 
       meetings.add(
         Appointment(
           startTime: startTime,
           endTime: endTime,
-          subject:"$app",
-          color:app==null?Colors.blue:Colors.red,),
+          subject:"",
+          //color:app==null?Colors.blue:Colors.red,
+           ),
 
       );
     }

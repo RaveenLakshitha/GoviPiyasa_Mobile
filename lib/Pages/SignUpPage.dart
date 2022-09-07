@@ -65,7 +65,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       children: [
 
                         Text(
-                          "Sign Up with Email",
+                          "Sign Up",
                           style: TextStyle(
                             fontSize: 30,
                             fontWeight: FontWeight.bold,

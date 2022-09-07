@@ -22,9 +22,10 @@ class expertView extends StatefulWidget {
   final List slots;
   final List docs;
   final email;
+  final id;
 
 
-  expertView({this.designation,this.description,this.city , this.contact,this.name,this.qualification,this.rating,this.list,this.slots,this.docs,this.image,this.email});
+  expertView({this.designation,this.description,this.city , this.contact,this.name,this.qualification,this.rating,this.list,this.slots,this.docs,this.image,this.email,this.id});
 
   @override
   _expertViewState createState() => _expertViewState();
@@ -195,7 +196,7 @@ class _expertViewState extends State<expertView> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => AppointmentCalender(appointmentSlots:widget.slots)));
+                                      builder: (context) => AppointmentCalender(expertid:widget.id)));
                             },
                             child: Container(
                               decoration: BoxDecoration(
@@ -216,7 +217,7 @@ class _expertViewState extends State<expertView> {
                           ),
                         ),
                         SizedBox(height: 10.0),
-                        Center(
+                     /*   Center(
                           child:Text("Expert Riviews",style: TextStyle(
                               fontFamily: 'Roboto',
                               fontSize: 20.0,
@@ -242,7 +243,7 @@ class _expertViewState extends State<expertView> {
                                   );
                                 }
 
-                              }),),
+                              }),),*/
                         Center(
                           child:Text("Proof Documents",     style: TextStyle(
                               fontFamily: 'Roboto',

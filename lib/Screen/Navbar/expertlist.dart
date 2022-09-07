@@ -261,6 +261,8 @@ class _SellerListState extends State<SellerList> {
                                 docs:_postsJson[index]['proofDocuments'],
                                 image:"${post['user']['profilePicture']}",
                                 email:"${post['email']}",
+                                id:"${post['_id']}",
+
                               )));
                     },
                   );

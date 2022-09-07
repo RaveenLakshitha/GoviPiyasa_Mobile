@@ -780,7 +780,7 @@ class _ShopState extends State<Shop> {
                             }
                           }
                               : null,
-                          child: Text('Create Architect shop'),
+                          child: Text('Create shop'),
                         ),
                  /*       RaisedButton(
                           padding: EdgeInsets.fromLTRB(70, 10, 70, 10),

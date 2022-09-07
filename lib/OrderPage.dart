@@ -276,7 +276,7 @@ class _OrderPageState extends State<OrderPage> with WidgetsBindingObserver {
                             this._currentStep = this._currentStep + 1;
                           }else{
                             setState(() {
-                            //  sendtoOrder(_address.text,_contact.text,_contact1.text);
+                              sendtoOrder(_address.text,_contact.text,_contact1.text);
                             });
 
                             //Logic to check if everything is completed

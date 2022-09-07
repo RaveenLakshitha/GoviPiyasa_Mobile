@@ -106,9 +106,8 @@ class SearchUser extends SearchDelegate {
                             builder: (context) => Itemdetails(
                               text: "${data[index].productName}",
                               price: "${data[index].price}",
-                             // image: '${data[index].thumbnail.img}',
-                            //  description:
-                              //"${data[index].description}",
+                              image: '${data[index].thumbnail.img}',
+                              description: "${data[index].description}",
                               quantity: "${data[index].quantity}",
                               // category:
                               // "${data[index].parentCategoryName}",
@@ -155,9 +154,9 @@ class SearchUser extends SearchDelegate {
                                     child:Image(
                                       height: 80,
                                       width: 80,
-                                      // image:data[index].thumbnail.img!=''?NetworkImage(
-                                      //     "${data[index].thumbnail.img}"):NetworkImage(
-                                      //     "https://images.unsplash.com/photo-1586882829491-b81178aa622e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2850&q=80"),
+                                      image:data[index].thumbnail.img!=''?NetworkImage(
+                                          "${data[index].thumbnail.img}"):NetworkImage(
+                                          "https://images.unsplash.com/photo-1586882829491-b81178aa622e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2850&q=80"),
                                     ),
                                   ),
                                   SizedBox(
@@ -228,23 +227,29 @@ class SearchUser extends SearchDelegate {
                                             Scaffold.of(context).showSnackBar(new SnackBar(
                                                 content: new Text("Item Added to wishlist")
                                             ));
-                                            /*     Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                        builder: (context) => Itemdetails(
-                                                            text:
-                                                            "${data[index].productName}",
-                                                            price:
-                                                            "${data[index].price}",
-                                                            image:
-                                                            'https://source.unsplash.com/random?sig=$index',
-                                                            description:
-                                                            "${data[index].description}",
-                                                            quantity:
-                                                            "${data[index].quantity}",
-                                                            category:
-                                                            "${data[index].categoryName}"),
-                                                      ));*/
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) => Itemdetails(
+                                           /*         text: "${data[index].productName}",
+                                                    price: "${data[index].price}",
+                                                   image: '${data[index].thumbnail.img}',
+                                                    description: "${data[index].description}",
+                                                    quantity: "${data[index].quantity}",
+                                                    category: "${data[index].parentCategoryName}",
+                                                     shopPic1:"${data[index].productPictures.img}",*/
+
+                                                   // id:"${data[index]['_id']}",
+                                                    text: "${data[index].productName}",
+                                                    price: "${data[index].price}",
+                                                    image: '${data[index].thumbnail.img}',
+                                                    description: "${data[index].description}",
+                                                    quantity: "${data[index].quantity}",
+                                                    category: "${data[index].parentCategoryName}",
+                                                  //  shopPic1:data[index].productPictures.img,
+                                                  ),
+
+                                                ));
                                           },
                                           icon: Icon(
                                             Icons.favorite,
@@ -258,15 +263,15 @@ class SearchUser extends SearchDelegate {
                                               Icons.store,
                                               size: 25,
                                             ),
-                                            // onPressed: () {
-                                            //   Navigator.push(
-                                            //       context,
-                                            //       MaterialPageRoute(
-                                            //         builder: (context) => Shopview(
-                                            //           id: "${data[index].shopId.id}",),
-                                            //       ));
-                                              //print(data[index].shopId.id);
-                                           // }
+                                            onPressed: () {
+                                              /*Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) => Shopview(
+                                                      id: "${data[index].shopId.id}",),
+                                                  ));*/
+                                             // print(data[index].shopId.id);
+                                           }
                                             ),
                                       ),
                                       Align(

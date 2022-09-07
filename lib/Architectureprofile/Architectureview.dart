@@ -129,7 +129,7 @@ class _ArchitectureviewState extends State<Architectureview> {
 @override
   void initState() {
 
-  print(widget.appointmentSlots);
+ // print(widget.appointmentSlots);
   fetchAwards(widget.id);
     super.initState();
   }

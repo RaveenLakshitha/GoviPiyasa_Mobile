@@ -26,7 +26,7 @@ class _WidgetScreenState extends State<WidgetScreen> {
   String visibility2;
   String visibility3;
   bool approval1 = false;
-  bool approval2 = false;
+  bool approval2 = true;
   bool approval3 = false;
   String value;
   var jsonData;
@@ -35,7 +35,7 @@ class _WidgetScreenState extends State<WidgetScreen> {
   var _expert;
 
   void fetchexpert() async {
-    print('expert Working');
+    print('expert method Working');
     String token = await storage.read(key: "token");
     try {
       final response = await get(
@@ -67,12 +67,12 @@ class _WidgetScreenState extends State<WidgetScreen> {
   }
 
   void fetchArchitect() async {
-    print('Architect Working');
+    print('Architect method Working');
     String token = await storage.read(key: "token");
     try {
       final response = await get(
           Uri.parse(
-              'https://govi-piyasa-v-0-1.herokuapp.com/api/v1/architects/getUsersArchitect'),
+              'https://govi-piyasa-v-0-1.herokuapp.com/api/v1/experts/getUsersExpertProfile'),
           headers: {
             'Accept': 'application/json',
             'Authorization': 'Bearer $token',
@@ -187,6 +187,7 @@ setState(() {
                       child: CarouselSlider.builder(
                         itemCount: bannerCards.length,
                         itemBuilder: (context, index, realIndex) {
+                          print(index);
                           return Container(
                             //alignment:  Alignment.centerLeft,
                             //width: MediaQuery.of(context).size.width,
@@ -232,7 +233,7 @@ setState(() {
                                         }));
                                   }
 
-                                }else{
+                                }else if(index==2){
                                   if(approval1==true){
                                     Navigator.push(context,
                                         MaterialPageRoute(builder: (BuildContext context) {

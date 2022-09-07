@@ -9,15 +9,15 @@ import 'infoui.dart';
 class Infordescription extends StatefulWidget {
   //final String id;
   final String id;
-  final List list;
+ // final List list;
 
   Infordescription (
       {
         @required this.id,
-        @required this.list,
+     //   @required this.list,
       });
   @override
-  State<Infordescription> createState() => _InfordescriptionState(id,list
+  State<Infordescription> createState() => _InfordescriptionState(id
   );
 }
 
@@ -25,9 +25,9 @@ class _InfordescriptionState extends State<Infordescription> {
   List<Node> data = [];
   Categorylist _inforJson = Categorylist();
   final String id;
-  final List list;
+   List articleslist;
 
-  _InfordescriptionState(this.id,this.list);
+  _InfordescriptionState(this.id);
   var _infordetails = [];
   String category;
 
@@ -39,6 +39,7 @@ class _InfordescriptionState extends State<Infordescription> {
       final jsonData = jsonDecode(response.body)['data'];
       setState(() {
         _infordetails = jsonData;
+        articleslist=_infordetails[0]['Articles'];
       });
       print("infodetails");
       print(_infordetails);
@@ -52,9 +53,9 @@ class _InfordescriptionState extends State<Infordescription> {
   @override
   void initState() {
     infocategory(id);
-    for (var element in list) {
+    /*for (var element in list) {
       data.add(Node.fromJson(element));
-    }
+    }*/
     print(data);
     super.initState();
   }
@@ -75,20 +76,20 @@ class _InfordescriptionState extends State<Infordescription> {
                 title: Center(child:Text(_infordetails[index]['Title'],style: TextStyle(   fontFamily: 'Roboto',fontWeight: FontWeight.bold, fontSize: 24.0)),),
                 children: <Widget>[
                   ListTile(
-                      title: Text(
+                     /* title: Text(
                         _infordetails[index]['Family'],
                         style: TextStyle(fontWeight: FontWeight.w700),
-                      ),
+                      ),*/
                       subtitle:Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Text(_infordetails[index]['Family']),
-                          _infordetails[index]['SubTitles']==null?SizedBox():Text(_infordetails[index]['SubTitles'][index]),
-                          Text(_infordetails[index]['ScientificName'],  style: TextStyle(
+                         // Text(_infordetails[index]['Family']),
+                         _infordetails[index]['SubTitles']==null?SizedBox():Text(_infordetails[index]['SubTitles'][index]),
+                         /* Text(_infordetails[index]['ScientificName'],  style: TextStyle(
                             color: Colors.red,
-                          )),
-                          Text(_infordetails.toString()),
-                        //  Text(widget.list.toString()),
+                          )),*/
+                          Text("${_infordetails[index]['Articles']}"),
+                        // Text(widget.list.toString()),
                            Text(_infordetails[index]['createdAt'])
                         ],
                       )

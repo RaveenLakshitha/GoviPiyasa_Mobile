@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:badges/badges.dart';
 import 'package:blogapp/Cart/Db_helper.dart';
 import 'package:blogapp/Cart/cart_model.dart';
+import 'package:blogapp/Search/HomeScreen.dart';
 import 'package:blogapp/payment/gateway/PaymentScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -264,6 +265,9 @@ print(_cartitems);
                                                           totalAmount=0;
                                                           decreseAmount(_cartitems[index]['_id']);
                                                           totalAmount=totalAmount-_cartitems[index]['unitPrice']* _cartitems[index]['amount'];
+                                                          setState(() {
+                                                            fetchcartItems();
+                                                          });
                                                           await Future.delayed(
                                                               Duration(seconds: 8));
                                                           setState(() {
@@ -286,10 +290,16 @@ print(_cartitems);
                                                           setState(() {
                                                             _isLoading=true;
                                                             _cartitems[index]['amount']++;
+
                                                           });
                                                           //totalAmount;
                                                           increseAmount(_cartitems[index]['_id']);
-                                                         totalAmount=totalAmount+_cartitems[index]['unitPrice']* _cartitems[index]['amount'];
+
+                                                          totalAmount=totalAmount+_cartitems[index]['unitPrice']* _cartitems[index]['amount'];
+                                                         setState(() {
+                                                           fetchcartItems();
+                                                         });
+
                                                           await Future.delayed(
                                                               Duration(seconds: 8));
 
@@ -352,6 +362,9 @@ print(_cartitems);
                                               setState(() {
                                                 _value=value;
                                                 changePayment(_cartitems[index]['_id'],"Takeway");
+                                                setState(() {
+                                                  fetchcartItems();
+                                                });
                                               });
                                               print(value);
                                              //selected value
@@ -370,6 +383,10 @@ print(_cartitems);
                                               setState(() {
                                               _value=value;
                                               changePayment(_cartitems[index]['_id'],"Takeway");
+                                              setState(() {
+                                                fetchcartItems();
+                                              });
+
                                             });
                                             }
                                         ),
@@ -385,6 +402,9 @@ print(_cartitems);
                                               setState(() {
                                                 _value=value;
                                                 changePayment(_cartitems[index]['_id'],"Takeway");
+                                              });
+                                              setState(() {
+                                                fetchcartItems();
                                               });
                                               print(value); //selected value
                                             }
@@ -407,7 +427,7 @@ print(_cartitems);
                   child: Card(
                     child: ListTile(
                       title: Text("CartTotal:${_cartTotal}"),
-                      subtitle: Text("priceToPayOnline:${totalAmount}"),
+                      subtitle: Text("priceToPayOnline:${_priceToPay}"),
                       trailing:   _cartitems.length==0?SizedBox(child:Text("No more Items")): OutlinedButton(
                         style:OutlinedButton.styleFrom(
                           padding:const EdgeInsets.symmetric(horizontal: 40),
@@ -418,12 +438,25 @@ print(_cartitems);
                         ),
 
                         onPressed:(){
-                          sendtoOrders();
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>   OrderPage(total:"${_cartTotal}"),
-                              ));
+                          if(_value=="CashOnDelivery"){
+
+                            setState(() {
+                              sendtoOrders();
+                            });
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>   Searchitems(),
+                                ));
+                          }else{
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>   OrderPage(total:"${_cartTotal}"),
+                                ));
+                          }
+
+
 
 
                         },

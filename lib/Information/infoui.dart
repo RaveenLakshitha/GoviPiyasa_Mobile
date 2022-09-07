@@ -45,8 +45,8 @@ class _CategorylistState extends State<Categorylist> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: 100,
-        backgroundColor: Colors.lightGreen,
+        //toolbarHeight: 100,
+        backgroundColor: Colors.white,
         centerTitle: true,
         actions: [
           IconButton(
@@ -68,12 +68,12 @@ class _CategorylistState extends State<Categorylist> {
                     ));
               }),
         ],
-        flexibleSpace: Image(
+     /*   flexibleSpace: Image(
           image: NetworkImage(
               'https://images.pexels.com/photos/443356/pexels-photo-443356.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940'),
           fit: BoxFit.cover,
 
-        ),
+        ),*/
       ),
       body:Container(
    /*     decoration: BoxDecoration(

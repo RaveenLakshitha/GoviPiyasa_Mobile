@@ -149,13 +149,13 @@ class MapScreenState extends State<ProfilePage>
   void initState() {
     name= myController1.text;
     fetchsingleuser();
-
+    print(_image1);
     loadImage();
     writeuser();
     super.initState();
   }
   final picker=ImagePicker();
-  File _image;
+  File _image1;
   String _imagepath;
 
 
@@ -163,9 +163,9 @@ class MapScreenState extends State<ProfilePage>
     final image=await picker.getImage(source:source);
 
     setState(() {
-      _image=File(image.path);
-      SaveImage(_image.path);
-      userProfile(_image,id);
+      _image1=File(image.path);
+      SaveImage(_image1.path);
+      userProfile(_image1,id);
     });
 
 
@@ -191,7 +191,7 @@ class MapScreenState extends State<ProfilePage>
     // pref.getString("imagepath");
     setState(() {
       _imagepath = pref.getString("imagepath1");
-      _image = File(_imagepath.toString());
+      _image1 = File(_imagepath.toString());
     });
     print(_imagepath);
     Fluttertoast.showToast(
@@ -224,7 +224,7 @@ class MapScreenState extends State<ProfilePage>
                                 padding: EdgeInsets.only(left: 20.0, top: 20.0),
                                 child: new Row(
                                   crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: <Widget>[
                                     SizedBox(width: 10,),
                                     Padding(
@@ -284,8 +284,8 @@ class MapScreenState extends State<ProfilePage>
                                           border: Border.all(color: Colors.blueAccent),
                                           shape: BoxShape.circle,
                                           image: new DecorationImage(
-                                            image: _image==null?AssetImage(
-                                                'assets/profile.png'):FileImage(_image),
+                                            image: _image1!=null?AssetImage(
+                                                'assets/profile.png'):FileImage(_image1),
                                             fit: BoxFit.cover,
                                           ),
                                         )),

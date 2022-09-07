@@ -50,9 +50,9 @@ class _InfoSubState extends State<InfoSub> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("${category}"),
+         // title: Text("${category}"),
           toolbarHeight: 50,
-          backgroundColor: Colors.lightGreen,
+          backgroundColor: Colors.white,
           centerTitle: true,
 
         ),
@@ -97,12 +97,12 @@ class _InfoSubState extends State<InfoSub> {
                     margin: EdgeInsets.only(left: 20.0, right: 20.0, top: 5.0),
                   ),
                   onTap:(){
-                    if(_inforJson[index]['Information'][index]['Title']!=null){
+                    //if(_inforJson[index]['Information'][index]['Title']!=null){
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => Infordescription(id:_inforJson[index]['Information'][index]['categoryId'],list:_inforJson[index]['Information'])));
-                    }
+                              builder: (context) => Infordescription(id:_inforJson[index]['_id'])));
+
 
                   } ,);
                 /*}else{

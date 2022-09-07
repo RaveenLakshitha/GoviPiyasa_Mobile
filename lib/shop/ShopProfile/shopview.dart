@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'package:blogapp/Architectureprofile/constants.dart';
 import 'package:blogapp/Screen/Maps/Map2.dart';
+import 'package:blogapp/checkout/widgets/itemdetails.dart';
 import 'package:blogapp/checkout/widgets/viewgallery.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:blogapp/shop/custom/BorderIcon.dart';
@@ -35,6 +37,7 @@ class _ShopviewState extends State<Shopview> {
   String rating1;
   List shopPictures;
   List doc;
+  List shopItems1;
 
   _ShopviewState(this.id);
 
@@ -71,6 +74,7 @@ class _ShopviewState extends State<Shopview> {
         lat1 = _shopitems['location']['coordinates'][0];
         long1 = _shopitems['location']['coordinates'][1];
         doc = _shopitems['proofDocs'];
+        shopItems1=_shopitems['shopItems'];
 
         //pic2=_shopitems[' proofDocs'][0];
       });
@@ -79,8 +83,49 @@ class _ShopviewState extends State<Shopview> {
     } catch (err) {}
   }
 
-  var _shopjson = [];
 
+  var _shopjson = [];
+  addtowishlist(id) async {
+    String token = await storage.read(key: "token");
+    print(token);
+    print(id);
+    final body = {"item": id};
+    http.post(
+      "https://govi-piyasa-v-0-1.herokuapp.com/api/v1/listItems",
+      body: jsonEncode(body),
+      headers: {
+        "Content-Type": "application/json",
+        'Authorization': 'Bearer $token',
+      },
+    ).then((response) {
+      if (response.statusCode == 200) {
+        print(response.body);
+        print(json.decode(response.body));
+
+      }
+    });
+  }
+  addtocart(id, amount, unitPrice) async {
+    String token = await storage.read(key: "token");
+    print(token);
+    print(id);
+
+    final body = {"item": id, "amount": amount, "unitPrice": unitPrice};
+    http.post(
+      "https://govi-piyasa-v-0-1.herokuapp.com/api/v1/cartItems",
+      body: jsonEncode(body),
+      headers: {
+        "Content-Type": "application/json",
+        'Authorization': 'Bearer $token',
+      },
+    ).then((response) {
+      if (response.statusCode == 200) {
+        print(response.body);
+        print(json.decode(response.body));
+        // Do the rest of job here
+      }
+    });
+  }
 /*  void infocategory(String id) async {
     print(id);
     try {
@@ -316,6 +361,155 @@ class _ShopviewState extends State<Shopview> {
                                         fit: BoxFit.fill,
                                       )
                                     ),
+                                  );
+                                }),
+                          ),
+                          SizedBox(height: 20),
+                          Padding(
+                            padding: sidePadding,
+                            child: Center(
+                                child: Text(
+                                  "Items",
+                                  style: TextStyle(
+                                      fontFamily: 'Roboto',
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xFF545D68)),
+                                )),
+                          ),
+                          Container(
+                            child: GridView.builder(
+                                gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                ),
+                                itemCount: 2,
+                                physics: NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                itemBuilder: (context, index) {
+                                 final item = shopItems1[index];
+                                  return Card(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(15.0),
+                                        side: BorderSide(
+                                            color: Colors.lightGreen, width: 1),
+                                      ),
+                                      child: ListTile(
+                                        title: Column(
+                                          children: [
+                                            GestureDetector(
+                                              child: Container(
+                                                width: 80,
+                                                height: 80,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  image: DecorationImage(
+                                                    image: NetworkImage(
+                                                      '${item['thumbnail'][0]['img']}',
+                                                    ),
+                                                  ),
+                                                  borderRadius:
+                                                  BorderRadius.circular(10),
+                                                ),
+                                              ),
+                                              onTap: () {
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) => Itemdetails(
+                                                          text: '${item['productName']}',price:'${item['price']}',image:'${item['thumbnail'][0]['img']}',description:'${item['description']}',quantity:'${item['quantity']}',category:'${item['categoryName']}'),
+                                                    ));
+                                              },
+                                            ),
+                                            SizedBox(width: 20),
+                                            Column(
+                                              crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  "${item['productName']}",
+                                                  style: TextStyle(
+                                                      fontSize: 18,
+                                                      fontWeight: FontWeight.w600),
+                                                ),
+
+                                                Text("Rs:${item['price']}"),
+                                                Container(
+                                                    child:Row(
+                                                      children: [
+                                                        Text("${item['quantity']}"),
+                                                        SizedBox(width: 40,),
+                                                        GestureDetector(
+                                                          child: Icon(
+                                                            FontAwesomeIcons.eye,
+                                                            size: 25.0,
+                                                            color: Colors.black,
+                                                          ),
+                                                          onTap: () {
+                                                            Navigator.push(
+                                                                context,
+                                                                MaterialPageRoute(
+                                                                  builder: (context) => Itemdetails(
+                                                                      text: '${item['productName']}',price:'${item['price']}',image:'${item['thumbnail'][0]['img']}',description:'${item['description']}',quantity:'${item['quantity']}',category:'${item['categoryName']}'),
+                                                                ));
+                                                          },
+                                                        ),
+                                                      ],
+                                                    )
+                                                )
+                                              ],
+                                            )
+                                          ],
+                                        ),
+                                        trailing: Column(
+                                          children: [
+                                            GestureDetector(
+                                              child: Icon(
+                                                Icons.shopping_cart,
+                                                size: 22.0,
+                                                color: Colors.black,
+                                              ),
+                                              onTap: () {
+                                                addtocart(shopItems1[index]['_id'],1,shopItems1[index]['price']);
+                                                Fluttertoast.showToast(
+                                                  msg: "Add item to cart",
+                                                  toastLength: Toast.LENGTH_SHORT,
+                                                  gravity: ToastGravity.BOTTOM,
+                                                  backgroundColor: Colors.red,
+                                                  textColor: Colors.white,
+                                                  fontSize: 16.0,
+                                                );
+                                              },
+                                            ),
+                                            SizedBox(
+                                              height: 5.0,
+                                            ),
+
+
+                                            GestureDetector(
+                                              child: Icon(
+                                                Icons.favorite,
+                                                size: 22.0,
+                                                color: Colors.red,
+                                              ),
+                                              onTap: () {
+                                                addtowishlist(shopItems1[index]['_id']);
+                                               // DeleteData(item['_id']);
+
+                                                Fluttertoast.showToast(
+                                                  msg: "Add items to wish list",
+                                                  toastLength: Toast.LENGTH_SHORT,
+                                                  gravity: ToastGravity.BOTTOM,
+                                                  backgroundColor: Colors.red,
+                                                  textColor: Colors.white,
+                                                  fontSize: 16.0,
+                                                );
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                      )
+
                                   );
                                 }),
                           ),
